@@ -12,28 +12,28 @@
         <meta name="author" content="opengeos">
       
       
-        <link rel="canonical" href="https://opengeos.github.io/geoai/examples/samgeo/box_prompts/">
+        <link rel="canonical" href="https://opengeos.github.io/geoai/examples/data_viz/">
       
       
-        <link rel="prev" href="../input_prompts_hq/">
+        <link rel="prev" href="../download_data/">
       
       
-        <link rel="next" href="../text_prompts/">
+        <link rel="next" href="../samgeo/satellite/">
       
       
-      <link rel="icon" href="../../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
     
     
       
-        <title>Box prompts - geoai</title>
+        <title>Data viz - geoai</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.8608ea7d.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -52,11 +52,11 @@
       
     
     
-      <link rel="stylesheet" href="../../../css/timeago.css">
+      <link rel="stylesheet" href="../../css/timeago.css">
     
-      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#segmenting-remote-sensing-imagery-with-box-prompts" class="md-skip">
+        <a href="#data-visualization" class="md-skip">
           Skip to content
         </a>
       
@@ -98,7 +98,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="geoai" class="md-header__button md-logo" aria-label="geoai" data-md-component="logo">
+    <a href="../.." title="geoai" class="md-header__button md-logo" aria-label="geoai" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Box prompts
+              Data viz
             
           </span>
         </div>
@@ -236,7 +236,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="geoai" class="md-nav__button md-logo" aria-label="geoai" data-md-component="logo">
+    <a href="../.." title="geoai" class="md-nav__button md-logo" aria-label="geoai" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -266,7 +266,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -287,7 +287,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../installation/" class="md-nav__link">
+      <a href="../../installation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -308,7 +308,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../usage/" class="md-nav__link">
+      <a href="../../usage/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -329,7 +329,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../contributing/" class="md-nav__link">
+      <a href="../../contributing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -350,7 +350,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../faq/" class="md-nav__link">
+      <a href="../../faq/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -371,7 +371,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../changelog/" class="md-nav__link">
+      <a href="../../changelog/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -451,143 +451,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../download_data/" class="md-nav__link">
+      <a href="../download_data/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     Download data
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../data_viz/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Data viz
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../satellite/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Satellite
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../automatic_mask_generator/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Automatic mask generator
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../automatic_mask_generator_hq/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Automatic mask generator hq
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../input_prompts/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Input prompts
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../input_prompts_hq/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Input prompts hq
     
   </span>
   
@@ -618,7 +486,7 @@
           
   
   <span class="md-ellipsis">
-    Box prompts
+    Data viz
     
   </span>
   
@@ -630,7 +498,7 @@
         
   
   <span class="md-ellipsis">
-    Box prompts
+    Data viz
     
   </span>
   
@@ -653,81 +521,81 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#install-dependencies" class="md-nav__link">
+  <a href="#importing-required-libraries" class="md-nav__link">
     <span class="md-ellipsis">
-      Install dependencies
+      Importing Required Libraries
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#create-an-interactive-map" class="md-nav__link">
+  <a href="#download-naip-imagery" class="md-nav__link">
     <span class="md-ellipsis">
-      Create an interactive map
+      Download NAIP imagery
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#download-a-sample-image" class="md-nav__link">
+  <a href="#setting-up-the-dataset" class="md-nav__link">
     <span class="md-ellipsis">
-      Download a sample image
+      Setting Up the Dataset
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#initialize-sam-class" class="md-nav__link">
+  <a href="#random-sampling-of-geospatial-data" class="md-nav__link">
     <span class="md-ellipsis">
-      Initialize SAM class
+      Random Sampling of Geospatial Data
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#create-bounding-boxes" class="md-nav__link">
+  <a href="#visualizing-randomly-sampled-data" class="md-nav__link">
     <span class="md-ellipsis">
-      Create bounding boxes
+      Visualizing Randomly Sampled Data
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#segment-the-image" class="md-nav__link">
+  <a href="#grid-sampling-of-geospatial-data" class="md-nav__link">
     <span class="md-ellipsis">
-      Segment the image
+      Grid Sampling of Geospatial Data
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#display-the-result" class="md-nav__link">
+  <a href="#visualizing-grid-sampled-data" class="md-nav__link">
     <span class="md-ellipsis">
-      Display the result
+      Visualizing Grid Sampled Data
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#use-an-existing-vector-file-as-box-prompts" class="md-nav__link">
+  <a href="#advanced-visualization-with-geospatial-context" class="md-nav__link">
     <span class="md-ellipsis">
-      Use an existing vector file as box prompts
+      Advanced Visualization with Geospatial Context
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#segment-image-with-box-prompts" class="md-nav__link">
+  <a href="#key-takeaways" class="md-nav__link">
     <span class="md-ellipsis">
-      Segment image with box prompts
+      Key Takeaways
     </span>
   </a>
   
@@ -749,7 +617,139 @@
   
   
     <li class="md-nav__item">
-      <a href="../text_prompts/" class="md-nav__link">
+      <a href="../samgeo/satellite/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Satellite
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samgeo/automatic_mask_generator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Automatic mask generator
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samgeo/automatic_mask_generator_hq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Automatic mask generator hq
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samgeo/input_prompts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Input prompts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samgeo/input_prompts_hq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Input prompts hq
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samgeo/box_prompts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Box prompts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samgeo/text_prompts/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -771,7 +771,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../text_prompts_batch/" class="md-nav__link">
+      <a href="../samgeo/text_prompts_batch/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -793,7 +793,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../fast_sam/" class="md-nav__link">
+      <a href="../samgeo/fast_sam/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -815,7 +815,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../swimming_pools/" class="md-nav__link">
+      <a href="../samgeo/swimming_pools/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -837,7 +837,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../arcgis/" class="md-nav__link">
+      <a href="../samgeo/arcgis/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -859,7 +859,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../maxar_open_data/" class="md-nav__link">
+      <a href="../samgeo/maxar_open_data/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -881,7 +881,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../rastervision/semantic_segmentation/" class="md-nav__link">
+      <a href="../rastervision/semantic_segmentation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -903,7 +903,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../dataviz/raster_viz/" class="md-nav__link">
+      <a href="../dataviz/raster_viz/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -925,7 +925,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../dataviz/vector_viz/" class="md-nav__link">
+      <a href="../dataviz/vector_viz/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -947,7 +947,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../dataviz/lidar_viz/" class="md-nav__link">
+      <a href="../dataviz/lidar_viz/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1012,7 +1012,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../geoai/" class="md-nav__link">
+      <a href="../../geoai/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1034,7 +1034,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../common/" class="md-nav__link">
+      <a href="../../common/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1056,7 +1056,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../download/" class="md-nav__link">
+      <a href="../../download/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1078,7 +1078,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../segmentation/" class="md-nav__link">
+      <a href="../../segmentation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1127,81 +1127,81 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#install-dependencies" class="md-nav__link">
+  <a href="#importing-required-libraries" class="md-nav__link">
     <span class="md-ellipsis">
-      Install dependencies
+      Importing Required Libraries
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#create-an-interactive-map" class="md-nav__link">
+  <a href="#download-naip-imagery" class="md-nav__link">
     <span class="md-ellipsis">
-      Create an interactive map
+      Download NAIP imagery
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#download-a-sample-image" class="md-nav__link">
+  <a href="#setting-up-the-dataset" class="md-nav__link">
     <span class="md-ellipsis">
-      Download a sample image
+      Setting Up the Dataset
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#initialize-sam-class" class="md-nav__link">
+  <a href="#random-sampling-of-geospatial-data" class="md-nav__link">
     <span class="md-ellipsis">
-      Initialize SAM class
+      Random Sampling of Geospatial Data
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#create-bounding-boxes" class="md-nav__link">
+  <a href="#visualizing-randomly-sampled-data" class="md-nav__link">
     <span class="md-ellipsis">
-      Create bounding boxes
+      Visualizing Randomly Sampled Data
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#segment-the-image" class="md-nav__link">
+  <a href="#grid-sampling-of-geospatial-data" class="md-nav__link">
     <span class="md-ellipsis">
-      Segment the image
+      Grid Sampling of Geospatial Data
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#display-the-result" class="md-nav__link">
+  <a href="#visualizing-grid-sampled-data" class="md-nav__link">
     <span class="md-ellipsis">
-      Display the result
+      Visualizing Grid Sampled Data
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#use-an-existing-vector-file-as-box-prompts" class="md-nav__link">
+  <a href="#advanced-visualization-with-geospatial-context" class="md-nav__link">
     <span class="md-ellipsis">
-      Use an existing vector file as box prompts
+      Advanced Visualization with Geospatial Context
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#segment-image-with-box-prompts" class="md-nav__link">
+  <a href="#key-takeaways" class="md-nav__link">
     <span class="md-ellipsis">
-      Segment image with box prompts
+      Key Takeaways
     </span>
   </a>
   
@@ -1220,7 +1220,7 @@
               <article class="md-content__inner md-typeset">
                 
 
-    <a href="/geoai/examples/samgeo/box_prompts/box_prompts.ipynb" title="Download Notebook" class="md-content__button md-icon">
+    <a href="/geoai/examples/data_viz/data_viz.ipynb" title="Download Notebook" class="md-content__button md-icon">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7z"/></svg>
     </a>
 
@@ -1675,22 +1675,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="segmenting-remote-sensing-imagery-with-box-prompts">Segmenting remote sensing imagery with box prompts<a class="anchor-link" href="#segmenting-remote-sensing-imagery-with-box-prompts">¶</a></h1><p><a href="https://studiolab.sagemaker.aws/import/github/opengeos/segment-geospatial/blob/main/docs/examples/box_prompts.ipynb"><img alt="image" src="https://studiolab.sagemaker.aws/studiolab.svg"/></a>
-<a href="https://pccompute.westeurope.cloudapp.azure.com/compute/hub/user-redirect/git-pull?repo=https://github.com/opengeos/segment-geospatial&amp;urlpath=lab/tree/segment-geospatial/docs/examples/box_prompts.ipynb&amp;branch=main"><img alt="image" src="https://img.shields.io/badge/Open-Planetary%20Computer-black?style=flat&amp;logo=microsoft"/></a>
-<a href="https://colab.research.google.com/github/opengeos/segment-geospatial/blob/main/docs/examples/box_prompts.ipynb"><img alt="image" src="https://colab.research.google.com/assets/colab-badge.svg"/></a></p>
-<p>This notebook shows how to generate object masks from text prompts with the Segment Anything Model (SAM).</p>
-<p>Make sure you use GPU runtime for this notebook. For Google Colab, go to <code>Runtime</code> -&gt; <code>Change runtime type</code> and select <code>GPU</code> as the hardware accelerator.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="install-dependencies">Install dependencies<a class="anchor-link" href="#install-dependencies">¶</a></h2><p>Uncomment and run the following cell to install the required dependencies.</p>
+<h1 id="data-visualization">Data visualization<a class="anchor-link" href="#data-visualization">¶</a></h1><p>This notebook demonstrates how to work with geospatial imagery data using TorchGeo and GeoAI. We'll explore how to load data, sample it using different strategies, and visualize the results.</p>
+<h2 id="importing-required-libraries">Importing Required Libraries<a class="anchor-link" href="#importing-required-libraries">¶</a></h2><p>First, we import the necessary libraries for our geospatial data visualization workflow:</p>
 </div>
 </div>
 </div>
@@ -1713,11 +1699,28 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># %pip install segment-geospatial</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">torchgeo.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">NAIP</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torchgeo.samplers</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomGeoSampler</span><span class="p">,</span> <span class="n">GridGeoSampler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">geoai.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">viz_image</span><span class="p">,</span> <span class="n">viz_raster</span><span class="p">,</span> <span class="n">dict_to_image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">geoai.download</span><span class="w"> </span><span class="kn">import</span> <span class="n">download_naip</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-1"># %pip install segment-geospatial</div>
+<div class="clipboard-copy-txt" id="cell-1">from torchgeo.datasets import NAIP
+from torchgeo.samplers import RandomGeoSampler, GridGeoSampler
+from geoai.common import viz_image, viz_raster, dict_to_image
+from geoai.download import download_naip</div>
 </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="download-naip-imagery">Download NAIP imagery<a class="anchor-link" href="#download-naip-imagery">¶</a></h2>
 </div>
 </div>
 </div>
@@ -1740,26 +1743,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">leafmap</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">samgeo</span><span class="w"> </span><span class="kn">import</span> <span class="n">tms_to_geotiff</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">samgeo</span><span class="w"> </span><span class="kn">import</span> <span class="n">SamGeo</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">root</span> <span class="o">=</span> <span class="s2">"naip_data"</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-2">import leafmap
-from samgeo import tms_to_geotiff
-from samgeo import SamGeo</div>
+<div class="clipboard-copy-txt" id="cell-2">root = "naip_data"</div>
 </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="create-an-interactive-map">Create an interactive map<a class="anchor-link" href="#create-an-interactive-map">¶</a></h2>
 </div>
 </div>
 </div>
@@ -1782,13 +1770,19 @@ from samgeo import SamGeo</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">leafmap</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">22.17615</span><span class="p">,</span> <span class="o">-</span><span class="mf">51.253043</span><span class="p">],</span> <span class="n">zoom</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="s2">"800px"</span><span class="p">)</span>
-<span class="n">m</span><span class="o">.</span><span class="n">add_basemap</span><span class="p">(</span><span class="s2">"SATELLITE"</span><span class="p">)</span>
-<span class="n">m</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">bbox</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">117.6029</span><span class="p">,</span> <span class="mf">47.65</span><span class="p">,</span> <span class="o">-</span><span class="mf">117.5936</span><span class="p">,</span> <span class="mf">47.6563</span><span class="p">)</span>
+<span class="n">downloaded_files</span> <span class="o">=</span> <span class="n">download_naip</span><span class="p">(</span>
+    <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="n">root</span><span class="p">,</span>
+    <span class="n">max_items</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-3">m = leafmap.Map(center=[-22.17615, -51.253043], zoom=18, height="800px")
-m.add_basemap("SATELLITE")
-m</div>
+<div class="clipboard-copy-txt" id="cell-3">bbox = (-117.6029, 47.65, -117.5936, 47.6563)
+downloaded_files = download_naip(
+    bbox=bbox,
+    output_dir=root,
+    max_items=1,
+)</div>
 </div>
 </div>
 </div>
@@ -1801,7 +1795,32 @@ m</div>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="download-a-sample-image">Download a sample image<a class="anchor-link" href="#download-a-sample-image">¶</a></h2><p>Pan and zoom the map to select the area of interest. Use the draw tools to draw a polygon or rectangle on the map</p>
+<ul>
+<li><strong>torchgeo.datasets.NAIP</strong>: Provides access to the National Agriculture Imagery Program (NAIP) dataset, which offers high-resolution aerial imagery across the United States.</li>
+<li><strong>torchgeo.samplers</strong>: Contains sampling strategies for geospatial data:<ul>
+<li><strong>RandomGeoSampler</strong>: Samples random patches from the dataset</li>
+<li><strong>GridGeoSampler</strong>: Samples patches in a grid pattern with specified stride</li>
+</ul>
+</li>
+<li><strong>geoai.common</strong>: Custom utility functions for visualization:<ul>
+<li><strong>viz_image</strong>: Visualizes tensor images</li>
+<li><strong>viz_raster</strong>: Displays georeferenced data on an interactive map</li>
+<li><strong>dict_to_image</strong>: Converts dictionary representation to image format</li>
+</ul>
+</li>
+</ul>
+<h2 id="setting-up-the-dataset">Setting Up the Dataset<a class="anchor-link" href="#setting-up-the-dataset">¶</a></h2>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Load the NAIP dataset from the specified root directory:</p>
 </div>
 </div>
 </div>
@@ -1824,15 +1843,22 @@ m</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">bbox</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">user_roi_bounds</span><span class="p">()</span>
-<span class="k">if</span> <span class="n">bbox</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">bbox</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">51.2565</span><span class="p">,</span> <span class="o">-</span><span class="mf">22.1777</span><span class="p">,</span> <span class="o">-</span><span class="mf">51.2512</span><span class="p">,</span> <span class="o">-</span><span class="mf">22.175</span><span class="p">]</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">NAIP</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-4">bbox = m.user_roi_bounds()
-if bbox is None:
-    bbox = [-51.2565, -22.1777, -51.2512, -22.175]</div>
+<div class="clipboard-copy-txt" id="cell-4">dataset = NAIP(root)</div>
 </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Examine the dataset object to understand its properties:</p>
 </div>
 </div>
 </div>
@@ -1855,11 +1881,9 @@ if bbox is None:
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">image</span> <span class="o">=</span> <span class="s2">"Image.tif"</span>
-<span class="n">tms_to_geotiff</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">image</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span> <span class="n">zoom</span><span class="o">=</span><span class="mi">19</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">"Satellite"</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">dataset</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-5">image = "Image.tif"
-tms_to_geotiff(output=image, bbox=bbox, zoom=19, source="Satellite", overwrite=True)</div>
+<div class="clipboard-copy-txt" id="cell-5">dataset</div>
 </div>
 </div>
 </div>
@@ -1872,7 +1896,8 @@ tms_to_geotiff(output=image, bbox=bbox, zoom=19, source="Satellite", overwrite=T
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>You can also use your own image. Uncomment and run the following cell to use your own image.</p>
+<p>This will display information about the NAIP dataset including available imagery dates, coverage area, and other metadata.</p>
+<p>Check the Coordinate Reference System (CRS) used by the dataset:</p>
 </div>
 </div>
 </div>
@@ -1895,9 +1920,9 @@ tms_to_geotiff(output=image, bbox=bbox, zoom=19, source="Satellite", overwrite=T
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># image = '/path/to/your/own/image.tif'</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">crs</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-6"># image = '/path/to/your/own/image.tif'</div>
+<div class="clipboard-copy-txt" id="cell-6">dataset.crs</div>
 </div>
 </div>
 </div>
@@ -1910,7 +1935,8 @@ tms_to_geotiff(output=image, bbox=bbox, zoom=19, source="Satellite", overwrite=T
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Display the downloaded image on the map.</p>
+<p>The CRS defines how the geospatial data is projected onto a coordinate system, which is essential for accurate visualization and analysis.</p>
+<h2 id="random-sampling-of-geospatial-data">Random Sampling of Geospatial Data<a class="anchor-link" href="#random-sampling-of-geospatial-data">¶</a></h2><p>Create a random sampler to extract patches from the dataset:</p>
 </div>
 </div>
 </div>
@@ -1933,13 +1959,9 @@ tms_to_geotiff(output=image, bbox=bbox, zoom=19, source="Satellite", overwrite=T
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">m</span><span class="o">.</span><span class="n">add_raster</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">layer_name</span><span class="o">=</span><span class="s2">"Image"</span><span class="p">)</span>
-<span class="n">m</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">train_sampler</span> <span class="o">=</span> <span class="n">RandomGeoSampler</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-7">m.layers[-1].visible = False
-m.add_raster(image, layer_name="Image")
-m</div>
+<div class="clipboard-copy-txt" id="cell-7">train_sampler = RandomGeoSampler(dataset, size=256, length=1000)</div>
 </div>
 </div>
 </div>
@@ -1952,9 +1974,8 @@ m</div>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="initialize-sam-class">Initialize SAM class<a class="anchor-link" href="#initialize-sam-class">¶</a></h2><p>The initialization of the LangSAM class might take a few minutes. The initialization downloads the model weights and sets up the model for inference.</p>
-<p>Specify the file path to the model checkpoint. If it is not specified, the model will to downloaded to the working directory.</p>
-<p>Set <code>automatic=False</code> to disable the <code>SamAutomaticMaskGenerator</code> and enable the <code>SamPredictor</code>.</p>
+<p>This creates a sampler that will randomly select 1000 patches, each 256x256 pixels in size. This sampling strategy is commonly used for training machine learning models where you need a diverse set of examples.</p>
+<p>Extract a bounding box from the random sampler:</p>
 </div>
 </div>
 </div>
@@ -1977,17 +1998,11 @@ m</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">sam</span> <span class="o">=</span> <span class="n">SamGeo</span><span class="p">(</span>
-    <span class="n">model_type</span><span class="o">=</span><span class="s2">"vit_h"</span><span class="p">,</span>
-    <span class="n">automatic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">sam_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">train_bbox</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_sampler</span><span class="p">))</span>
+<span class="n">train_bbox</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-8">sam = SamGeo(
-    model_type="vit_h",
-    automatic=False,
-    sam_kwargs=None,
-)</div>
+<div class="clipboard-copy-txt" id="cell-8">train_bbox = next(iter(train_sampler))
+train_bbox</div>
 </div>
 </div>
 </div>
@@ -2000,7 +2015,8 @@ m</div>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Specify the image to segment.</p>
+<p>The bounding box contains the coordinates defining the spatial extent of our randomly sampled patch.</p>
+<p>Load the actual image data corresponding to the randomly selected bounding box:</p>
 </div>
 </div>
 </div>
@@ -2023,9 +2039,9 @@ m</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">sam</span><span class="o">.</span><span class="n">set_image</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">train_image</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_sampler</span><span class="p">))][</span><span class="s2">"image"</span><span class="p">]</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-9">sam.set_image(image)</div>
+<div class="clipboard-copy-txt" id="cell-9">train_image = dataset[next(iter(train_sampler))]["image"]</div>
 </div>
 </div>
 </div>
@@ -2038,7 +2054,7 @@ m</div>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Display the map. Use the drawing tools to draw some rectangles around the features you want to extract, such as trees, buildings.</p>
+<p>Examine the complete data dictionary returned for a sample, which includes both the image and metadata:</p>
 </div>
 </div>
 </div>
@@ -2061,9 +2077,9 @@ m</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">m</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_sampler</span><span class="p">))]</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-10">m</div>
+<div class="clipboard-copy-txt" id="cell-10">dataset[next(iter(train_sampler))]</div>
 </div>
 </div>
 </div>
@@ -2076,7 +2092,8 @@ m</div>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="create-bounding-boxes">Create bounding boxes<a class="anchor-link" href="#create-bounding-boxes">¶</a></h2><p>If no rectangles are drawn, the default bounding boxes will be used as follows:</p>
+<p>This returns a dictionary containing the image tensor and associated metadata such as the bounding box, CRS, and other properties.</p>
+<h2 id="visualizing-randomly-sampled-data">Visualizing Randomly Sampled Data<a class="anchor-link" href="#visualizing-randomly-sampled-data">¶</a></h2><p>Display the randomly sampled image:</p>
 </div>
 </div>
 </div>
@@ -2099,21 +2116,13 @@ m</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">user_rois</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">boxes</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">user_rois</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">boxes</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">[</span><span class="o">-</span><span class="mf">51.2546</span><span class="p">,</span> <span class="o">-</span><span class="mf">22.1771</span><span class="p">,</span> <span class="o">-</span><span class="mf">51.2541</span><span class="p">,</span> <span class="o">-</span><span class="mf">22.1767</span><span class="p">],</span>
-        <span class="p">[</span><span class="o">-</span><span class="mf">51.2538</span><span class="p">,</span> <span class="o">-</span><span class="mf">22.1764</span><span class="p">,</span> <span class="o">-</span><span class="mf">51.2535</span><span class="p">,</span> <span class="o">-</span><span class="mf">22.1761</span><span class="p">],</span>
-    <span class="p">]</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">viz_image</span><span class="p">(</span>
+    <span class="n">train_image</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">250</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Random GeoSampler"</span>
+<span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-11">if m.user_rois is not None:
-    boxes = m.user_rois
-else:
-    boxes = [
-        [-51.2546, -22.1771, -51.2541, -22.1767],
-        [-51.2538, -22.1764, -51.2535, -22.1761],
-    ]</div>
+<div class="clipboard-copy-txt" id="cell-11">viz_image(
+    train_image, transpose=True, scale_factor=(1 / 250), title="Random GeoSampler"
+)</div>
 </div>
 </div>
 </div>
@@ -2126,7 +2135,12 @@ else:
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="segment-the-image">Segment the image<a class="anchor-link" href="#segment-the-image">¶</a></h2><p>Use the <code>predict()</code> method to segment the image with specified bounding boxes. The <code>boxes</code> parameter accepts a list of bounding box coordinates in the format of [[left, bottom, right, top], [left, bottom, right, top], ...], a GeoJSON dictionary, or a file path to a GeoJSON file.</p>
+<ul>
+<li><strong>transpose=True</strong>: Rearranges the dimensions for proper display (from [C,H,W] to [H,W,C])</li>
+<li><strong>scale_factor=(1/250)</strong>: Scales the pixel values for better visualization</li>
+<li><strong>title="Random GeoSampler"</strong>: Adds a descriptive title to the plot</li>
+</ul>
+<h2 id="grid-sampling-of-geospatial-data">Grid Sampling of Geospatial Data<a class="anchor-link" href="#grid-sampling-of-geospatial-data">¶</a></h2><p>Create a grid sampler to extract patches in a systematic pattern:</p>
 </div>
 </div>
 </div>
@@ -2149,9 +2163,9 @@ else:
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">sam</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">boxes</span><span class="o">=</span><span class="n">boxes</span><span class="p">,</span> <span class="n">point_crs</span><span class="o">=</span><span class="s2">"EPSG:4326"</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">"mask.tif"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"uint8"</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">test_sampler</span> <span class="o">=</span> <span class="n">GridGeoSampler</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-12">sam.predict(boxes=boxes, point_crs="EPSG:4326", output="mask.tif", dtype="uint8")</div>
+<div class="clipboard-copy-txt" id="cell-12">test_sampler = GridGeoSampler(dataset, size=256, stride=128)</div>
 </div>
 </div>
 </div>
@@ -2164,7 +2178,8 @@ else:
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="display-the-result">Display the result<a class="anchor-link" href="#display-the-result">¶</a></h2><p>Add the segmented image to the map.</p>
+<p>This sampler extracts 256x256 pixel patches in a grid pattern with a stride of 128 pixels, meaning patches will overlap by 128 pixels. Grid sampling is typically used for inference or testing, where systematic coverage of the area is important.</p>
+<p>Extract a bounding box from the grid sampler:</p>
 </div>
 </div>
 </div>
@@ -2187,11 +2202,11 @@ else:
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">add_raster</span><span class="p">(</span><span class="s2">"mask.tif"</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"viridis"</span><span class="p">,</span> <span class="n">nodata</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">layer_name</span><span class="o">=</span><span class="s2">"Mask"</span><span class="p">)</span>
-<span class="n">m</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">test_bbox</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">test_sampler</span><span class="p">))</span>
+<span class="n">test_bbox</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-13">m.add_raster("mask.tif", cmap="viridis", nodata=0, layer_name="Mask")
-m</div>
+<div class="clipboard-copy-txt" id="cell-13">test_bbox = next(iter(test_sampler))
+test_bbox</div>
 </div>
 </div>
 </div>
@@ -2204,7 +2219,7 @@ m</div>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="use-an-existing-vector-file-as-box-prompts">Use an existing vector file as box prompts<a class="anchor-link" href="#use-an-existing-vector-file-as-box-prompts">¶</a></h2><p>Alternatively, you can specify a file path to a vector file. Let's download a sample vector file from GitHub.</p>
+<p>Load the image data for a patch selected by the grid sampler:</p>
 </div>
 </div>
 </div>
@@ -2227,13 +2242,9 @@ m</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">url</span> <span class="o">=</span> <span class="s2">"https://opengeos.github.io/data/sam/tree_boxes.geojson"</span>
-<span class="n">geojson</span> <span class="o">=</span> <span class="s2">"tree_boxes.geojson"</span>
-<span class="n">leafmap</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">geojson</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">test_image</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">test_sampler</span><span class="p">))][</span><span class="s2">"image"</span><span class="p">]</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-14">url = "https://opengeos.github.io/data/sam/tree_boxes.geojson"
-geojson = "tree_boxes.geojson"
-leafmap.download_file(url, geojson)</div>
+<div class="clipboard-copy-txt" id="cell-14">test_image = dataset[next(iter(test_sampler))]["image"]</div>
 </div>
 </div>
 </div>
@@ -2246,7 +2257,7 @@ leafmap.download_file(url, geojson)</div>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Display the vector data on the map.</p>
+<h2 id="visualizing-grid-sampled-data">Visualizing Grid Sampled Data<a class="anchor-link" href="#visualizing-grid-sampled-data">¶</a></h2><p>Display the image from the grid sampler:</p>
 </div>
 </div>
 </div>
@@ -2269,27 +2280,9 @@ leafmap.download_file(url, geojson)</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">leafmap</span><span class="o">.</span><span class="n">Map</span><span class="p">()</span>
-<span class="n">m</span><span class="o">.</span><span class="n">add_raster</span><span class="p">(</span><span class="s2">"Image.tif"</span><span class="p">,</span> <span class="n">layer_name</span><span class="o">=</span><span class="s2">"image"</span><span class="p">)</span>
-<span class="n">style</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"color"</span><span class="p">:</span> <span class="s2">"#ffff00"</span><span class="p">,</span>
-    <span class="s2">"weight"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-    <span class="s2">"fillColor"</span><span class="p">:</span> <span class="s2">"#7c4185"</span><span class="p">,</span>
-    <span class="s2">"fillOpacity"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-<span class="p">}</span>
-<span class="n">m</span><span class="o">.</span><span class="n">add_vector</span><span class="p">(</span><span class="n">geojson</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">style</span><span class="p">,</span> <span class="n">zoom_to_layer</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">layer_name</span><span class="o">=</span><span class="s2">"Bounding boxes"</span><span class="p">)</span>
-<span class="n">m</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">viz_image</span><span class="p">(</span><span class="n">test_image</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">250</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Grid GeoSampler"</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-15">m = leafmap.Map()
-m.add_raster("Image.tif", layer_name="image")
-style = {
-    "color": "#ffff00",
-    "weight": 2,
-    "fillColor": "#7c4185",
-    "fillOpacity": 0,
-}
-m.add_vector(geojson, style=style, zoom_to_layer=True, layer_name="Bounding boxes")
-m</div>
+<div class="clipboard-copy-txt" id="cell-15">viz_image(test_image, transpose=True, scale_factor=(1 / 250), title="Grid GeoSampler")</div>
 </div>
 </div>
 </div>
@@ -2302,7 +2295,8 @@ m</div>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="segment-image-with-box-prompts">Segment image with box prompts<a class="anchor-link" href="#segment-image-with-box-prompts">¶</a></h2><p>Segment the image using the specified file path to the vector mask.</p>
+<p>The visualization shows a systematically sampled patch from the dataset.</p>
+<h2 id="advanced-visualization-with-geospatial-context">Advanced Visualization with Geospatial Context<a class="anchor-link" href="#advanced-visualization-with-geospatial-context">¶</a></h2><p>Load a complete data sample including all metadata:</p>
 </div>
 </div>
 </div>
@@ -2325,9 +2319,9 @@ m</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">sam</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">boxes</span><span class="o">=</span><span class="n">geojson</span><span class="p">,</span> <span class="n">point_crs</span><span class="o">=</span><span class="s2">"EPSG:4326"</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">"mask2.tif"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"uint8"</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">test_sampler</span><span class="p">))]</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-16">sam.predict(boxes=geojson, point_crs="EPSG:4326", output="mask2.tif", dtype="uint8")</div>
+<div class="clipboard-copy-txt" id="cell-16">data = dataset[next(iter(test_sampler))]</div>
 </div>
 </div>
 </div>
@@ -2340,7 +2334,7 @@ m</div>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Display the segmented masks on the map.</p>
+<p>Visualize the raster data on an interactive map with Google Satellite imagery as the background:</p>
 </div>
 </div>
 </div>
@@ -2363,11 +2357,9 @@ m</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">add_raster</span><span class="p">(</span><span class="s2">"mask2.tif"</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"Greens"</span><span class="p">,</span> <span class="n">nodata</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">layer_name</span><span class="o">=</span><span class="s2">"Tree masks"</span><span class="p">)</span>
-<span class="n">m</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">viz_raster</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">basemap</span><span class="o">=</span><span class="s2">"Google Satellite"</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-17">m.add_raster("mask2.tif", cmap="Greens", nodata=0, opacity=0.5, layer_name="Tree masks")
-m</div>
+<div class="clipboard-copy-txt" id="cell-17">viz_raster(data, basemap="Google Satellite")</div>
 </div>
 </div>
 </div>
@@ -2380,7 +2372,13 @@ m</div>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><img alt="" src="https://i.imgur.com/SpA2NV9.gif"/></p>
+<p>This interactive visualization places the sampled data in its real-world geographic context, allowing you to see how it aligns with the Google Satellite imagery.</p>
+<h2 id="key-takeaways">Key Takeaways<a class="anchor-link" href="#key-takeaways">¶</a></h2><ol>
+<li><strong>TorchGeo</strong> provides a flexible framework for working with geospatial datasets like NAIP.</li>
+<li>Different sampling strategies (random vs. grid) serve different purposes in geospatial machine learning workflows.</li>
+<li>Visualization tools help understand the data in both pixel space (viz_image) and geographic space (viz_raster).</li>
+<li>Working with geospatial data requires attention to coordinate reference systems (CRS) and proper handling of georeferenced data.</li>
+</ol>
 </div>
 </div>
 </div>
@@ -2414,7 +2412,7 @@ m</div>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago"><span class="timeago" datetime="2024-07-27T16:50:48+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2024-07-27</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago"><span class="timeago" datetime="2025-03-01T05:54:32+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2025-03-01</span>
   </span>
 
     
@@ -2424,7 +2422,7 @@ m</div>
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago"><span class="timeago" datetime="2023-10-11T23:10:59+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2023-10-11</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago"><span class="timeago" datetime="2025-03-01T05:54:32+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2025-03-01</span>
   </span>
 
     
@@ -2481,14 +2479,14 @@ m</div>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "search.highlight", "search.share"], "search": "../../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "search.highlight", "search.share"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
       
-        <script src="../../../js/timeago.min.js"></script>
+        <script src="../../js/timeago.min.js"></script>
       
-        <script src="../../../js/timeago_mkdocs_material.js"></script>
+        <script src="../../js/timeago_mkdocs_material.js"></script>
       
     
   </body>
