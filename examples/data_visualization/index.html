@@ -12,7 +12,7 @@
         <meta name="author" content="opengeos">
       
       
-        <link rel="canonical" href="https://geoai.gishub.org/examples/data_viz/">
+        <link rel="canonical" href="https://geoai.gishub.org/examples/data_visualization/">
       
       
         <link rel="prev" href="../download_data/">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Data viz - geoai</title>
+        <title>Data visualization - geoai</title>
       
     
     
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Data viz
+              Data visualization
             
           </span>
         </div>
@@ -486,7 +486,7 @@
           
   
   <span class="md-ellipsis">
-    Data viz
+    Data visualization
     
   </span>
   
@@ -498,7 +498,7 @@
         
   
   <span class="md-ellipsis">
-    Data viz
+    Data visualization
     
   </span>
   
@@ -519,6 +519,15 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#install-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install Package
+    </span>
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#importing-required-libraries" class="md-nav__link">
@@ -1171,6 +1180,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#install-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install Package
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#importing-required-libraries" class="md-nav__link">
     <span class="md-ellipsis">
       Importing Required Libraries
@@ -1264,7 +1282,7 @@
               <article class="md-content__inner md-typeset">
                 
 
-    <a href="/examples/data_viz/data_viz.ipynb" title="Download Notebook" class="md-content__button md-icon">
+    <a href="/examples/data_visualization/data_visualization.ipynb" title="Download Notebook" class="md-content__button md-icon">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7z"/></svg>
     </a>
 
@@ -1719,8 +1737,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="data-visualization">Data visualization<a class="anchor-link" href="#data-visualization">¶</a></h1><p>This notebook demonstrates how to work with geospatial imagery data using TorchGeo and GeoAI. We'll explore how to load data, sample it using different strategies, and visualize the results.</p>
-<h2 id="importing-required-libraries">Importing Required Libraries<a class="anchor-link" href="#importing-required-libraries">¶</a></h2><p>First, we import the necessary libraries for our geospatial data visualization workflow:</p>
+<h1 id="data-visualization">Data visualization<a class="anchor-link" href="#data-visualization">¶</a></h1><p><a href="https://colab.research.google.com/github/opengeos/geoai/blob/main/docs/examples/data_viz.ipynb"><img alt="image" src="https://colab.research.google.com/assets/colab-badge.svg"/></a></p>
+<p>This notebook demonstrates how to work with geospatial imagery data using TorchGeo and GeoAI. We'll explore how to load data, sample it using different strategies, and visualize the results.</p>
+<h2 id="install-package">Install Package<a class="anchor-link" href="#install-package">¶</a></h2><p>To use the <code>geoai-py</code> package, ensure it is installed in your environment. Uncomment the command below if needed.</p>
 </div>
 </div>
 </div>
@@ -1743,12 +1762,50 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># %pip install geoai-py</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-1"># %pip install geoai-py</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="importing-required-libraries">Importing Required Libraries<a class="anchor-link" href="#importing-required-libraries">¶</a></h2><p>First, we import the necessary libraries for our geospatial data visualization workflow:</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-2">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">torchgeo.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">NAIP</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torchgeo.samplers</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomGeoSampler</span><span class="p">,</span> <span class="n">GridGeoSampler</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">geoai.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">viz_image</span><span class="p">,</span> <span class="n">viz_raster</span><span class="p">,</span> <span class="n">dict_to_image</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">geoai.download</span><span class="w"> </span><span class="kn">import</span> <span class="n">download_naip</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-1">from torchgeo.datasets import NAIP
+<div class="clipboard-copy-txt" id="cell-2">from torchgeo.datasets import NAIP
 from torchgeo.samplers import RandomGeoSampler, GridGeoSampler
 from geoai.common import viz_image, viz_raster, dict_to_image
 from geoai.download import download_naip</div>
@@ -1777,7 +1834,7 @@ from geoai.download import download_naip</div>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-2">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-3">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1789,7 +1846,7 @@ from geoai.download import download_naip</div>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">root</span> <span class="o">=</span> <span class="s2">"naip_data"</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-2">root = "naip_data"</div>
+<div class="clipboard-copy-txt" id="cell-3">root = "naip_data"</div>
 </div>
 </div>
 </div>
@@ -1804,7 +1861,7 @@ from geoai.download import download_naip</div>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-3">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-4">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1821,7 +1878,7 @@ from geoai.download import download_naip</div>
     <span class="n">max_items</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-3">bbox = (-117.6029, 47.65, -117.5936, 47.6563)
+<div class="clipboard-copy-txt" id="cell-4">bbox = (-117.6029, 47.65, -117.5936, 47.6563)
 downloaded_files = download_naip(
     bbox=bbox,
     output_dir=root,
@@ -1877,7 +1934,7 @@ downloaded_files = download_naip(
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-4">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-5">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1889,7 +1946,7 @@ downloaded_files = download_naip(
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">NAIP</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-4">dataset = NAIP(root)</div>
+<div class="clipboard-copy-txt" id="cell-5">dataset = NAIP(root)</div>
 </div>
 </div>
 </div>
@@ -1915,7 +1972,7 @@ downloaded_files = download_naip(
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-5">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-6">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1927,7 +1984,7 @@ downloaded_files = download_naip(
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">dataset</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-5">dataset</div>
+<div class="clipboard-copy-txt" id="cell-6">dataset</div>
 </div>
 </div>
 </div>
@@ -1954,7 +2011,7 @@ downloaded_files = download_naip(
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-6">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-7">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1966,7 +2023,7 @@ downloaded_files = download_naip(
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">crs</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-6">dataset.crs</div>
+<div class="clipboard-copy-txt" id="cell-7">dataset.crs</div>
 </div>
 </div>
 </div>
@@ -1993,7 +2050,7 @@ downloaded_files = download_naip(
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-7">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-8">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2005,7 +2062,7 @@ downloaded_files = download_naip(
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">train_sampler</span> <span class="o">=</span> <span class="n">RandomGeoSampler</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-7">train_sampler = RandomGeoSampler(dataset, size=256, length=1000)</div>
+<div class="clipboard-copy-txt" id="cell-8">train_sampler = RandomGeoSampler(dataset, size=256, length=1000)</div>
 </div>
 </div>
 </div>
@@ -2032,7 +2089,7 @@ downloaded_files = download_naip(
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-8">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-9">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2045,7 +2102,7 @@ downloaded_files = download_naip(
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">train_bbox</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_sampler</span><span class="p">))</span>
 <span class="n">train_bbox</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-8">train_bbox = next(iter(train_sampler))
+<div class="clipboard-copy-txt" id="cell-9">train_bbox = next(iter(train_sampler))
 train_bbox</div>
 </div>
 </div>
@@ -2073,7 +2130,7 @@ train_bbox</div>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-9">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-10">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2085,7 +2142,7 @@ train_bbox</div>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">train_image</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_sampler</span><span class="p">))][</span><span class="s2">"image"</span><span class="p">]</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-9">train_image = dataset[next(iter(train_sampler))]["image"]</div>
+<div class="clipboard-copy-txt" id="cell-10">train_image = dataset[next(iter(train_sampler))]["image"]</div>
 </div>
 </div>
 </div>
@@ -2111,7 +2168,7 @@ train_bbox</div>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-10">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-11">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2123,7 +2180,7 @@ train_bbox</div>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_sampler</span><span class="p">))]</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-10">dataset[next(iter(train_sampler))]</div>
+<div class="clipboard-copy-txt" id="cell-11">dataset[next(iter(train_sampler))]</div>
 </div>
 </div>
 </div>
@@ -2150,7 +2207,7 @@ train_bbox</div>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-11">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-12">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2164,7 +2221,7 @@ train_bbox</div>
     <span class="n">train_image</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">250</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Random GeoSampler"</span>
 <span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-11">viz_image(
+<div class="clipboard-copy-txt" id="cell-12">viz_image(
     train_image, transpose=True, scale_factor=(1 / 250), title="Random GeoSampler"
 )</div>
 </div>
@@ -2197,7 +2254,7 @@ train_bbox</div>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-12">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-13">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2209,7 +2266,7 @@ train_bbox</div>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">test_sampler</span> <span class="o">=</span> <span class="n">GridGeoSampler</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-12">test_sampler = GridGeoSampler(dataset, size=256, stride=128)</div>
+<div class="clipboard-copy-txt" id="cell-13">test_sampler = GridGeoSampler(dataset, size=256, stride=128)</div>
 </div>
 </div>
 </div>
@@ -2236,7 +2293,7 @@ train_bbox</div>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-13">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-14">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2249,7 +2306,7 @@ train_bbox</div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">test_bbox</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">test_sampler</span><span class="p">))</span>
 <span class="n">test_bbox</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-13">test_bbox = next(iter(test_sampler))
+<div class="clipboard-copy-txt" id="cell-14">test_bbox = next(iter(test_sampler))
 test_bbox</div>
 </div>
 </div>
@@ -2276,7 +2333,7 @@ test_bbox</div>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-14">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-15">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2288,7 +2345,7 @@ test_bbox</div>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">test_image</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">test_sampler</span><span class="p">))][</span><span class="s2">"image"</span><span class="p">]</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-14">test_image = dataset[next(iter(test_sampler))]["image"]</div>
+<div class="clipboard-copy-txt" id="cell-15">test_image = dataset[next(iter(test_sampler))]["image"]</div>
 </div>
 </div>
 </div>
@@ -2314,7 +2371,7 @@ test_bbox</div>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-15">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-16">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2326,7 +2383,7 @@ test_bbox</div>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">viz_image</span><span class="p">(</span><span class="n">test_image</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">250</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Grid GeoSampler"</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-15">viz_image(test_image, transpose=True, scale_factor=(1 / 250), title="Grid GeoSampler")</div>
+<div class="clipboard-copy-txt" id="cell-16">viz_image(test_image, transpose=True, scale_factor=(1 / 250), title="Grid GeoSampler")</div>
 </div>
 </div>
 </div>
@@ -2353,7 +2410,7 @@ test_bbox</div>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-16">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-17">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2365,7 +2422,7 @@ test_bbox</div>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">test_sampler</span><span class="p">))]</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-16">data = dataset[next(iter(test_sampler))]</div>
+<div class="clipboard-copy-txt" id="cell-17">data = dataset[next(iter(test_sampler))]</div>
 </div>
 </div>
 </div>
@@ -2391,7 +2448,7 @@ test_bbox</div>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-17">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-18">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -2403,7 +2460,7 @@ test_bbox</div>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">viz_raster</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">basemap</span><span class="o">=</span><span class="s2">"Google Satellite"</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-17">viz_raster(data, basemap="Google Satellite")</div>
+<div class="clipboard-copy-txt" id="cell-18">viz_raster(data, basemap="Google Satellite")</div>
 </div>
 </div>
 </div>
