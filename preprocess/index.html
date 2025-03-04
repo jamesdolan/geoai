@@ -1206,6 +1206,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#geoai.preprocess.export_tiles_to_geojson" class="md-nav__link">
+    <span class="md-ellipsis">
+      export_tiles_to_geojson()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#geoai.preprocess.export_training_data" class="md-nav__link">
     <span class="md-ellipsis">
       export_training_data()
@@ -1468,6 +1477,15 @@
   <a href="#geoai.preprocess.export_geotiff_tiles" class="md-nav__link">
     <span class="md-ellipsis">
       export_geotiff_tiles()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geoai.preprocess.export_tiles_to_geojson" class="md-nav__link">
+    <span class="md-ellipsis">
+      export_tiles_to_geojson()
     </span>
   </a>
   
@@ -2521,19 +2539,97 @@ Can include {vector_name} and {index} placeholders.</p></td>
 
 
 <h2 id="geoai.preprocess.create_overview_image" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">create_overview_image</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">tile_coordinates</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="n">stride</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">create_overview_image</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">tile_coordinates</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="n">stride</span><span class="p">,</span> <span class="n">geojson_path</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a href="#geoai.preprocess.create_overview_image" class="headerlink" title="Permanent link">&para;</a></h2>
 
     <div class="doc doc-contents ">
 
-      <p>Create an overview image showing all tiles and their status.</p>
+      <p>Create an overview image showing all tiles and their status, with optional GeoJSON export.</p>
 
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>src</code></td>
+        <td><code>rasterio.io.DatasetReader</code></td>
+        <td><p>The source raster dataset.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>tile_coordinates</code></td>
+        <td><code>list</code></td>
+        <td><p>A list of dictionaries containing tile information.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>output_path</code></td>
+        <td><code>str</code></td>
+        <td><p>The path where the overview image will be saved.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>tile_size</code></td>
+        <td><code>int</code></td>
+        <td><p>The size of each tile in pixels.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>stride</code></td>
+        <td><code>int</code></td>
+        <td><p>The stride between tiles in pixels. Controls overlap between adjacent tiles.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>geojson_path</code></td>
+        <td><code>str</code></td>
+        <td><p>If provided, exports the tile rectangles as GeoJSON to this path.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>str</code></td>
+      <td><p>Path to the saved overview image.</p></td>
+    </tr>
+  </tbody>
+</table>
         <details class="quote">
           <summary>Source code in <code>geoai/preprocess.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">create_overview_image</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">tile_coordinates</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="n">stride</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an overview image showing all tiles and their status.&quot;&quot;&quot;</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">create_overview_image</span><span class="p">(</span>
+    <span class="n">src</span><span class="p">,</span> <span class="n">tile_coordinates</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="n">stride</span><span class="p">,</span> <span class="n">geojson_path</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an overview image showing all tiles and their status, with optional GeoJSON export.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        src (rasterio.io.DatasetReader): The source raster dataset.</span>
+<span class="sd">        tile_coordinates (list): A list of dictionaries containing tile information.</span>
+<span class="sd">        output_path (str): The path where the overview image will be saved.</span>
+<span class="sd">        tile_size (int): The size of each tile in pixels.</span>
+<span class="sd">        stride (int): The stride between tiles in pixels. Controls overlap between adjacent tiles.</span>
+<span class="sd">        geojson_path (str, optional): If provided, exports the tile rectangles as GeoJSON to this path.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Path to the saved overview image.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Read a reduced version of the source image</span>
     <span class="n">overview_scale</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
         <span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">height</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2000</span><span class="p">)</span>
@@ -2566,6 +2662,10 @@ Can include {vector_name} and {index} placeholders.</p></td>
     <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">rgb</span><span class="p">)</span>
 
+    <span class="c1"># If GeoJSON export is requested, prepare GeoJSON structures</span>
+    <span class="k">if</span> <span class="n">geojson_path</span><span class="p">:</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="p">[]</span>
+
     <span class="c1"># Draw tile boundaries</span>
     <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">tile_coordinates</span><span class="p">:</span>
         <span class="c1"># Convert bounds to pixel coordinates in overview</span>
@@ -2595,6 +2695,43 @@ Can include {vector_name} and {index} placeholders.</p></td>
                 <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
             <span class="p">)</span>
 
+        <span class="c1"># Add to GeoJSON features if exporting</span>
+        <span class="k">if</span> <span class="n">geojson_path</span><span class="p">:</span>
+            <span class="c1"># Create a polygon from the bounds (already in geo-coordinates)</span>
+            <span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span> <span class="o">=</span> <span class="n">bounds</span>
+            <span class="n">polygon</span> <span class="o">=</span> <span class="n">box</span><span class="p">(</span><span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span><span class="p">)</span>
+
+            <span class="c1"># Calculate overlap with neighboring tiles</span>
+            <span class="n">overlap</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">stride</span> <span class="o">&lt;</span> <span class="n">tile_size</span><span class="p">:</span>
+                <span class="n">overlap</span> <span class="o">=</span> <span class="n">tile_size</span> <span class="o">-</span> <span class="n">stride</span>
+
+            <span class="c1"># Create a GeoJSON feature</span>
+            <span class="n">feature</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">mapping</span><span class="p">(</span><span class="n">polygon</span><span class="p">),</span>
+                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">tile</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;has_features&quot;</span><span class="p">:</span> <span class="n">tile</span><span class="p">[</span><span class="s2">&quot;has_features&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;bounds_pixel&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="n">tile</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span>
+                        <span class="n">tile</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">],</span>
+                        <span class="n">tile</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">tile_size</span><span class="p">,</span>
+                        <span class="n">tile</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">tile_size</span><span class="p">,</span>
+                    <span class="p">],</span>
+                    <span class="s2">&quot;tile_size_px&quot;</span><span class="p">:</span> <span class="n">tile_size</span><span class="p">,</span>
+                    <span class="s2">&quot;stride_px&quot;</span><span class="p">:</span> <span class="n">stride</span><span class="p">,</span>
+                    <span class="s2">&quot;overlap_px&quot;</span><span class="p">:</span> <span class="n">overlap</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">}</span>
+
+            <span class="c1"># Add any additional properties from the tile</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">tile</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="s2">&quot;has_features&quot;</span><span class="p">,</span> <span class="s2">&quot;bounds&quot;</span><span class="p">]:</span>
+                    <span class="n">feature</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+            <span class="n">features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
+
     <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Tile Overview (Green = Contains Features, Red = Empty)&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
@@ -2602,6 +2739,30 @@ Can include {vector_name} and {index} placeholders.</p></td>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Overview image saved to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Export GeoJSON if requested</span>
+    <span class="k">if</span> <span class="n">geojson_path</span><span class="p">:</span>
+        <span class="n">geojson_collection</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;FeatureCollection&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">features</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;crs&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="s2">&quot;to_string&quot;</span><span class="p">)</span>
+                    <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;total_tiles&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">),</span>
+                <span class="s2">&quot;source_raster_dimensions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">src</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">height</span><span class="p">],</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Save to file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">geojson_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">geojson_collection</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;GeoJSON saved to </span><span class="si">{</span><span class="n">geojson_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">output_path</span>
 </code></pre></div>
         </details>
     </div>
@@ -3338,6 +3499,191 @@ If not provided, the filename from the URL will be used.</p></td>
 
         <span class="c1"># Return statistics dictionary for further processing if needed</span>
         <span class="k">return</span> <span class="n">stats</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="geoai.preprocess.export_tiles_to_geojson" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">export_tiles_to_geojson</span><span class="p">(</span><span class="n">tile_coordinates</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">tile_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+<a href="#geoai.preprocess.export_tiles_to_geojson" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Export tile rectangles directly to GeoJSON without creating an overview image.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>tile_coordinates</code></td>
+        <td><code>list</code></td>
+        <td><p>A list of dictionaries containing tile information.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>src</code></td>
+        <td><code>rasterio.io.DatasetReader</code></td>
+        <td><p>The source raster dataset.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>output_path</code></td>
+        <td><code>str</code></td>
+        <td><p>The path where the GeoJSON will be saved.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>tile_size</code></td>
+        <td><code>int</code></td>
+        <td><p>The size of each tile in pixels. Only needed if not in tile_coordinates.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>stride</code></td>
+        <td><code>int</code></td>
+        <td><p>The stride between tiles in pixels. Used to calculate overlaps between tiles.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>str</code></td>
+      <td><p>Path to the saved GeoJSON file.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>geoai/preprocess.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">export_tiles_to_geojson</span><span class="p">(</span>
+    <span class="n">tile_coordinates</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">tile_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Export tile rectangles directly to GeoJSON without creating an overview image.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tile_coordinates (list): A list of dictionaries containing tile information.</span>
+<span class="sd">        src (rasterio.io.DatasetReader): The source raster dataset.</span>
+<span class="sd">        output_path (str): The path where the GeoJSON will be saved.</span>
+<span class="sd">        tile_size (int, optional): The size of each tile in pixels. Only needed if not in tile_coordinates.</span>
+<span class="sd">        stride (int, optional): The stride between tiles in pixels. Used to calculate overlaps between tiles.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Path to the saved GeoJSON file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">tile_coordinates</span><span class="p">:</span>
+        <span class="c1"># Get the size from the tile or use the provided parameter</span>
+        <span class="n">tile_width</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">))</span>
+        <span class="n">tile_height</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">tile_width</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">tile_height</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Tile size not found in tile data and no tile_size parameter provided&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Get bounds from the tile</span>
+        <span class="k">if</span> <span class="s2">&quot;bounds&quot;</span> <span class="ow">in</span> <span class="n">tile</span><span class="p">:</span>
+            <span class="c1"># If bounds are already in geo coordinates</span>
+            <span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[</span><span class="s2">&quot;bounds&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Try to calculate bounds from transform if available</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="s2">&quot;transform&quot;</span><span class="p">):</span>
+                <span class="c1"># Convert pixel coordinates to geo coordinates</span>
+                <span class="n">window_transform</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">transform</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="n">tile</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span>
+                <span class="n">minx</span> <span class="o">=</span> <span class="n">window_transform</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">window_transform</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">maxy</span> <span class="o">=</span> <span class="n">window_transform</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">window_transform</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                <span class="n">maxx</span> <span class="o">=</span> <span class="n">minx</span> <span class="o">+</span> <span class="n">tile_width</span> <span class="o">*</span> <span class="n">window_transform</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">miny</span> <span class="o">=</span> <span class="n">maxy</span> <span class="o">+</span> <span class="n">tile_height</span> <span class="o">*</span> <span class="n">window_transform</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Cannot determine bounds. Neither &#39;bounds&#39; in tile nor transform in src.&quot;</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Calculate overlap with neighboring tiles if stride is provided</span>
+        <span class="n">overlap</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">stride</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">stride</span> <span class="o">&lt;</span> <span class="n">tile_width</span><span class="p">:</span>
+            <span class="n">overlap</span> <span class="o">=</span> <span class="n">tile_width</span> <span class="o">-</span> <span class="n">stride</span>
+
+        <span class="c1"># Create a polygon from the bounds</span>
+        <span class="n">polygon</span> <span class="o">=</span> <span class="n">box</span><span class="p">(</span><span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span><span class="p">)</span>
+
+        <span class="c1"># Create a GeoJSON feature</span>
+        <span class="n">feature</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">mapping</span><span class="p">(</span><span class="n">polygon</span><span class="p">),</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">tile</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;has_features&quot;</span><span class="p">:</span> <span class="n">tile</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;has_features&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+                <span class="s2">&quot;tile_width_px&quot;</span><span class="p">:</span> <span class="n">tile_width</span><span class="p">,</span>
+                <span class="s2">&quot;tile_height_px&quot;</span><span class="p">:</span> <span class="n">tile_height</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Add overlap information if stride is provided</span>
+        <span class="k">if</span> <span class="n">stride</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">feature</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;stride_px&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stride</span>
+            <span class="n">feature</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;overlap_px&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">overlap</span>
+
+        <span class="c1"># Add additional properties from the tile</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">tile</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bounds&quot;</span><span class="p">,</span> <span class="s2">&quot;geometry&quot;</span><span class="p">]:</span>
+                <span class="n">feature</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="n">features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
+
+    <span class="c1"># Create the GeoJSON collection</span>
+    <span class="n">geojson_collection</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;FeatureCollection&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">features</span><span class="p">,</span>
+        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;crs&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="s2">&quot;to_string&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;total_tiles&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">),</span>
+            <span class="s2">&quot;source_raster_dimensions&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="p">[</span><span class="n">src</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">height</span><span class="p">]</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="s2">&quot;width&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="p">),</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Create directory if it doesn&#39;t exist</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">output_path</span><span class="p">))</span> <span class="ow">or</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Save to file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">geojson_collection</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;GeoJSON saved to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">output_path</span>
 </code></pre></div>
         </details>
     </div>
