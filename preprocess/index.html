@@ -1242,6 +1242,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#geoai.preprocess.get_raster_stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_raster_stats()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#geoai.preprocess.get_vector_info" class="md-nav__link">
     <span class="md-ellipsis">
       get_vector_info()
@@ -1513,6 +1522,15 @@
   <a href="#geoai.preprocess.get_raster_info_gdal" class="md-nav__link">
     <span class="md-ellipsis">
       get_raster_info_gdal()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geoai.preprocess.get_raster_stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_raster_stats()
     </span>
   </a>
   
@@ -4828,6 +4846,113 @@ If not provided, the filename from the URL will be used.</p></td>
     <span class="n">ds</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">return</span> <span class="n">info</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="geoai.preprocess.get_raster_stats" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_raster_stats</span><span class="p">(</span><span class="n">raster_path</span><span class="p">,</span> <span class="n">divide_by</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span></code>
+
+
+<a href="#geoai.preprocess.get_raster_stats" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Calculate statistics for each band in a raster dataset.</p>
+<p>This function computes min, max, mean, and standard deviation values
+for each band in the provided raster, returning results in a dictionary
+with lists for each statistic type.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>raster_path</code></td>
+        <td><code>str</code></td>
+        <td><p>Path to the raster file</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>divide_by</code></td>
+        <td><code>float</code></td>
+        <td><p>Value to divide pixel values by.
+Defaults to 1.0, which keeps the original pixel</p></td>
+        <td><code>1.0</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>dict</code></td>
+      <td><p>Dictionary containing lists of statistics with keys:
+    - 'min': List of minimum values for each band
+    - 'max': List of maximum values for each band
+    - 'mean': List of mean values for each band
+    - 'std': List of standard deviation values for each band</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>geoai/preprocess.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_raster_stats</span><span class="p">(</span><span class="n">raster_path</span><span class="p">,</span> <span class="n">divide_by</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate statistics for each band in a raster dataset.</span>
+
+<span class="sd">    This function computes min, max, mean, and standard deviation values</span>
+<span class="sd">    for each band in the provided raster, returning results in a dictionary</span>
+<span class="sd">    with lists for each statistic type.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        raster_path (str): Path to the raster file</span>
+<span class="sd">        divide_by (float, optional): Value to divide pixel values by.</span>
+<span class="sd">            Defaults to 1.0, which keeps the original pixel</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: Dictionary containing lists of statistics with keys:</span>
+<span class="sd">            - &#39;min&#39;: List of minimum values for each band</span>
+<span class="sd">            - &#39;max&#39;: List of maximum values for each band</span>
+<span class="sd">            - &#39;mean&#39;: List of mean values for each band</span>
+<span class="sd">            - &#39;std&#39;: List of standard deviation values for each band</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Initialize the results dictionary with empty lists</span>
+    <span class="n">stats</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;std&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+
+    <span class="c1"># Open the raster dataset</span>
+    <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">raster_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+        <span class="c1"># Calculate statistics for each band</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">band</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">masked</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># Append statistics for this band to each list</span>
+            <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="n">divide_by</span><span class="p">)</span>
+            <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">max</span><span class="p">())</span> <span class="o">/</span> <span class="n">divide_by</span><span class="p">)</span>
+            <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="n">divide_by</span><span class="p">)</span>
+            <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;std&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">std</span><span class="p">())</span> <span class="o">/</span> <span class="n">divide_by</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">stats</span>
 </code></pre></div>
         </details>
     </div>
