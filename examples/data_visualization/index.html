@@ -1868,12 +1868,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">torchgeo.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">NAIP</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torchgeo.samplers</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomGeoSampler</span><span class="p">,</span> <span class="n">GridGeoSampler</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">geoai.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">viz_image</span><span class="p">,</span> <span class="n">viz_raster</span><span class="p">,</span> <span class="n">dict_to_image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">geoai.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">view_image</span><span class="p">,</span> <span class="n">view_raster</span><span class="p">,</span> <span class="n">dict_to_image</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">geoai.download</span><span class="w"> </span><span class="kn">import</span> <span class="n">download_naip</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-2">from torchgeo.datasets import NAIP
 from torchgeo.samplers import RandomGeoSampler, GridGeoSampler
-from geoai.common import viz_image, viz_raster, dict_to_image
+from geoai.common import view_image, view_raster, dict_to_image
 from geoai.download import download_naip</div>
 </div>
 </div>
@@ -1970,8 +1970,8 @@ downloaded_files = download_naip(
 </ul>
 </li>
 <li><strong>geoai.common</strong>: Custom utility functions for visualization:<ul>
-<li><strong>viz_image</strong>: Visualizes tensor images</li>
-<li><strong>viz_raster</strong>: Displays georeferenced data on an interactive map</li>
+<li><strong>view_image</strong>: Visualizes tensor images</li>
+<li><strong>view_raster</strong>: Displays georeferenced data on an interactive map</li>
 <li><strong>dict_to_image</strong>: Converts dictionary representation to image format</li>
 </ul>
 </li>
@@ -2283,11 +2283,11 @@ train_bbox</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">viz_image</span><span class="p">(</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">view_image</span><span class="p">(</span>
     <span class="n">train_image</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">250</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Random GeoSampler"</span>
 <span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-12">viz_image(
+<div class="clipboard-copy-txt" id="cell-12">view_image(
     train_image, transpose=True, scale_factor=(1 / 250), title="Random GeoSampler"
 )</div>
 </div>
@@ -2447,9 +2447,9 @@ test_bbox</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">viz_image</span><span class="p">(</span><span class="n">test_image</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">250</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Grid GeoSampler"</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">view_image</span><span class="p">(</span><span class="n">test_image</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">250</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Grid GeoSampler"</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-16">viz_image(test_image, transpose=True, scale_factor=(1 / 250), title="Grid GeoSampler")</div>
+<div class="clipboard-copy-txt" id="cell-16">view_image(test_image, transpose=True, scale_factor=(1 / 250), title="Grid GeoSampler")</div>
 </div>
 </div>
 </div>
@@ -2524,9 +2524,9 @@ test_bbox</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">viz_raster</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">basemap</span><span class="o">=</span><span class="s2">"Google Satellite"</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">view_raster</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">basemap</span><span class="o">=</span><span class="s2">"Google Satellite"</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-18">viz_raster(data, basemap="Google Satellite")</div>
+<div class="clipboard-copy-txt" id="cell-18">view_raster(data, basemap="Google Satellite")</div>
 </div>
 </div>
 </div>
@@ -2543,7 +2543,7 @@ test_bbox</div>
 <h2 id="key-takeaways">Key Takeaways<a class="anchor-link" href="#key-takeaways">¶</a></h2><ol>
 <li><strong>TorchGeo</strong> provides a flexible framework for working with geospatial datasets like NAIP.</li>
 <li>Different sampling strategies (random vs. grid) serve different purposes in geospatial machine learning workflows.</li>
-<li>Visualization tools help understand the data in both pixel space (viz_image) and geographic space (viz_raster).</li>
+<li>Visualization tools help understand the data in both pixel space (view_image) and geographic space (view_raster).</li>
 <li>Working with geospatial data requires attention to coordinate reference systems (CRS) and proper handling of georeferenced data.</li>
 </ol>
 </div>
@@ -2579,7 +2579,7 @@ test_bbox</div>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago"><span class="timeago" datetime="2025-03-01T05:54:32+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2025-03-01</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago"><span class="timeago" datetime="2025-03-04T14:42:21+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2025-03-04</span>
   </span>
 
     
