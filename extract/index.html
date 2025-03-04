@@ -1140,9 +1140,27 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#geoai.extract.BuildingFootprintExtractor.filter_edge_buildings" class="md-nav__link">
+    <span class="md-ellipsis">
+      filter_edge_buildings()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#geoai.extract.BuildingFootprintExtractor.process_raster" class="md-nav__link">
     <span class="md-ellipsis">
       process_raster()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geoai.extract.BuildingFootprintExtractor.save_masks_as_geotiff" class="md-nav__link">
+    <span class="md-ellipsis">
+      save_masks_as_geotiff()
     </span>
   </a>
   
@@ -1319,9 +1337,27 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#geoai.extract.BuildingFootprintExtractor.filter_edge_buildings" class="md-nav__link">
+    <span class="md-ellipsis">
+      filter_edge_buildings()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#geoai.extract.BuildingFootprintExtractor.process_raster" class="md-nav__link">
     <span class="md-ellipsis">
       process_raster()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geoai.extract.BuildingFootprintExtractor.save_masks_as_geotiff" class="md-nav__link">
+    <span class="md-ellipsis">
+      save_masks_as_geotiff()
     </span>
   </a>
   
@@ -1408,7 +1444,9 @@ Using NonGeoDataset to avoid spatial indexing issues.</p>
 <span class="sd">    Using NonGeoDataset to avoid spatial indexing issues.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">chip_size</span><span class="o">=</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span> <span class="n">transforms</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">chip_size</span><span class="o">=</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span> <span class="n">transforms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the dataset.</span>
 
@@ -1416,6 +1454,7 @@ Using NonGeoDataset to avoid spatial indexing issues.</p>
 <span class="sd">            raster_path: Path to the input raster file</span>
 <span class="sd">            chip_size: Size of image chips to extract (height, width)</span>
 <span class="sd">            transforms: Transforms to apply to the image</span>
+<span class="sd">            verbose: Whether to print detailed processing information</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
@@ -1423,6 +1462,10 @@ Using NonGeoDataset to avoid spatial indexing issues.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span> <span class="o">=</span> <span class="n">raster_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span> <span class="o">=</span> <span class="n">chip_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span> <span class="o">=</span> <span class="n">transforms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+
+        <span class="c1"># For tracking warnings about multi-band images</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">warned_about_bands</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># Open raster and get metadata</span>
         <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
@@ -1440,12 +1483,15 @@ Using NonGeoDataset to avoid spatial indexing issues.</p>
             <span class="bp">self</span><span class="o">.</span><span class="n">roi</span> <span class="o">=</span> <span class="n">box</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
 
             <span class="c1"># Calculate number of chips in each dimension</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># Use ceil division to ensure we cover the entire image</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cols</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
             <span class="nb">print</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Dataset initialized with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rows</span><span class="si">}</span><span class="s2"> rows and </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cols</span><span class="si">}</span><span class="s2"> columns of chips&quot;</span>
             <span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image dimensions: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="si">}</span><span class="s2"> x </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="si">}</span><span class="s2"> pixels&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Chip size: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> x </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> pixels&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CRS: </span><span class="si">{</span><span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -1481,11 +1527,17 @@ Using NonGeoDataset to avoid spatial indexing issues.</p>
 
             <span class="c1"># Handle RGBA or multispectral images - keep only first 3 bands</span>
             <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image has </span><span class="si">{</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> bands, using first 3 bands only&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">warned_about_bands</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image has </span><span class="si">{</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> bands, using first 3 bands only&quot;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">warned_about_bands</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
             <span class="k">elif</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="c1"># If image has fewer than 3 bands, duplicate the last band to make 3</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image has </span><span class="si">{</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> bands, duplicating bands to make 3&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">warned_about_bands</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Image has </span><span class="si">{</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> bands, duplicating bands to make 3&quot;</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">warned_about_bands</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">image</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
                     <span class="n">temp</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
@@ -1628,11 +1680,17 @@ Using NonGeoDataset to avoid spatial indexing issues.</p>
 
         <span class="c1"># Handle RGBA or multispectral images - keep only first 3 bands</span>
         <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image has </span><span class="si">{</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> bands, using first 3 bands only&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">warned_about_bands</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image has </span><span class="si">{</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> bands, using first 3 bands only&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">warned_about_bands</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
         <span class="k">elif</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
             <span class="c1"># If image has fewer than 3 bands, duplicate the last band to make 3</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image has </span><span class="si">{</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> bands, duplicating bands to make 3&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">warned_about_bands</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Image has </span><span class="si">{</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> bands, duplicating bands to make 3&quot;</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">warned_about_bands</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">image</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
                 <span class="n">temp</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
@@ -1687,7 +1745,7 @@ Using NonGeoDataset to avoid spatial indexing issues.</p>
 
 
 <h3 id="geoai.extract.BuildingFootprintDataset.__init__" class="doc doc-heading">
-<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">chip_size</span><span class="o">=</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span> <span class="n">transforms</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">chip_size</span><span class="o">=</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span> <span class="n">transforms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
   <span class="doc doc-properties">
       <small class="doc doc-property doc-property-special"><code>special</code></small>
@@ -1728,11 +1786,19 @@ Using NonGeoDataset to avoid spatial indexing issues.</p>
         <td><p>Transforms to apply to the image</p></td>
         <td><code>None</code></td>
       </tr>
+      <tr>
+        <td><code>verbose</code></td>
+        <td></td>
+        <td><p>Whether to print detailed processing information</p></td>
+        <td><code>False</code></td>
+      </tr>
   </tbody>
 </table>
         <details class="quote">
           <summary>Source code in <code>geoai/extract.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">chip_size</span><span class="o">=</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span> <span class="n">transforms</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">chip_size</span><span class="o">=</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span> <span class="n">transforms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialize the dataset.</span>
 
@@ -1740,6 +1806,7 @@ Using NonGeoDataset to avoid spatial indexing issues.</p>
 <span class="sd">        raster_path: Path to the input raster file</span>
 <span class="sd">        chip_size: Size of image chips to extract (height, width)</span>
 <span class="sd">        transforms: Transforms to apply to the image</span>
+<span class="sd">        verbose: Whether to print detailed processing information</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
@@ -1747,6 +1814,10 @@ Using NonGeoDataset to avoid spatial indexing issues.</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span> <span class="o">=</span> <span class="n">raster_path</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span> <span class="o">=</span> <span class="n">chip_size</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span> <span class="o">=</span> <span class="n">transforms</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+
+    <span class="c1"># For tracking warnings about multi-band images</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">warned_about_bands</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="c1"># Open raster and get metadata</span>
     <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
@@ -1764,12 +1835,15 @@ Using NonGeoDataset to avoid spatial indexing issues.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">roi</span> <span class="o">=</span> <span class="n">box</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
 
         <span class="c1"># Calculate number of chips in each dimension</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># Use ceil division to ensure we cover the entire image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cols</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="nb">print</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Dataset initialized with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rows</span><span class="si">}</span><span class="s2"> rows and </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cols</span><span class="si">}</span><span class="s2"> columns of chips&quot;</span>
         <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image dimensions: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="si">}</span><span class="s2"> x </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="si">}</span><span class="s2"> pixels&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Chip size: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> x </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> pixels&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CRS: </span><span class="si">{</span><span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -2084,8 +2158,79 @@ BuildingFootprintExtractor        </code>
 
         <span class="k">return</span> <span class="n">gdf</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">keep_indices</span><span class="p">]</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter_edge_buildings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdf</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">edge_buffer</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Filter out building detections that fall in padding/edge areas of the image.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            gdf: GeoDataFrame with building footprint detections</span>
+<span class="sd">            raster_path: Path to the original raster file</span>
+<span class="sd">            edge_buffer: Buffer in pixels to consider as edge region</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            GeoDataFrame with filtered building footprints</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">box</span>
+
+        <span class="c1"># If no buildings detected, return empty GeoDataFrame</span>
+        <span class="k">if</span> <span class="n">gdf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">gdf</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Buildings before filtering: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">raster_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+            <span class="c1"># Get raster bounds</span>
+            <span class="n">raster_bounds</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">bounds</span>
+            <span class="n">raster_width</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">width</span>
+            <span class="n">raster_height</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">height</span>
+
+            <span class="c1"># Convert edge buffer from pixels to geographic units</span>
+            <span class="c1"># We need the smallest dimension of a pixel in geographic units</span>
+            <span class="n">pixel_width</span> <span class="o">=</span> <span class="p">(</span><span class="n">raster_bounds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">raster_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">raster_width</span>
+            <span class="n">pixel_height</span> <span class="o">=</span> <span class="p">(</span><span class="n">raster_bounds</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">raster_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">raster_height</span>
+            <span class="n">buffer_size</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">pixel_width</span><span class="p">,</span> <span class="n">pixel_height</span><span class="p">)</span> <span class="o">*</span> <span class="n">edge_buffer</span>
+
+            <span class="c1"># Create a slightly smaller bounding box to exclude edge regions</span>
+            <span class="n">inner_bounds</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">raster_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">buffer_size</span><span class="p">,</span>  <span class="c1"># min x (west)</span>
+                <span class="n">raster_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">buffer_size</span><span class="p">,</span>  <span class="c1"># min y (south)</span>
+                <span class="n">raster_bounds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">buffer_size</span><span class="p">,</span>  <span class="c1"># max x (east)</span>
+                <span class="n">raster_bounds</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">buffer_size</span><span class="p">,</span>  <span class="c1"># max y (north)</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Check that inner bounds are valid</span>
+            <span class="k">if</span> <span class="n">inner_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">inner_bounds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">or</span> <span class="n">inner_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">inner_bounds</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: Edge buffer too large, using original bounds&quot;</span><span class="p">)</span>
+                <span class="n">inner_box</span> <span class="o">=</span> <span class="n">box</span><span class="p">(</span><span class="o">*</span><span class="n">raster_bounds</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">inner_box</span> <span class="o">=</span> <span class="n">box</span><span class="p">(</span><span class="o">*</span><span class="n">inner_bounds</span><span class="p">)</span>
+
+            <span class="c1"># Filter out buildings that intersect with the edge of the image</span>
+            <span class="n">filtered_gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="n">gdf</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">inner_box</span><span class="p">)]</span>
+
+            <span class="c1"># Additional check for buildings that have &gt;50% of their area outside the valid region</span>
+            <span class="n">valid_buildings</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">filtered_gdf</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">inner_box</span><span class="p">)</span><span class="o">.</span><span class="n">area</span> <span class="o">&gt;=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">row</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">area</span><span class="p">:</span>
+                    <span class="n">valid_buildings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+            <span class="n">filtered_gdf</span> <span class="o">=</span> <span class="n">filtered_gdf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">valid_buildings</span><span class="p">]</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Buildings after filtering: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">filtered_gdf</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">filtered_gdf</span>
+
     <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">process_raster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_raster</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">raster_path</span><span class="p">,</span>
+        <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">filter_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">edge_buffer</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Process a raster file to extract building footprints with customizable parameters.</span>
 
@@ -2093,6 +2238,8 @@ BuildingFootprintExtractor        </code>
 <span class="sd">            raster_path: Path to input raster file</span>
 <span class="sd">            output_path: Path to output GeoJSON file (optional)</span>
 <span class="sd">            batch_size: Batch size for processing</span>
+<span class="sd">            filter_edges: Whether to filter out buildings at the edges of the image</span>
+<span class="sd">            edge_buffer: Size of edge buffer in pixels to filter out buildings (if filter_edges=True)</span>
 <span class="sd">            **kwargs: Additional parameters:</span>
 <span class="sd">                confidence_threshold: Minimum confidence score to keep a detection (0.0-1.0)</span>
 <span class="sd">                overlap: Overlap between adjacent tiles (0.0-1.0)</span>
@@ -2127,6 +2274,9 @@ BuildingFootprintExtractor        </code>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Mask threshold: </span><span class="si">{</span><span class="n">mask_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Min building area: </span><span class="si">{</span><span class="n">small_building_area</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Simplify tolerance: </span><span class="si">{</span><span class="n">simplify_tolerance</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Filter edge buildings: </span><span class="si">{</span><span class="n">filter_edges</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filter_edges</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Edge buffer size: </span><span class="si">{</span><span class="n">edge_buffer</span><span class="si">}</span><span class="s2"> pixels&quot;</span><span class="p">)</span>
 
         <span class="c1"># Create dataset</span>
         <span class="n">dataset</span> <span class="o">=</span> <span class="n">BuildingFootprintDataset</span><span class="p">(</span><span class="n">raster_path</span><span class="o">=</span><span class="n">raster_path</span><span class="p">,</span> <span class="n">chip_size</span><span class="o">=</span><span class="n">chip_size</span><span class="p">)</span>
@@ -2301,12 +2451,246 @@ BuildingFootprintExtractor        </code>
             <span class="n">gdf</span><span class="p">,</span> <span class="n">nms_iou_threshold</span><span class="o">=</span><span class="n">nms_iou_threshold</span>
         <span class="p">)</span>
 
+        <span class="c1"># Filter edge buildings if requested</span>
+        <span class="k">if</span> <span class="n">filter_edges</span><span class="p">:</span>
+            <span class="n">gdf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_edge_buildings</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">edge_buffer</span><span class="o">=</span><span class="n">edge_buffer</span><span class="p">)</span>
+
         <span class="c1"># Save to file if requested</span>
         <span class="k">if</span> <span class="n">output_path</span><span class="p">:</span>
             <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GeoJSON&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2"> building footprints to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">gdf</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_masks_as_geotiff</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Process a raster file to extract building footprint masks and save as GeoTIFF.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            raster_path: Path to input raster file</span>
+<span class="sd">            output_path: Path to output GeoTIFF file (optional, default: input_masks.tif)</span>
+<span class="sd">            batch_size: Batch size for processing</span>
+<span class="sd">            verbose: Whether to print detailed processing information</span>
+<span class="sd">            **kwargs: Additional parameters:</span>
+<span class="sd">                confidence_threshold: Minimum confidence score to keep a detection (0.0-1.0)</span>
+<span class="sd">                chip_size: Size of image chips for processing (height, width)</span>
+<span class="sd">                mask_threshold: Threshold for mask binarization (0.0-1.0)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Path to the saved GeoTIFF file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Get parameters from kwargs or use instance defaults</span>
+        <span class="n">confidence_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;confidence_threshold&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">confidence_threshold</span>
+        <span class="p">)</span>
+        <span class="n">chip_size</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;chip_size&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">)</span>
+        <span class="n">mask_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mask_threshold&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_threshold</span><span class="p">)</span>
+
+        <span class="c1"># Set default output path if not provided</span>
+        <span class="k">if</span> <span class="n">output_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">output_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">raster_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_masks.tif&quot;</span>
+
+        <span class="c1"># Print parameters being used</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing masks with parameters:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Confidence threshold: </span><span class="si">{</span><span class="n">confidence_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Chip size: </span><span class="si">{</span><span class="n">chip_size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Mask threshold: </span><span class="si">{</span><span class="n">mask_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Create dataset</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">BuildingFootprintDataset</span><span class="p">(</span>
+            <span class="n">raster_path</span><span class="o">=</span><span class="n">raster_path</span><span class="p">,</span> <span class="n">chip_size</span><span class="o">=</span><span class="n">chip_size</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Store a flag to avoid repetitive messages</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raster_stats</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">raster_stats</span>
+        <span class="n">seen_warnings</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;bands&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s2">&quot;resize&quot;</span><span class="p">:</span> <span class="p">{},</span>  <span class="c1"># Dictionary to track resize warnings by shape</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Open original raster to get metadata</span>
+        <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">raster_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+            <span class="c1"># Create output binary mask raster with same dimensions as input</span>
+            <span class="n">output_profile</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">output_profile</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">rasterio</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span>
+                <span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Single band for building mask</span>
+                <span class="n">compress</span><span class="o">=</span><span class="s2">&quot;lzw&quot;</span><span class="p">,</span>
+                <span class="n">nodata</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Create output mask raster</span>
+            <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">output_profile</span><span class="p">)</span> <span class="k">as</span> <span class="n">dst</span><span class="p">:</span>
+                <span class="c1"># Initialize mask with zeros</span>
+                <span class="n">mask_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">src</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">width</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+
+                <span class="c1"># Custom collate function to handle Shapely objects</span>
+                <span class="k">def</span><span class="w"> </span><span class="nf">custom_collate</span><span class="p">(</span><span class="n">batch</span><span class="p">):</span>
+<span class="w">                    </span><span class="sd">&quot;&quot;&quot;Custom collate function for DataLoader&quot;&quot;&quot;</span>
+                    <span class="n">elem</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+                        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">elem</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;bbox&quot;</span><span class="p">:</span>
+                                <span class="c1"># Don&#39;t collate shapely objects, keep as list</span>
+                                <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="c1"># For tensors and other collatable types</span>
+                                <span class="k">try</span><span class="p">:</span>
+                                    <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                                        <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">_utils</span><span class="o">.</span><span class="n">collate</span><span class="o">.</span><span class="n">default_collate</span><span class="p">(</span>
+                                            <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]</span>
+                                        <span class="p">)</span>
+                                    <span class="p">)</span>
+                                <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                                    <span class="c1"># Fall back to list for non-collatable types</span>
+                                    <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]</span>
+                        <span class="k">return</span> <span class="n">result</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Default collate for non-dict types</span>
+                        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">_utils</span><span class="o">.</span><span class="n">collate</span><span class="o">.</span><span class="n">default_collate</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+                <span class="c1"># Create dataloader</span>
+                <span class="n">dataloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+                    <span class="n">dataset</span><span class="p">,</span>
+                    <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                    <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="n">collate_fn</span><span class="o">=</span><span class="n">custom_collate</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Process batches</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing raster with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dataloader</span><span class="p">)</span><span class="si">}</span><span class="s2"> batches&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">dataloader</span><span class="p">):</span>
+                    <span class="c1"># Move images to device</span>
+                    <span class="n">images</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+                    <span class="n">coords</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;coords&quot;</span><span class="p">]</span>  <span class="c1"># (i, j) coordinates in pixels</span>
+
+                    <span class="c1"># Run inference</span>
+                    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                        <span class="n">predictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+
+                    <span class="c1"># Process predictions</span>
+                    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">prediction</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">predictions</span><span class="p">):</span>
+                        <span class="n">masks</span> <span class="o">=</span> <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;masks&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+                        <span class="n">scores</span> <span class="o">=</span> <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;scores&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+                        <span class="c1"># Skip if no predictions</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="k">continue</span>
+
+                        <span class="c1"># Filter by confidence threshold</span>
+                        <span class="n">valid_indices</span> <span class="o">=</span> <span class="n">scores</span> <span class="o">&gt;=</span> <span class="n">confidence_threshold</span>
+                        <span class="n">masks</span> <span class="o">=</span> <span class="n">masks</span><span class="p">[</span><span class="n">valid_indices</span><span class="p">]</span>
+                        <span class="n">scores</span> <span class="o">=</span> <span class="n">scores</span><span class="p">[</span><span class="n">valid_indices</span><span class="p">]</span>
+
+                        <span class="c1"># Skip if no valid predictions</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="k">continue</span>
+
+                        <span class="c1"># Get window coordinates</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                            <span class="n">coord_item</span> <span class="o">=</span> <span class="n">coords</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">coord_item</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">coord_item</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                                <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">coord_item</span>
+                            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">coord_item</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+                                <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">coord_item</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected coords format: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">coord_item</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                                <span class="k">continue</span>
+                        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+                            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">coords</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected coords type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                            <span class="k">continue</span>
+
+                        <span class="c1"># Get window size</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s2">&quot;window_size&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+                            <span class="n">window_item</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;window_size&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
+                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">window_item</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">window_item</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                                <span class="n">window_width</span><span class="p">,</span> <span class="n">window_height</span> <span class="o">=</span> <span class="n">window_item</span>
+                            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">window_item</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+                                <span class="n">window_width</span><span class="p">,</span> <span class="n">window_height</span> <span class="o">=</span> <span class="p">(</span>
+                                    <span class="n">window_item</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                                <span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="nb">print</span><span class="p">(</span>
+                                    <span class="sa">f</span><span class="s2">&quot;Unexpected window_size format: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">window_item</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                                <span class="p">)</span>
+                                <span class="k">continue</span>
+                        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s2">&quot;window_size&quot;</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+                            <span class="n">window_width</span><span class="p">,</span> <span class="n">window_height</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;window_size&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                            <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span>
+                                <span class="sa">f</span><span class="s2">&quot;Unexpected window_size type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;window_size&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+                            <span class="p">)</span>
+                            <span class="k">continue</span>
+
+                        <span class="c1"># Combine all masks for this window</span>
+                        <span class="n">combined_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                            <span class="p">(</span><span class="n">window_height</span><span class="p">,</span> <span class="n">window_width</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span>
+                        <span class="p">)</span>
+
+                        <span class="k">for</span> <span class="n">mask</span> <span class="ow">in</span> <span class="n">masks</span><span class="p">:</span>
+                            <span class="c1"># Get the binary mask</span>
+                            <span class="n">binary_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">mask</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">mask_threshold</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
+                                <span class="n">np</span><span class="o">.</span><span class="n">uint8</span>
+                            <span class="p">)</span> <span class="o">*</span> <span class="mi">255</span>
+
+                            <span class="c1"># Handle size mismatch - resize binary_mask if needed</span>
+                            <span class="n">mask_h</span><span class="p">,</span> <span class="n">mask_w</span> <span class="o">=</span> <span class="n">binary_mask</span><span class="o">.</span><span class="n">shape</span>
+                            <span class="k">if</span> <span class="n">mask_h</span> <span class="o">!=</span> <span class="n">window_height</span> <span class="ow">or</span> <span class="n">mask_w</span> <span class="o">!=</span> <span class="n">window_width</span><span class="p">:</span>
+                                <span class="n">resize_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="p">(</span><span class="n">mask_h</span><span class="p">,</span><span class="w"> </span><span class="n">mask_w</span><span class="p">)</span><span class="si">}</span><span class="s2">-&gt;</span><span class="si">{</span><span class="p">(</span><span class="n">window_height</span><span class="p">,</span><span class="w"> </span><span class="n">window_width</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                                <span class="k">if</span> <span class="n">resize_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen_warnings</span><span class="p">[</span><span class="s2">&quot;resize&quot;</span><span class="p">]:</span>
+                                    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                                        <span class="nb">print</span><span class="p">(</span>
+                                            <span class="sa">f</span><span class="s2">&quot;Resizing mask from </span><span class="si">{</span><span class="n">binary_mask</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="p">(</span><span class="n">window_height</span><span class="p">,</span><span class="w"> </span><span class="n">window_width</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                                        <span class="p">)</span>
+                                    <span class="k">else</span><span class="p">:</span>
+                                        <span class="k">if</span> <span class="ow">not</span> <span class="n">seen_warnings</span><span class="p">[</span>
+                                            <span class="s2">&quot;resize&quot;</span>
+                                        <span class="p">]:</span>  <span class="c1"># If this is the first resize warning</span>
+                                            <span class="nb">print</span><span class="p">(</span>
+                                                <span class="sa">f</span><span class="s2">&quot;Resizing masks at image edges (set verbose=True for details)&quot;</span>
+                                            <span class="p">)</span>
+                                    <span class="n">seen_warnings</span><span class="p">[</span><span class="s2">&quot;resize&quot;</span><span class="p">][</span><span class="n">resize_key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+                                <span class="c1"># Crop or pad the binary mask to match window size</span>
+                                <span class="n">resized_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                                    <span class="p">(</span><span class="n">window_height</span><span class="p">,</span> <span class="n">window_width</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span>
+                                <span class="p">)</span>
+                                <span class="n">copy_h</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">mask_h</span><span class="p">,</span> <span class="n">window_height</span><span class="p">)</span>
+                                <span class="n">copy_w</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">mask_w</span><span class="p">,</span> <span class="n">window_width</span><span class="p">)</span>
+                                <span class="n">resized_mask</span><span class="p">[:</span><span class="n">copy_h</span><span class="p">,</span> <span class="p">:</span><span class="n">copy_w</span><span class="p">]</span> <span class="o">=</span> <span class="n">binary_mask</span><span class="p">[</span>
+                                    <span class="p">:</span><span class="n">copy_h</span><span class="p">,</span> <span class="p">:</span><span class="n">copy_w</span>
+                                <span class="p">]</span>
+                                <span class="n">binary_mask</span> <span class="o">=</span> <span class="n">resized_mask</span>
+
+                            <span class="c1"># Update combined mask (taking maximum where masks overlap)</span>
+                            <span class="n">combined_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">combined_mask</span><span class="p">,</span> <span class="n">binary_mask</span><span class="p">)</span>
+
+                        <span class="c1"># Write combined mask to output array</span>
+                        <span class="c1"># Handle edge cases where window might be smaller than chip size</span>
+                        <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">combined_mask</span><span class="o">.</span><span class="n">shape</span>
+                        <span class="n">valid_h</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">j</span><span class="p">)</span>
+                        <span class="n">valid_w</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span>
+
+                        <span class="k">if</span> <span class="n">valid_h</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">valid_w</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">mask_array</span><span class="p">[</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="n">valid_h</span><span class="p">,</span> <span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">valid_w</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                                <span class="n">mask_array</span><span class="p">[</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="n">valid_h</span><span class="p">,</span> <span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">valid_w</span><span class="p">],</span>
+                                <span class="n">combined_mask</span><span class="p">[:</span><span class="n">valid_h</span><span class="p">,</span> <span class="p">:</span><span class="n">valid_w</span><span class="p">],</span>
+                            <span class="p">)</span>
+
+                <span class="c1"># Write the final mask to the output file</span>
+                <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mask_array</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Building masks saved to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output_path</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">visualize_results</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">gdf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
@@ -2821,8 +3205,140 @@ BuildingFootprintExtractor        </code>
 
 
 
+<h3 id="geoai.extract.BuildingFootprintExtractor.filter_edge_buildings" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">filter_edge_buildings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdf</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">edge_buffer</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span></code>
+
+
+<a href="#geoai.extract.BuildingFootprintExtractor.filter_edge_buildings" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Filter out building detections that fall in padding/edge areas of the image.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>gdf</code></td>
+        <td></td>
+        <td><p>GeoDataFrame with building footprint detections</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>raster_path</code></td>
+        <td></td>
+        <td><p>Path to the original raster file</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>edge_buffer</code></td>
+        <td></td>
+        <td><p>Buffer in pixels to consider as edge region</p></td>
+        <td><code>10</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td><p>GeoDataFrame with filtered building footprints</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>geoai/extract.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">filter_edge_buildings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdf</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">edge_buffer</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Filter out building detections that fall in padding/edge areas of the image.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        gdf: GeoDataFrame with building footprint detections</span>
+<span class="sd">        raster_path: Path to the original raster file</span>
+<span class="sd">        edge_buffer: Buffer in pixels to consider as edge region</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        GeoDataFrame with filtered building footprints</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">box</span>
+
+    <span class="c1"># If no buildings detected, return empty GeoDataFrame</span>
+    <span class="k">if</span> <span class="n">gdf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">gdf</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Buildings before filtering: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">raster_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+        <span class="c1"># Get raster bounds</span>
+        <span class="n">raster_bounds</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">bounds</span>
+        <span class="n">raster_width</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">width</span>
+        <span class="n">raster_height</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">height</span>
+
+        <span class="c1"># Convert edge buffer from pixels to geographic units</span>
+        <span class="c1"># We need the smallest dimension of a pixel in geographic units</span>
+        <span class="n">pixel_width</span> <span class="o">=</span> <span class="p">(</span><span class="n">raster_bounds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">raster_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">raster_width</span>
+        <span class="n">pixel_height</span> <span class="o">=</span> <span class="p">(</span><span class="n">raster_bounds</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">raster_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">raster_height</span>
+        <span class="n">buffer_size</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">pixel_width</span><span class="p">,</span> <span class="n">pixel_height</span><span class="p">)</span> <span class="o">*</span> <span class="n">edge_buffer</span>
+
+        <span class="c1"># Create a slightly smaller bounding box to exclude edge regions</span>
+        <span class="n">inner_bounds</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">raster_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">buffer_size</span><span class="p">,</span>  <span class="c1"># min x (west)</span>
+            <span class="n">raster_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">buffer_size</span><span class="p">,</span>  <span class="c1"># min y (south)</span>
+            <span class="n">raster_bounds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">buffer_size</span><span class="p">,</span>  <span class="c1"># max x (east)</span>
+            <span class="n">raster_bounds</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">buffer_size</span><span class="p">,</span>  <span class="c1"># max y (north)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Check that inner bounds are valid</span>
+        <span class="k">if</span> <span class="n">inner_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">inner_bounds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">or</span> <span class="n">inner_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">inner_bounds</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: Edge buffer too large, using original bounds&quot;</span><span class="p">)</span>
+            <span class="n">inner_box</span> <span class="o">=</span> <span class="n">box</span><span class="p">(</span><span class="o">*</span><span class="n">raster_bounds</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">inner_box</span> <span class="o">=</span> <span class="n">box</span><span class="p">(</span><span class="o">*</span><span class="n">inner_bounds</span><span class="p">)</span>
+
+        <span class="c1"># Filter out buildings that intersect with the edge of the image</span>
+        <span class="n">filtered_gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="n">gdf</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">inner_box</span><span class="p">)]</span>
+
+        <span class="c1"># Additional check for buildings that have &gt;50% of their area outside the valid region</span>
+        <span class="n">valid_buildings</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">filtered_gdf</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">inner_box</span><span class="p">)</span><span class="o">.</span><span class="n">area</span> <span class="o">&gt;=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">row</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">area</span><span class="p">:</span>
+                <span class="n">valid_buildings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+        <span class="n">filtered_gdf</span> <span class="o">=</span> <span class="n">filtered_gdf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">valid_buildings</span><span class="p">]</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Buildings after filtering: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">filtered_gdf</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">filtered_gdf</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 id="geoai.extract.BuildingFootprintExtractor.process_raster" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">process_raster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">process_raster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">filter_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">edge_buffer</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 
 <a href="#geoai.extract.BuildingFootprintExtractor.process_raster" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -2861,6 +3377,18 @@ BuildingFootprintExtractor        </code>
         <td><code>4</code></td>
       </tr>
       <tr>
+        <td><code>filter_edges</code></td>
+        <td></td>
+        <td><p>Whether to filter out buildings at the edges of the image</p></td>
+        <td><code>True</code></td>
+      </tr>
+      <tr>
+        <td><code>edge_buffer</code></td>
+        <td></td>
+        <td><p>Size of edge buffer in pixels to filter out buildings (if filter_edges=True)</p></td>
+        <td><code>20</code></td>
+      </tr>
+      <tr>
         <td><code>**kwargs</code></td>
         <td></td>
         <td><p>Additional parameters:
@@ -2893,7 +3421,15 @@ simplify_tolerance: Tolerance for polygon simplification</p></td>
         <details class="quote">
           <summary>Source code in <code>geoai/extract.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">process_raster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_raster</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">raster_path</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">filter_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">edge_buffer</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Process a raster file to extract building footprints with customizable parameters.</span>
 
@@ -2901,6 +3437,8 @@ simplify_tolerance: Tolerance for polygon simplification</p></td>
 <span class="sd">        raster_path: Path to input raster file</span>
 <span class="sd">        output_path: Path to output GeoJSON file (optional)</span>
 <span class="sd">        batch_size: Batch size for processing</span>
+<span class="sd">        filter_edges: Whether to filter out buildings at the edges of the image</span>
+<span class="sd">        edge_buffer: Size of edge buffer in pixels to filter out buildings (if filter_edges=True)</span>
 <span class="sd">        **kwargs: Additional parameters:</span>
 <span class="sd">            confidence_threshold: Minimum confidence score to keep a detection (0.0-1.0)</span>
 <span class="sd">            overlap: Overlap between adjacent tiles (0.0-1.0)</span>
@@ -2935,6 +3473,9 @@ simplify_tolerance: Tolerance for polygon simplification</p></td>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Mask threshold: </span><span class="si">{</span><span class="n">mask_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Min building area: </span><span class="si">{</span><span class="n">small_building_area</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Simplify tolerance: </span><span class="si">{</span><span class="n">simplify_tolerance</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Filter edge buildings: </span><span class="si">{</span><span class="n">filter_edges</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">filter_edges</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Edge buffer size: </span><span class="si">{</span><span class="n">edge_buffer</span><span class="si">}</span><span class="s2"> pixels&quot;</span><span class="p">)</span>
 
     <span class="c1"># Create dataset</span>
     <span class="n">dataset</span> <span class="o">=</span> <span class="n">BuildingFootprintDataset</span><span class="p">(</span><span class="n">raster_path</span><span class="o">=</span><span class="n">raster_path</span><span class="p">,</span> <span class="n">chip_size</span><span class="o">=</span><span class="n">chip_size</span><span class="p">)</span>
@@ -3109,12 +3650,330 @@ simplify_tolerance: Tolerance for polygon simplification</p></td>
         <span class="n">gdf</span><span class="p">,</span> <span class="n">nms_iou_threshold</span><span class="o">=</span><span class="n">nms_iou_threshold</span>
     <span class="p">)</span>
 
+    <span class="c1"># Filter edge buildings if requested</span>
+    <span class="k">if</span> <span class="n">filter_edges</span><span class="p">:</span>
+        <span class="n">gdf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_edge_buildings</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">edge_buffer</span><span class="o">=</span><span class="n">edge_buffer</span><span class="p">)</span>
+
     <span class="c1"># Save to file if requested</span>
     <span class="k">if</span> <span class="n">output_path</span><span class="p">:</span>
         <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GeoJSON&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2"> building footprints to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">gdf</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="geoai.extract.BuildingFootprintExtractor.save_masks_as_geotiff" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">save_masks_as_geotiff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
+<a href="#geoai.extract.BuildingFootprintExtractor.save_masks_as_geotiff" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Process a raster file to extract building footprint masks and save as GeoTIFF.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>raster_path</code></td>
+        <td></td>
+        <td><p>Path to input raster file</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>output_path</code></td>
+        <td></td>
+        <td><p>Path to output GeoTIFF file (optional, default: input_masks.tif)</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>batch_size</code></td>
+        <td></td>
+        <td><p>Batch size for processing</p></td>
+        <td><code>4</code></td>
+      </tr>
+      <tr>
+        <td><code>verbose</code></td>
+        <td></td>
+        <td><p>Whether to print detailed processing information</p></td>
+        <td><code>False</code></td>
+      </tr>
+      <tr>
+        <td><code>**kwargs</code></td>
+        <td></td>
+        <td><p>Additional parameters:
+confidence_threshold: Minimum confidence score to keep a detection (0.0-1.0)
+chip_size: Size of image chips for processing (height, width)
+mask_threshold: Threshold for mask binarization (0.0-1.0)</p></td>
+        <td><code>{}</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td><p>Path to the saved GeoTIFF file</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>geoai/extract.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">save_masks_as_geotiff</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Process a raster file to extract building footprint masks and save as GeoTIFF.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        raster_path: Path to input raster file</span>
+<span class="sd">        output_path: Path to output GeoTIFF file (optional, default: input_masks.tif)</span>
+<span class="sd">        batch_size: Batch size for processing</span>
+<span class="sd">        verbose: Whether to print detailed processing information</span>
+<span class="sd">        **kwargs: Additional parameters:</span>
+<span class="sd">            confidence_threshold: Minimum confidence score to keep a detection (0.0-1.0)</span>
+<span class="sd">            chip_size: Size of image chips for processing (height, width)</span>
+<span class="sd">            mask_threshold: Threshold for mask binarization (0.0-1.0)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Path to the saved GeoTIFF file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Get parameters from kwargs or use instance defaults</span>
+    <span class="n">confidence_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;confidence_threshold&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">confidence_threshold</span>
+    <span class="p">)</span>
+    <span class="n">chip_size</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;chip_size&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">)</span>
+    <span class="n">mask_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mask_threshold&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_threshold</span><span class="p">)</span>
+
+    <span class="c1"># Set default output path if not provided</span>
+    <span class="k">if</span> <span class="n">output_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">output_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">raster_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_masks.tif&quot;</span>
+
+    <span class="c1"># Print parameters being used</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing masks with parameters:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Confidence threshold: </span><span class="si">{</span><span class="n">confidence_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Chip size: </span><span class="si">{</span><span class="n">chip_size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Mask threshold: </span><span class="si">{</span><span class="n">mask_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create dataset</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">BuildingFootprintDataset</span><span class="p">(</span>
+        <span class="n">raster_path</span><span class="o">=</span><span class="n">raster_path</span><span class="p">,</span> <span class="n">chip_size</span><span class="o">=</span><span class="n">chip_size</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Store a flag to avoid repetitive messages</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">raster_stats</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">raster_stats</span>
+    <span class="n">seen_warnings</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;bands&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;resize&quot;</span><span class="p">:</span> <span class="p">{},</span>  <span class="c1"># Dictionary to track resize warnings by shape</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Open original raster to get metadata</span>
+    <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">raster_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+        <span class="c1"># Create output binary mask raster with same dimensions as input</span>
+        <span class="n">output_profile</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">output_profile</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">rasterio</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span>
+            <span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Single band for building mask</span>
+            <span class="n">compress</span><span class="o">=</span><span class="s2">&quot;lzw&quot;</span><span class="p">,</span>
+            <span class="n">nodata</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Create output mask raster</span>
+        <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">output_profile</span><span class="p">)</span> <span class="k">as</span> <span class="n">dst</span><span class="p">:</span>
+            <span class="c1"># Initialize mask with zeros</span>
+            <span class="n">mask_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">src</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">width</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+
+            <span class="c1"># Custom collate function to handle Shapely objects</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">custom_collate</span><span class="p">(</span><span class="n">batch</span><span class="p">):</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;Custom collate function for DataLoader&quot;&quot;&quot;</span>
+                <span class="n">elem</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">elem</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;bbox&quot;</span><span class="p">:</span>
+                            <span class="c1"># Don&#39;t collate shapely objects, keep as list</span>
+                            <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="c1"># For tensors and other collatable types</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                                    <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">_utils</span><span class="o">.</span><span class="n">collate</span><span class="o">.</span><span class="n">default_collate</span><span class="p">(</span>
+                                        <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]</span>
+                                    <span class="p">)</span>
+                                <span class="p">)</span>
+                            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                                <span class="c1"># Fall back to list for non-collatable types</span>
+                                <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]</span>
+                    <span class="k">return</span> <span class="n">result</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Default collate for non-dict types</span>
+                    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">_utils</span><span class="o">.</span><span class="n">collate</span><span class="o">.</span><span class="n">default_collate</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+            <span class="c1"># Create dataloader</span>
+            <span class="n">dataloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+                <span class="n">dataset</span><span class="p">,</span>
+                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">collate_fn</span><span class="o">=</span><span class="n">custom_collate</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Process batches</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing raster with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dataloader</span><span class="p">)</span><span class="si">}</span><span class="s2"> batches&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">dataloader</span><span class="p">):</span>
+                <span class="c1"># Move images to device</span>
+                <span class="n">images</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+                <span class="n">coords</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;coords&quot;</span><span class="p">]</span>  <span class="c1"># (i, j) coordinates in pixels</span>
+
+                <span class="c1"># Run inference</span>
+                <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                    <span class="n">predictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+
+                <span class="c1"># Process predictions</span>
+                <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">prediction</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">predictions</span><span class="p">):</span>
+                    <span class="n">masks</span> <span class="o">=</span> <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;masks&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+                    <span class="n">scores</span> <span class="o">=</span> <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;scores&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+                    <span class="c1"># Skip if no predictions</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">continue</span>
+
+                    <span class="c1"># Filter by confidence threshold</span>
+                    <span class="n">valid_indices</span> <span class="o">=</span> <span class="n">scores</span> <span class="o">&gt;=</span> <span class="n">confidence_threshold</span>
+                    <span class="n">masks</span> <span class="o">=</span> <span class="n">masks</span><span class="p">[</span><span class="n">valid_indices</span><span class="p">]</span>
+                    <span class="n">scores</span> <span class="o">=</span> <span class="n">scores</span><span class="p">[</span><span class="n">valid_indices</span><span class="p">]</span>
+
+                    <span class="c1"># Skip if no valid predictions</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">continue</span>
+
+                    <span class="c1"># Get window coordinates</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                        <span class="n">coord_item</span> <span class="o">=</span> <span class="n">coords</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">coord_item</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">coord_item</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">coord_item</span>
+                        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">coord_item</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+                            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">coord_item</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected coords format: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">coord_item</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                            <span class="k">continue</span>
+                    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+                        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">coords</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected coords type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">continue</span>
+
+                    <span class="c1"># Get window size</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s2">&quot;window_size&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+                        <span class="n">window_item</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;window_size&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">window_item</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">window_item</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                            <span class="n">window_width</span><span class="p">,</span> <span class="n">window_height</span> <span class="o">=</span> <span class="n">window_item</span>
+                        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">window_item</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+                            <span class="n">window_width</span><span class="p">,</span> <span class="n">window_height</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">window_item</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                            <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span>
+                                <span class="sa">f</span><span class="s2">&quot;Unexpected window_size format: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">window_item</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                            <span class="p">)</span>
+                            <span class="k">continue</span>
+                    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s2">&quot;window_size&quot;</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+                        <span class="n">window_width</span><span class="p">,</span> <span class="n">window_height</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;window_size&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                        <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Unexpected window_size type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;window_size&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="p">)</span>
+                        <span class="k">continue</span>
+
+                    <span class="c1"># Combine all masks for this window</span>
+                    <span class="n">combined_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                        <span class="p">(</span><span class="n">window_height</span><span class="p">,</span> <span class="n">window_width</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span>
+                    <span class="p">)</span>
+
+                    <span class="k">for</span> <span class="n">mask</span> <span class="ow">in</span> <span class="n">masks</span><span class="p">:</span>
+                        <span class="c1"># Get the binary mask</span>
+                        <span class="n">binary_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">mask</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">mask_threshold</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
+                            <span class="n">np</span><span class="o">.</span><span class="n">uint8</span>
+                        <span class="p">)</span> <span class="o">*</span> <span class="mi">255</span>
+
+                        <span class="c1"># Handle size mismatch - resize binary_mask if needed</span>
+                        <span class="n">mask_h</span><span class="p">,</span> <span class="n">mask_w</span> <span class="o">=</span> <span class="n">binary_mask</span><span class="o">.</span><span class="n">shape</span>
+                        <span class="k">if</span> <span class="n">mask_h</span> <span class="o">!=</span> <span class="n">window_height</span> <span class="ow">or</span> <span class="n">mask_w</span> <span class="o">!=</span> <span class="n">window_width</span><span class="p">:</span>
+                            <span class="n">resize_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="p">(</span><span class="n">mask_h</span><span class="p">,</span><span class="w"> </span><span class="n">mask_w</span><span class="p">)</span><span class="si">}</span><span class="s2">-&gt;</span><span class="si">{</span><span class="p">(</span><span class="n">window_height</span><span class="p">,</span><span class="w"> </span><span class="n">window_width</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                            <span class="k">if</span> <span class="n">resize_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen_warnings</span><span class="p">[</span><span class="s2">&quot;resize&quot;</span><span class="p">]:</span>
+                                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                                    <span class="nb">print</span><span class="p">(</span>
+                                        <span class="sa">f</span><span class="s2">&quot;Resizing mask from </span><span class="si">{</span><span class="n">binary_mask</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="p">(</span><span class="n">window_height</span><span class="p">,</span><span class="w"> </span><span class="n">window_width</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                                    <span class="p">)</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="k">if</span> <span class="ow">not</span> <span class="n">seen_warnings</span><span class="p">[</span>
+                                        <span class="s2">&quot;resize&quot;</span>
+                                    <span class="p">]:</span>  <span class="c1"># If this is the first resize warning</span>
+                                        <span class="nb">print</span><span class="p">(</span>
+                                            <span class="sa">f</span><span class="s2">&quot;Resizing masks at image edges (set verbose=True for details)&quot;</span>
+                                        <span class="p">)</span>
+                                <span class="n">seen_warnings</span><span class="p">[</span><span class="s2">&quot;resize&quot;</span><span class="p">][</span><span class="n">resize_key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+                            <span class="c1"># Crop or pad the binary mask to match window size</span>
+                            <span class="n">resized_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                                <span class="p">(</span><span class="n">window_height</span><span class="p">,</span> <span class="n">window_width</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span>
+                            <span class="p">)</span>
+                            <span class="n">copy_h</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">mask_h</span><span class="p">,</span> <span class="n">window_height</span><span class="p">)</span>
+                            <span class="n">copy_w</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">mask_w</span><span class="p">,</span> <span class="n">window_width</span><span class="p">)</span>
+                            <span class="n">resized_mask</span><span class="p">[:</span><span class="n">copy_h</span><span class="p">,</span> <span class="p">:</span><span class="n">copy_w</span><span class="p">]</span> <span class="o">=</span> <span class="n">binary_mask</span><span class="p">[</span>
+                                <span class="p">:</span><span class="n">copy_h</span><span class="p">,</span> <span class="p">:</span><span class="n">copy_w</span>
+                            <span class="p">]</span>
+                            <span class="n">binary_mask</span> <span class="o">=</span> <span class="n">resized_mask</span>
+
+                        <span class="c1"># Update combined mask (taking maximum where masks overlap)</span>
+                        <span class="n">combined_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">combined_mask</span><span class="p">,</span> <span class="n">binary_mask</span><span class="p">)</span>
+
+                    <span class="c1"># Write combined mask to output array</span>
+                    <span class="c1"># Handle edge cases where window might be smaller than chip size</span>
+                    <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">combined_mask</span><span class="o">.</span><span class="n">shape</span>
+                    <span class="n">valid_h</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">j</span><span class="p">)</span>
+                    <span class="n">valid_w</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">valid_h</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">valid_w</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">mask_array</span><span class="p">[</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="n">valid_h</span><span class="p">,</span> <span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">valid_w</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                            <span class="n">mask_array</span><span class="p">[</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="n">valid_h</span><span class="p">,</span> <span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">valid_w</span><span class="p">],</span>
+                            <span class="n">combined_mask</span><span class="p">[:</span><span class="n">valid_h</span><span class="p">,</span> <span class="p">:</span><span class="n">valid_w</span><span class="p">],</span>
+                        <span class="p">)</span>
+
+            <span class="c1"># Write the final mask to the output file</span>
+            <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mask_array</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Building masks saved to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">output_path</span>
 </code></pre></div>
         </details>
     </div>
