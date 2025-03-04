@@ -1084,6 +1084,57 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#geoai.preprocess.clip_raster_by_bbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      clip_raster_by_bbox()
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="clip_raster_by_bbox()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#geoai.preprocess.clip_raster_by_bbox--clip-using-geographic-coordinates-in-the-same-crs-as-the-raster" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clip using geographic coordinates in the same CRS as the raster
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geoai.preprocess.clip_raster_by_bbox--clip-using-wgs84-coordinates-when-the-raster-is-in-a-different-crs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clip using WGS84 coordinates when the raster is in a different CRS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geoai.preprocess.clip_raster_by_bbox--clip-using-rowcolumn-indices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clip using row/column indices
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geoai.preprocess.clip_raster_by_bbox--clip-with-band-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clip with band selection
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#geoai.preprocess.create_overview_image" class="md-nav__link">
     <span class="md-ellipsis">
       create_overview_image()
@@ -1297,6 +1348,57 @@
       batch_vector_to_raster()
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geoai.preprocess.clip_raster_by_bbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      clip_raster_by_bbox()
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="clip_raster_by_bbox()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#geoai.preprocess.clip_raster_by_bbox--clip-using-geographic-coordinates-in-the-same-crs-as-the-raster" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clip using geographic coordinates in the same CRS as the raster
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geoai.preprocess.clip_raster_by_bbox--clip-using-wgs84-coordinates-when-the-raster-is-in-a-different-crs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clip using WGS84 coordinates when the raster is in a different CRS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geoai.preprocess.clip_raster_by_bbox--clip-using-rowcolumn-indices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clip using row/column indices
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geoai.preprocess.clip_raster_by_bbox--clip-with-band-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clip with band selection
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2037,6 +2139,331 @@ Can include {vector_name} and {index} placeholders.</p></td>
         <span class="n">output_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">output_files</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="geoai.preprocess.clip_raster_by_bbox" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">clip_raster_by_bbox</span><span class="p">(</span><span class="n">input_raster</span><span class="p">,</span> <span class="n">output_raster</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">bands</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bbox_type</span><span class="o">=</span><span class="s1">&#39;geo&#39;</span><span class="p">,</span> <span class="n">bbox_crs</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+<a href="#geoai.preprocess.clip_raster_by_bbox" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Clip a raster dataset using a bounding box and optionally select specific bands.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>input_raster</code></td>
+        <td><code>str</code></td>
+        <td><p>Path to the input raster file.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>output_raster</code></td>
+        <td><code>str</code></td>
+        <td><p>Path where the clipped raster will be saved.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>bbox</code></td>
+        <td><code>tuple</code></td>
+        <td><p>Bounding box coordinates either as:
+         - Geographic coordinates (minx, miny, maxx, maxy) if bbox_type="geo"
+         - Pixel indices (min_row, min_col, max_row, max_col) if bbox_type="pixel"</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>bands</code></td>
+        <td><code>list</code></td>
+        <td><p>List of band indices to keep (1-based indexing).
+                   If None, all bands will be kept.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>bbox_type</code></td>
+        <td><code>str</code></td>
+        <td><p>Type of bounding box coordinates. Either "geo" for
+                      geographic coordinates or "pixel" for row/column indices.
+                      Default is "geo".</p></td>
+        <td><code>&#39;geo&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>bbox_crs</code></td>
+        <td><code>str or dict</code></td>
+        <td><p>CRS of the bbox if different from the raster CRS.
+                             Can be provided as EPSG code (e.g., "EPSG:4326") or
+                             as a proj4 string. Only applies when bbox_type="geo".
+                             If None, assumes bbox is in the same CRS as the raster.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>str</code></td>
+      <td><p>Path to the clipped output raster.</p></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Exceptions:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>ImportError</code></td>
+        <td><p>If required dependencies are not installed.</p></td>
+      </tr>
+      <tr>
+        <td><code>ValueError</code></td>
+        <td><p>If the bbox is invalid, bands are out of range, or bbox_type is invalid.</p></td>
+      </tr>
+      <tr>
+        <td><code>RuntimeError</code></td>
+        <td><p>If the clipping operation fails.</p></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Examples:</strong></p>
+    <h3 id="geoai.preprocess.clip_raster_by_bbox--clip-using-geographic-coordinates-in-the-same-crs-as-the-raster">Clip using geographic coordinates in the same CRS as the raster<a class="headerlink" href="#geoai.preprocess.clip_raster_by_bbox--clip-using-geographic-coordinates-in-the-same-crs-as-the-raster" title="Permanent link">&para;</a></h3>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">clip_raster_by_bbox</span><span class="p">(</span><span class="s1">&#39;input.tif&#39;</span><span class="p">,</span> <span class="s1">&#39;clipped_geo.tif&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">))</span>
+<span class="s1">&#39;clipped_geo.tif&#39;</span>
+</code></pre></div>
+    <h3 id="geoai.preprocess.clip_raster_by_bbox--clip-using-wgs84-coordinates-when-the-raster-is-in-a-different-crs">Clip using WGS84 coordinates when the raster is in a different CRS<a class="headerlink" href="#geoai.preprocess.clip_raster_by_bbox--clip-using-wgs84-coordinates-when-the-raster-is-in-a-different-crs" title="Permanent link">&para;</a></h3>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">clip_raster_by_bbox</span><span class="p">(</span><span class="s1">&#39;input.tif&#39;</span><span class="p">,</span> <span class="s1">&#39;clipped_wgs84.tif&#39;</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mf">122.5</span><span class="p">,</span> <span class="mf">37.7</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.4</span><span class="p">,</span> <span class="mf">37.8</span><span class="p">),</span>
+<span class="o">...</span>                     <span class="n">bbox_crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">)</span>
+<span class="s1">&#39;clipped_wgs84.tif&#39;</span>
+</code></pre></div>
+    <h3 id="geoai.preprocess.clip_raster_by_bbox--clip-using-rowcolumn-indices">Clip using row/column indices<a class="headerlink" href="#geoai.preprocess.clip_raster_by_bbox--clip-using-rowcolumn-indices" title="Permanent link">&para;</a></h3>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">clip_raster_by_bbox</span><span class="p">(</span><span class="s1">&#39;input.tif&#39;</span><span class="p">,</span> <span class="s1">&#39;clipped_pixel.tif&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span>
+<span class="o">...</span>                     <span class="n">bbox_type</span><span class="o">=</span><span class="s2">&quot;pixel&quot;</span><span class="p">)</span>
+<span class="s1">&#39;clipped_pixel.tif&#39;</span>
+</code></pre></div>
+    <h3 id="geoai.preprocess.clip_raster_by_bbox--clip-with-band-selection">Clip with band selection<a class="headerlink" href="#geoai.preprocess.clip_raster_by_bbox--clip-with-band-selection" title="Permanent link">&para;</a></h3>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">clip_raster_by_bbox</span><span class="p">(</span><span class="s1">&#39;input.tif&#39;</span><span class="p">,</span> <span class="s1">&#39;clipped_bands.tif&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">),</span>
+<span class="o">...</span>                     <span class="n">bands</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="s1">&#39;clipped_bands.tif&#39;</span>
+</code></pre></div>
+
+        <details class="quote">
+          <summary>Source code in <code>geoai/preprocess.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">clip_raster_by_bbox</span><span class="p">(</span>
+    <span class="n">input_raster</span><span class="p">,</span> <span class="n">output_raster</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">bands</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bbox_type</span><span class="o">=</span><span class="s2">&quot;geo&quot;</span><span class="p">,</span> <span class="n">bbox_crs</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clip a raster dataset using a bounding box and optionally select specific bands.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        input_raster (str): Path to the input raster file.</span>
+<span class="sd">        output_raster (str): Path where the clipped raster will be saved.</span>
+<span class="sd">        bbox (tuple): Bounding box coordinates either as:</span>
+<span class="sd">                     - Geographic coordinates (minx, miny, maxx, maxy) if bbox_type=&quot;geo&quot;</span>
+<span class="sd">                     - Pixel indices (min_row, min_col, max_row, max_col) if bbox_type=&quot;pixel&quot;</span>
+<span class="sd">        bands (list, optional): List of band indices to keep (1-based indexing).</span>
+<span class="sd">                               If None, all bands will be kept.</span>
+<span class="sd">        bbox_type (str, optional): Type of bounding box coordinates. Either &quot;geo&quot; for</span>
+<span class="sd">                                  geographic coordinates or &quot;pixel&quot; for row/column indices.</span>
+<span class="sd">                                  Default is &quot;geo&quot;.</span>
+<span class="sd">        bbox_crs (str or dict, optional): CRS of the bbox if different from the raster CRS.</span>
+<span class="sd">                                         Can be provided as EPSG code (e.g., &quot;EPSG:4326&quot;) or</span>
+<span class="sd">                                         as a proj4 string. Only applies when bbox_type=&quot;geo&quot;.</span>
+<span class="sd">                                         If None, assumes bbox is in the same CRS as the raster.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Path to the clipped output raster.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ImportError: If required dependencies are not installed.</span>
+<span class="sd">        ValueError: If the bbox is invalid, bands are out of range, or bbox_type is invalid.</span>
+<span class="sd">        RuntimeError: If the clipping operation fails.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        # Clip using geographic coordinates in the same CRS as the raster</span>
+<span class="sd">        &gt;&gt;&gt; clip_raster_by_bbox(&#39;input.tif&#39;, &#39;clipped_geo.tif&#39;, (100, 200, 300, 400))</span>
+<span class="sd">        &#39;clipped_geo.tif&#39;</span>
+
+<span class="sd">        # Clip using WGS84 coordinates when the raster is in a different CRS</span>
+<span class="sd">        &gt;&gt;&gt; clip_raster_by_bbox(&#39;input.tif&#39;, &#39;clipped_wgs84.tif&#39;, (-122.5, 37.7, -122.4, 37.8),</span>
+<span class="sd">        ...                     bbox_crs=&quot;EPSG:4326&quot;)</span>
+<span class="sd">        &#39;clipped_wgs84.tif&#39;</span>
+
+<span class="sd">        # Clip using row/column indices</span>
+<span class="sd">        &gt;&gt;&gt; clip_raster_by_bbox(&#39;input.tif&#39;, &#39;clipped_pixel.tif&#39;, (50, 100, 150, 200),</span>
+<span class="sd">        ...                     bbox_type=&quot;pixel&quot;)</span>
+<span class="sd">        &#39;clipped_pixel.tif&#39;</span>
+
+<span class="sd">        # Clip with band selection</span>
+<span class="sd">        &gt;&gt;&gt; clip_raster_by_bbox(&#39;input.tif&#39;, &#39;clipped_bands.tif&#39;, (100, 200, 300, 400),</span>
+<span class="sd">        ...                     bands=[1, 3])</span>
+<span class="sd">        &#39;clipped_bands.tif&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">rasterio.transform</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_bounds</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">rasterio.warp</span><span class="w"> </span><span class="kn">import</span> <span class="n">transform_bounds</span>
+
+    <span class="c1"># Validate bbox_type</span>
+    <span class="k">if</span> <span class="n">bbox_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;geo&quot;</span><span class="p">,</span> <span class="s2">&quot;pixel&quot;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;bbox_type must be either &#39;geo&#39; or &#39;pixel&#39;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Validate bbox</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bbox</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;bbox must contain exactly 4 values&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Open the source raster</span>
+    <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">input_raster</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+        <span class="c1"># Get the source CRS</span>
+        <span class="n">src_crs</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">crs</span>
+
+        <span class="c1"># Handle different bbox types</span>
+        <span class="k">if</span> <span class="n">bbox_type</span> <span class="o">==</span> <span class="s2">&quot;geo&quot;</span><span class="p">:</span>
+            <span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span> <span class="o">=</span> <span class="n">bbox</span>
+
+            <span class="c1"># Validate geographic bbox</span>
+            <span class="k">if</span> <span class="n">minx</span> <span class="o">&gt;=</span> <span class="n">maxx</span> <span class="ow">or</span> <span class="n">miny</span> <span class="o">&gt;=</span> <span class="n">maxy</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Invalid geographic bbox. Expected (minx, miny, maxx, maxy) where minx &lt; maxx and miny &lt; maxy&quot;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># If bbox_crs is provided and different from the source CRS, transform the bbox</span>
+            <span class="k">if</span> <span class="n">bbox_crs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bbox_crs</span> <span class="o">!=</span> <span class="n">src_crs</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># Transform bbox coordinates from bbox_crs to src_crs</span>
+                    <span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span> <span class="o">=</span> <span class="n">transform_bounds</span><span class="p">(</span>
+                        <span class="n">bbox_crs</span><span class="p">,</span> <span class="n">src_crs</span><span class="p">,</span> <span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span>
+                    <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Failed to transform bbox from </span><span class="si">{</span><span class="n">bbox_crs</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">src_crs</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+
+            <span class="c1"># Calculate the pixel window from geographic coordinates</span>
+            <span class="n">window</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">window</span><span class="p">(</span><span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span><span class="p">)</span>
+
+            <span class="c1"># Use the same bounds for the output transform</span>
+            <span class="n">output_bounds</span> <span class="o">=</span> <span class="p">(</span><span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># bbox_type == &quot;pixel&quot;</span>
+            <span class="n">min_row</span><span class="p">,</span> <span class="n">min_col</span><span class="p">,</span> <span class="n">max_row</span><span class="p">,</span> <span class="n">max_col</span> <span class="o">=</span> <span class="n">bbox</span>
+
+            <span class="c1"># Validate pixel bbox</span>
+            <span class="k">if</span> <span class="n">min_row</span> <span class="o">&gt;=</span> <span class="n">max_row</span> <span class="ow">or</span> <span class="n">min_col</span> <span class="o">&gt;=</span> <span class="n">max_col</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Invalid pixel bbox. Expected (min_row, min_col, max_row, max_col) where min_row &lt; max_row and min_col &lt; max_col&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">min_row</span> <span class="o">&lt;</span> <span class="mi">0</span>
+                <span class="ow">or</span> <span class="n">min_col</span> <span class="o">&lt;</span> <span class="mi">0</span>
+                <span class="ow">or</span> <span class="n">max_row</span> <span class="o">&gt;</span> <span class="n">src</span><span class="o">.</span><span class="n">height</span>
+                <span class="ow">or</span> <span class="n">max_col</span> <span class="o">&gt;</span> <span class="n">src</span><span class="o">.</span><span class="n">width</span>
+            <span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Pixel indices out of bounds. Raster dimensions are </span><span class="si">{</span><span class="n">src</span><span class="o">.</span><span class="n">height</span><span class="si">}</span><span class="s2"> rows x </span><span class="si">{</span><span class="n">src</span><span class="o">.</span><span class="n">width</span><span class="si">}</span><span class="s2"> columns&quot;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Create a window from pixel coordinates</span>
+            <span class="n">window</span> <span class="o">=</span> <span class="n">Window</span><span class="p">(</span><span class="n">min_col</span><span class="p">,</span> <span class="n">min_row</span><span class="p">,</span> <span class="n">max_col</span> <span class="o">-</span> <span class="n">min_col</span><span class="p">,</span> <span class="n">max_row</span> <span class="o">-</span> <span class="n">min_row</span><span class="p">)</span>
+
+            <span class="c1"># Calculate the geographic bounds for this window</span>
+            <span class="n">window_transform</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">window_transform</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>
+            <span class="n">output_bounds</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">array_bounds</span><span class="p">(</span>
+                <span class="n">window</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="n">window</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">window_transform</span>
+            <span class="p">)</span>
+            <span class="c1"># Reorder to (minx, miny, maxx, maxy)</span>
+            <span class="n">output_bounds</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">output_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">output_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">output_bounds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">output_bounds</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Get window dimensions</span>
+        <span class="n">window_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">window</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+        <span class="n">window_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">window</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+
+        <span class="c1"># Check if the window is valid</span>
+        <span class="k">if</span> <span class="n">window_width</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">window_height</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Bounding box results in an empty window&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Handle band selection</span>
+        <span class="k">if</span> <span class="n">bands</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Use all bands</span>
+            <span class="n">bands_to_read</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Validate band indices</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">b</span> <span class="o">&lt;=</span> <span class="n">src</span><span class="o">.</span><span class="n">count</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bands</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Band indices must be between 1 and </span><span class="si">{</span><span class="n">src</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">bands_to_read</span> <span class="o">=</span> <span class="n">bands</span>
+
+        <span class="c1"># Calculate new transform for the clipped raster</span>
+        <span class="n">new_transform</span> <span class="o">=</span> <span class="n">from_bounds</span><span class="p">(</span>
+            <span class="n">output_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">output_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">output_bounds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">output_bounds</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="n">window_width</span><span class="p">,</span>
+            <span class="n">window_height</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Create a metadata dictionary for the output</span>
+        <span class="n">out_meta</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">out_meta</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">window_height</span><span class="p">,</span>
+                <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="n">window_width</span><span class="p">,</span>
+                <span class="s2">&quot;transform&quot;</span><span class="p">:</span> <span class="n">new_transform</span><span class="p">,</span>
+                <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">bands_to_read</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Read the data for the selected bands</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">band_idx</span> <span class="ow">in</span> <span class="n">bands_to_read</span><span class="p">:</span>
+            <span class="n">band_data</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">band_idx</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">band_data</span><span class="p">)</span>
+
+        <span class="c1"># Stack the bands into a single array</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">clipped_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">clipped_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+
+        <span class="c1"># Write the output raster</span>
+        <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">output_raster</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">out_meta</span><span class="p">)</span> <span class="k">as</span> <span class="n">dst</span><span class="p">:</span>
+            <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">clipped_data</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">output_raster</span>
 </code></pre></div>
         </details>
     </div>
