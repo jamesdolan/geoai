@@ -1269,6 +1269,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#geoai.preprocess.masks_to_vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      masks_to_vector()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#geoai.preprocess.print_raster_info" class="md-nav__link">
     <span class="md-ellipsis">
       print_raster_info()
@@ -1549,6 +1558,15 @@
   <a href="#geoai.preprocess.get_vector_info_ogr" class="md-nav__link">
     <span class="md-ellipsis">
       get_vector_info_ogr()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geoai.preprocess.masks_to_vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      masks_to_vector()
     </span>
   </a>
   
@@ -5183,6 +5201,291 @@ Defaults to 1.0, which keeps the original pixel</p></td>
 
 
 
+<h2 id="geoai.preprocess.masks_to_vector" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">masks_to_vector</span><span class="p">(</span><span class="n">mask_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">simplify_tolerance</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mask_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">min_area</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">nms_iou_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span></code>
+
+
+<a href="#geoai.preprocess.masks_to_vector" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Convert a building mask GeoTIFF to vector polygons and save as a vector dataset.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>mask_path</code></td>
+        <td></td>
+        <td><p>Path to the building masks GeoTIFF</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>output_path</code></td>
+        <td></td>
+        <td><p>Path to save the output GeoJSON (default: mask_path with .geojson extension)</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>simplify_tolerance</code></td>
+        <td></td>
+        <td><p>Tolerance for polygon simplification (default: self.simplify_tolerance)</p></td>
+        <td><code>1.0</code></td>
+      </tr>
+      <tr>
+        <td><code>mask_threshold</code></td>
+        <td></td>
+        <td><p>Threshold for mask binarization (default: self.mask_threshold)</p></td>
+        <td><code>0.5</code></td>
+      </tr>
+      <tr>
+        <td><code>min_area</code></td>
+        <td></td>
+        <td><p>Minimum area in pixels to keep a building (default: self.small_building_area)</p></td>
+        <td><code>100</code></td>
+      </tr>
+      <tr>
+        <td><code>nms_iou_threshold</code></td>
+        <td></td>
+        <td><p>IoU threshold for non-maximum suppression (default: self.nms_iou_threshold)</p></td>
+        <td><code>0.5</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td><p>GeoDataFrame with building footprints</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>geoai/preprocess.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">masks_to_vector</span><span class="p">(</span>
+    <span class="n">mask_path</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">simplify_tolerance</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">mask_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">min_area</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">nms_iou_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a building mask GeoTIFF to vector polygons and save as a vector dataset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mask_path: Path to the building masks GeoTIFF</span>
+<span class="sd">        output_path: Path to save the output GeoJSON (default: mask_path with .geojson extension)</span>
+<span class="sd">        simplify_tolerance: Tolerance for polygon simplification (default: self.simplify_tolerance)</span>
+<span class="sd">        mask_threshold: Threshold for mask binarization (default: self.mask_threshold)</span>
+<span class="sd">        min_area: Minimum area in pixels to keep a building (default: self.small_building_area)</span>
+<span class="sd">        nms_iou_threshold: IoU threshold for non-maximum suppression (default: self.nms_iou_threshold)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        GeoDataFrame with building footprints</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Set default output path if not provided</span>
+    <span class="c1"># if output_path is None:</span>
+    <span class="c1">#     output_path = os.path.splitext(mask_path)[0] + &quot;.geojson&quot;</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Converting mask to GeoJSON with parameters:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Mask threshold: </span><span class="si">{</span><span class="n">mask_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Min building area: </span><span class="si">{</span><span class="n">min_area</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Simplify tolerance: </span><span class="si">{</span><span class="n">simplify_tolerance</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- NMS IoU threshold: </span><span class="si">{</span><span class="n">nms_iou_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Open the mask raster</span>
+    <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">mask_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+        <span class="c1"># Read the mask data</span>
+        <span class="n">mask_data</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">transform</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">transform</span>
+        <span class="n">crs</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">crs</span>
+
+        <span class="c1"># Print mask statistics</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mask dimensions: </span><span class="si">{</span><span class="n">mask_data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mask value range: </span><span class="si">{</span><span class="n">mask_data</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">mask_data</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Prepare for connected component analysis</span>
+        <span class="c1"># Binarize the mask based on threshold</span>
+        <span class="n">binary_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">mask_data</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">mask_threshold</span> <span class="o">*</span> <span class="mi">255</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+
+        <span class="c1"># Apply morphological operations for better results (optional)</span>
+        <span class="n">kernel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">binary_mask</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">morphologyEx</span><span class="p">(</span><span class="n">binary_mask</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">MORPH_CLOSE</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>
+
+        <span class="c1"># Find connected components</span>
+        <span class="n">num_labels</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">stats</span><span class="p">,</span> <span class="n">centroids</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">connectedComponentsWithStats</span><span class="p">(</span>
+            <span class="n">binary_mask</span><span class="p">,</span> <span class="n">connectivity</span><span class="o">=</span><span class="mi">8</span>
+        <span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="n">num_labels</span><span class="o">-</span><span class="mi">1</span><span class="si">}</span><span class="s2"> potential buildings&quot;</span><span class="p">)</span>  <span class="c1"># Subtract 1 for background</span>
+
+        <span class="c1"># Create list to store polygons and confidence values</span>
+        <span class="n">all_polygons</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_confidences</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Process each component (skip the first one which is background)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_labels</span><span class="p">)):</span>
+            <span class="c1"># Extract this building</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CC_STAT_AREA</span><span class="p">]</span>
+
+            <span class="c1"># Skip if too small</span>
+            <span class="k">if</span> <span class="n">area</span> <span class="o">&lt;</span> <span class="n">min_area</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Create a mask for this building</span>
+            <span class="n">building_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">labels</span> <span class="o">==</span> <span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+
+            <span class="c1"># Find contours</span>
+            <span class="n">contours</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">findContours</span><span class="p">(</span>
+                <span class="n">building_mask</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">RETR_EXTERNAL</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CHAIN_APPROX_SIMPLE</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Process each contour</span>
+            <span class="k">for</span> <span class="n">contour</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">:</span>
+                <span class="c1"># Skip if too few points</span>
+                <span class="k">if</span> <span class="n">contour</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Simplify contour if it has many points</span>
+                <span class="k">if</span> <span class="n">contour</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">50</span> <span class="ow">and</span> <span class="n">simplify_tolerance</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">epsilon</span> <span class="o">=</span> <span class="n">simplify_tolerance</span> <span class="o">*</span> <span class="n">cv2</span><span class="o">.</span><span class="n">arcLength</span><span class="p">(</span><span class="n">contour</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+                    <span class="n">contour</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">approxPolyDP</span><span class="p">(</span><span class="n">contour</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+                <span class="c1"># Convert to list of (x, y) coordinates</span>
+                <span class="n">polygon_points</span> <span class="o">=</span> <span class="n">contour</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+                <span class="c1"># Convert pixel coordinates to geographic coordinates</span>
+                <span class="n">geo_points</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">polygon_points</span><span class="p">:</span>
+                    <span class="n">gx</span><span class="p">,</span> <span class="n">gy</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+                    <span class="n">geo_points</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">gx</span><span class="p">,</span> <span class="n">gy</span><span class="p">))</span>
+
+                <span class="c1"># Create Shapely polygon</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">geo_points</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">shapely_poly</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">geo_points</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">shapely_poly</span><span class="o">.</span><span class="n">is_valid</span> <span class="ow">and</span> <span class="n">shapely_poly</span><span class="o">.</span><span class="n">area</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">all_polygons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">shapely_poly</span><span class="p">)</span>
+
+                            <span class="c1"># Calculate &quot;confidence&quot; as normalized size</span>
+                            <span class="c1"># This is a proxy since we don&#39;t have model confidence scores</span>
+                            <span class="n">normalized_size</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">area</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>  <span class="c1"># Cap at 1.0</span>
+                            <span class="n">all_confidences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">normalized_size</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error creating polygon: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_polygons</span><span class="p">)</span><span class="si">}</span><span class="s2"> valid polygons&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Create GeoDataFrame</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">all_polygons</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No valid polygons found&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">all_polygons</span><span class="p">,</span>
+                <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">all_confidences</span><span class="p">,</span>
+                <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1"># Building class</span>
+            <span class="p">},</span>
+            <span class="n">crs</span><span class="o">=</span><span class="n">crs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">filter_overlapping_polygons</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Filter overlapping polygons using non-maximum suppression.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                gdf: GeoDataFrame with polygons</span>
+<span class="sd">                **kwargs: Optional parameters:</span>
+<span class="sd">                    nms_iou_threshold: IoU threshold for filtering</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                Filtered GeoDataFrame</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">gdf</span>
+
+            <span class="c1"># Get parameters from kwargs or use instance defaults</span>
+            <span class="n">iou_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;nms_iou_threshold&quot;</span><span class="p">,</span> <span class="n">nms_iou_threshold</span><span class="p">)</span>
+
+            <span class="c1"># Sort by confidence</span>
+            <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;confidence&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># Fix any invalid geometries</span>
+            <span class="n">gdf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">geom</span><span class="p">:</span> <span class="n">geom</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">geom</span><span class="o">.</span><span class="n">is_valid</span> <span class="k">else</span> <span class="n">geom</span>
+            <span class="p">)</span>
+
+            <span class="n">keep_indices</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">polygons</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">values</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">polygons</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">keep_indices</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="n">keep</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">keep_indices</span><span class="p">:</span>
+                    <span class="c1"># Skip invalid geometries</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">polygons</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">is_valid</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">polygons</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">is_valid</span><span class="p">:</span>
+                        <span class="k">continue</span>
+
+                    <span class="c1"># Calculate IoU</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">intersection</span> <span class="o">=</span> <span class="n">polygons</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">polygons</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">area</span>
+                        <span class="n">union</span> <span class="o">=</span> <span class="n">polygons</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">area</span> <span class="o">+</span> <span class="n">polygons</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">area</span> <span class="o">-</span> <span class="n">intersection</span>
+                        <span class="n">iou</span> <span class="o">=</span> <span class="n">intersection</span> <span class="o">/</span> <span class="n">union</span> <span class="k">if</span> <span class="n">union</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+
+                        <span class="k">if</span> <span class="n">iou</span> <span class="o">&gt;</span> <span class="n">iou_threshold</span><span class="p">:</span>
+                            <span class="n">keep</span> <span class="o">=</span> <span class="kc">False</span>
+                            <span class="k">break</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                        <span class="c1"># Skip on topology exceptions</span>
+                        <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">keep</span><span class="p">:</span>
+                    <span class="n">keep_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">gdf</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">keep_indices</span><span class="p">]</span>
+
+        <span class="c1"># Apply non-maximum suppression to remove overlapping polygons</span>
+        <span class="n">gdf</span> <span class="o">=</span> <span class="n">filter_overlapping_polygons</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">nms_iou_threshold</span><span class="o">=</span><span class="n">nms_iou_threshold</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Final building count after filtering: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Save to file</span>
+        <span class="k">if</span> <span class="n">output_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2"> building footprints to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">gdf</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
 <h2 id="geoai.preprocess.print_raster_info" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">print_raster_info</span><span class="p">(</span><span class="n">raster_path</span><span class="p">,</span> <span class="n">show_preview</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span></code>
 
@@ -6162,7 +6465,7 @@ If False, only pixels whose center is within the geometry will be burned in.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago"><span class="timeago" datetime="2025-03-03T03:46:07+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2025-03-03</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="March 3, 2025 03:46:07"><span class="timeago" datetime="2025-03-03T03:46:07+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="March 3, 2025 03:46:07">2025-03-03</span>
   </span>
 
     
@@ -6172,7 +6475,7 @@ If False, only pixels whose center is within the geometry will be burned in.</p>
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago"><span class="timeago" datetime="2025-03-03T03:46:07+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2025-03-03</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="March 3, 2025 03:46:07"><span class="timeago" datetime="2025-03-03T03:46:07+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="March 3, 2025 03:46:07">2025-03-03</span>
   </span>
 
     
