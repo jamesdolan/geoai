@@ -5228,7 +5228,7 @@ Defaults to 1.0, which keeps the original pixel</p></td>
 
 
 <h2 id="geoai.preprocess.masks_to_vector" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">masks_to_vector</span><span class="p">(</span><span class="n">mask_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">simplify_tolerance</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mask_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">min_area</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">nms_iou_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">masks_to_vector</span><span class="p">(</span><span class="n">mask_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">simplify_tolerance</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mask_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">min_object_area</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_object_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nms_iou_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span></code>
 
 
 <a href="#geoai.preprocess.masks_to_vector" class="headerlink" title="Permanent link">&para;</a></h2>
@@ -5273,10 +5273,16 @@ Defaults to 1.0, which keeps the original pixel</p></td>
         <td><code>0.5</code></td>
       </tr>
       <tr>
-        <td><code>min_area</code></td>
+        <td><code>min_object_area</code></td>
         <td></td>
-        <td><p>Minimum area in pixels to keep a building (default: self.small_building_area)</p></td>
+        <td><p>Minimum area in pixels to keep a building (default: self.min_object_area)</p></td>
         <td><code>100</code></td>
+      </tr>
+      <tr>
+        <td><code>max_object_area</code></td>
+        <td></td>
+        <td><p>Maximum area in pixels to keep a building (default: self.max_object_area)</p></td>
+        <td><code>None</code></td>
       </tr>
       <tr>
         <td><code>nms_iou_threshold</code></td>
@@ -5308,7 +5314,8 @@ Defaults to 1.0, which keeps the original pixel</p></td>
     <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">simplify_tolerance</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
     <span class="n">mask_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-    <span class="n">min_area</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">min_object_area</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">max_object_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">nms_iou_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -5319,7 +5326,8 @@ Defaults to 1.0, which keeps the original pixel</p></td>
 <span class="sd">        output_path: Path to save the output GeoJSON (default: mask_path with .geojson extension)</span>
 <span class="sd">        simplify_tolerance: Tolerance for polygon simplification (default: self.simplify_tolerance)</span>
 <span class="sd">        mask_threshold: Threshold for mask binarization (default: self.mask_threshold)</span>
-<span class="sd">        min_area: Minimum area in pixels to keep a building (default: self.small_building_area)</span>
+<span class="sd">        min_object_area: Minimum area in pixels to keep a building (default: self.min_object_area)</span>
+<span class="sd">        max_object_area: Maximum area in pixels to keep a building (default: self.max_object_area)</span>
 <span class="sd">        nms_iou_threshold: IoU threshold for non-maximum suppression (default: self.nms_iou_threshold)</span>
 
 <span class="sd">    Returns:</span>
@@ -5331,7 +5339,7 @@ Defaults to 1.0, which keeps the original pixel</p></td>
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Converting mask to GeoJSON with parameters:&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Mask threshold: </span><span class="si">{</span><span class="n">mask_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Min building area: </span><span class="si">{</span><span class="n">min_area</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Min building area: </span><span class="si">{</span><span class="n">min_object_area</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Simplify tolerance: </span><span class="si">{</span><span class="n">simplify_tolerance</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- NMS IoU threshold: </span><span class="si">{</span><span class="n">nms_iou_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -5371,7 +5379,11 @@ Defaults to 1.0, which keeps the original pixel</p></td>
             <span class="n">area</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CC_STAT_AREA</span><span class="p">]</span>
 
             <span class="c1"># Skip if too small</span>
-            <span class="k">if</span> <span class="n">area</span> <span class="o">&lt;</span> <span class="n">min_area</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">area</span> <span class="o">&lt;</span> <span class="n">min_object_area</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Skip if too large</span>
+            <span class="k">if</span> <span class="n">max_object_area</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">max_object_area</span><span class="p">:</span>
                 <span class="k">continue</span>
 
             <span class="c1"># Create a mask for this building</span>

@@ -2694,7 +2694,8 @@ ObjectDetector        </code>
         <span class="bp">self</span><span class="o">.</span><span class="n">overlap</span> <span class="o">=</span> <span class="mf">0.25</span>  <span class="c1"># Default overlap between tiles</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">confidence_threshold</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># Default confidence threshold</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nms_iou_threshold</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># IoU threshold for non-maximum suppression</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">small_object_area</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># Minimum area in pixels to keep an object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_object_area</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># Minimum area in pixels to keep an object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_object_area</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Maximum area in pixels to keep an object</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mask_threshold</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># Threshold for mask binarization</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">simplify_tolerance</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># Tolerance for polygon simplification</span>
 
@@ -2824,7 +2825,8 @@ ObjectDetector        </code>
 <span class="sd">            **kwargs: Optional parameters:</span>
 <span class="sd">                simplify_tolerance: Tolerance for polygon simplification</span>
 <span class="sd">                mask_threshold: Threshold for mask binarization</span>
-<span class="sd">                small_object_area: Minimum area in pixels to keep an object</span>
+<span class="sd">                min_object_area: Minimum area in pixels to keep an object</span>
+<span class="sd">                max_object_area: Maximum area in pixels to keep an object</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List of polygons as lists of (x, y) coordinates</span>
@@ -2833,7 +2835,8 @@ ObjectDetector        </code>
         <span class="c1"># Get parameters from kwargs or use instance defaults</span>
         <span class="n">simplify_tolerance</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;simplify_tolerance&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">simplify_tolerance</span><span class="p">)</span>
         <span class="n">mask_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mask_threshold&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_threshold</span><span class="p">)</span>
-        <span class="n">small_object_area</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;small_object_area&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">small_object_area</span><span class="p">)</span>
+        <span class="n">min_object_area</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min_object_area&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_object_area</span><span class="p">)</span>
+        <span class="n">max_object_area</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_object_area&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_object_area</span><span class="p">)</span>
 
         <span class="c1"># Ensure binary mask</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">mask</span> <span class="o">&gt;</span> <span class="n">mask_threshold</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
@@ -2849,7 +2852,14 @@ ObjectDetector        </code>
         <span class="n">polygons</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">contour</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">:</span>
             <span class="c1"># Filter out too small contours</span>
-            <span class="k">if</span> <span class="n">contour</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">cv2</span><span class="o">.</span><span class="n">contourArea</span><span class="p">(</span><span class="n">contour</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">small_object_area</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">contour</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">cv2</span><span class="o">.</span><span class="n">contourArea</span><span class="p">(</span><span class="n">contour</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">min_object_area</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Filter out too large contours</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">max_object_area</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="ow">and</span> <span class="n">cv2</span><span class="o">.</span><span class="n">contourArea</span><span class="p">(</span><span class="n">contour</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">max_object_area</span>
+            <span class="p">):</span>
                 <span class="k">continue</span>
 
             <span class="c1"># Simplify contour if it has many points</span>
@@ -2989,7 +2999,8 @@ ObjectDetector        </code>
         <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">simplify_tolerance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">mask_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">small_object_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">min_object_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">max_object_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">nms_iou_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">regularize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">angle_threshold</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
@@ -3003,7 +3014,8 @@ ObjectDetector        </code>
 <span class="sd">            output_path: Path to save the output GeoJSON (default: mask_path with .geojson extension)</span>
 <span class="sd">            simplify_tolerance: Tolerance for polygon simplification (default: self.simplify_tolerance)</span>
 <span class="sd">            mask_threshold: Threshold for mask binarization (default: self.mask_threshold)</span>
-<span class="sd">            small_object_area: Minimum area in pixels to keep an object (default: self.small_object_area)</span>
+<span class="sd">            min_object_area: Minimum area in pixels to keep an object (default: self.min_object_area)</span>
+<span class="sd">            max_object_area: Minimum area in pixels to keep an object (default: self.max_object_area)</span>
 <span class="sd">            nms_iou_threshold: IoU threshold for non-maximum suppression (default: self.nms_iou_threshold)</span>
 <span class="sd">            regularize: Whether to regularize objects to right angles (default: True)</span>
 <span class="sd">            angle_threshold: Maximum deviation from 90 degrees for regularization (default: 15)</span>
@@ -3021,10 +3033,11 @@ ObjectDetector        </code>
         <span class="n">mask_threshold</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">mask_threshold</span> <span class="k">if</span> <span class="n">mask_threshold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_threshold</span>
         <span class="p">)</span>
-        <span class="n">small_object_area</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">small_object_area</span>
-            <span class="k">if</span> <span class="n">small_object_area</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">small_object_area</span>
+        <span class="n">min_object_area</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">min_object_area</span> <span class="k">if</span> <span class="n">min_object_area</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_object_area</span>
+        <span class="p">)</span>
+        <span class="n">max_object_area</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">max_object_area</span> <span class="k">if</span> <span class="n">max_object_area</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_object_area</span>
         <span class="p">)</span>
         <span class="n">nms_iou_threshold</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">nms_iou_threshold</span>
@@ -3038,7 +3051,8 @@ ObjectDetector        </code>
 
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Converting mask to GeoJSON with parameters:&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Mask threshold: </span><span class="si">{</span><span class="n">mask_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Min object area: </span><span class="si">{</span><span class="n">small_object_area</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Min object area: </span><span class="si">{</span><span class="n">min_object_area</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Max object area: </span><span class="si">{</span><span class="n">max_object_area</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Simplify tolerance: </span><span class="si">{</span><span class="n">simplify_tolerance</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- NMS IoU threshold: </span><span class="si">{</span><span class="n">nms_iou_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Regularize objects: </span><span class="si">{</span><span class="n">regularize</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -3084,7 +3098,11 @@ ObjectDetector        </code>
                 <span class="n">area</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CC_STAT_AREA</span><span class="p">]</span>
 
                 <span class="c1"># Skip if too small</span>
-                <span class="k">if</span> <span class="n">area</span> <span class="o">&lt;</span> <span class="n">small_object_area</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">area</span> <span class="o">&lt;</span> <span class="n">min_object_area</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Skip if too large</span>
+                <span class="k">if</span> <span class="n">max_object_area</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">max_object_area</span><span class="p">:</span>
                     <span class="k">continue</span>
 
                 <span class="c1"># Create a mask for this object</span>
@@ -3208,7 +3226,7 @@ ObjectDetector        </code>
 <span class="sd">                chip_size: Size of image chips for processing (height, width)</span>
 <span class="sd">                nms_iou_threshold: IoU threshold for non-maximum suppression (0.0-1.0)</span>
 <span class="sd">                mask_threshold: Threshold for mask binarization (0.0-1.0)</span>
-<span class="sd">                small_object_area: Minimum area in pixels to keep an object</span>
+<span class="sd">                min_object_area: Minimum area in pixels to keep an object</span>
 <span class="sd">                simplify_tolerance: Tolerance for polygon simplification</span>
 
 <span class="sd">        Returns:</span>
@@ -3222,7 +3240,8 @@ ObjectDetector        </code>
         <span class="n">chip_size</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;chip_size&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">)</span>
         <span class="n">nms_iou_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;nms_iou_threshold&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nms_iou_threshold</span><span class="p">)</span>
         <span class="n">mask_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mask_threshold&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_threshold</span><span class="p">)</span>
-        <span class="n">small_object_area</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;small_object_area&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">small_object_area</span><span class="p">)</span>
+        <span class="n">min_object_area</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min_object_area&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_object_area</span><span class="p">)</span>
+        <span class="n">max_object_area</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_object_area&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_object_area</span><span class="p">)</span>
         <span class="n">simplify_tolerance</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;simplify_tolerance&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">simplify_tolerance</span><span class="p">)</span>
 
         <span class="c1"># Print parameters being used</span>
@@ -3232,7 +3251,8 @@ ObjectDetector        </code>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Chip size: </span><span class="si">{</span><span class="n">chip_size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- NMS IoU threshold: </span><span class="si">{</span><span class="n">nms_iou_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Mask threshold: </span><span class="si">{</span><span class="n">mask_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Min object area: </span><span class="si">{</span><span class="n">small_object_area</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Min object area: </span><span class="si">{</span><span class="n">min_object_area</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Max object area: </span><span class="si">{</span><span class="n">max_object_area</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Simplify tolerance: </span><span class="si">{</span><span class="n">simplify_tolerance</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Filter edge objects: </span><span class="si">{</span><span class="n">filter_edges</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">filter_edges</span><span class="p">:</span>
@@ -3363,7 +3383,8 @@ ObjectDetector        </code>
                         <span class="n">binary_mask</span><span class="p">,</span>
                         <span class="n">simplify_tolerance</span><span class="o">=</span><span class="n">simplify_tolerance</span><span class="p">,</span>
                         <span class="n">mask_threshold</span><span class="o">=</span><span class="n">mask_threshold</span><span class="p">,</span>
-                        <span class="n">small_object_area</span><span class="o">=</span><span class="n">small_object_area</span><span class="p">,</span>
+                        <span class="n">min_object_area</span><span class="o">=</span><span class="n">min_object_area</span><span class="p">,</span>
+                        <span class="n">max_object_area</span><span class="o">=</span><span class="n">max_object_area</span><span class="p">,</span>
                     <span class="p">)</span>
 
                     <span class="c1"># Skip if no valid polygons</span>
@@ -4362,7 +4383,8 @@ ObjectDetector        </code>
     <span class="bp">self</span><span class="o">.</span><span class="n">overlap</span> <span class="o">=</span> <span class="mf">0.25</span>  <span class="c1"># Default overlap between tiles</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">confidence_threshold</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># Default confidence threshold</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">nms_iou_threshold</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># IoU threshold for non-maximum suppression</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">small_object_area</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># Minimum area in pixels to keep an object</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">min_object_area</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># Minimum area in pixels to keep an object</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">max_object_area</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Maximum area in pixels to keep an object</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">mask_threshold</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># Threshold for mask binarization</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">simplify_tolerance</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># Tolerance for polygon simplification</span>
 
@@ -4942,7 +4964,8 @@ nms_iou_threshold: IoU threshold for filtering</p></td>
         <td><p>Optional parameters:
 simplify_tolerance: Tolerance for polygon simplification
 mask_threshold: Threshold for mask binarization
-small_object_area: Minimum area in pixels to keep an object</p></td>
+min_object_area: Minimum area in pixels to keep an object
+max_object_area: Maximum area in pixels to keep an object</p></td>
         <td><code>{}</code></td>
       </tr>
   </tbody>
@@ -4973,7 +4996,8 @@ small_object_area: Minimum area in pixels to keep an object</p></td>
 <span class="sd">        **kwargs: Optional parameters:</span>
 <span class="sd">            simplify_tolerance: Tolerance for polygon simplification</span>
 <span class="sd">            mask_threshold: Threshold for mask binarization</span>
-<span class="sd">            small_object_area: Minimum area in pixels to keep an object</span>
+<span class="sd">            min_object_area: Minimum area in pixels to keep an object</span>
+<span class="sd">            max_object_area: Maximum area in pixels to keep an object</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        List of polygons as lists of (x, y) coordinates</span>
@@ -4982,7 +5006,8 @@ small_object_area: Minimum area in pixels to keep an object</p></td>
     <span class="c1"># Get parameters from kwargs or use instance defaults</span>
     <span class="n">simplify_tolerance</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;simplify_tolerance&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">simplify_tolerance</span><span class="p">)</span>
     <span class="n">mask_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mask_threshold&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_threshold</span><span class="p">)</span>
-    <span class="n">small_object_area</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;small_object_area&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">small_object_area</span><span class="p">)</span>
+    <span class="n">min_object_area</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min_object_area&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_object_area</span><span class="p">)</span>
+    <span class="n">max_object_area</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_object_area&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_object_area</span><span class="p">)</span>
 
     <span class="c1"># Ensure binary mask</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">mask</span> <span class="o">&gt;</span> <span class="n">mask_threshold</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
@@ -4998,7 +5023,14 @@ small_object_area: Minimum area in pixels to keep an object</p></td>
     <span class="n">polygons</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">contour</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">:</span>
         <span class="c1"># Filter out too small contours</span>
-        <span class="k">if</span> <span class="n">contour</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">cv2</span><span class="o">.</span><span class="n">contourArea</span><span class="p">(</span><span class="n">contour</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">small_object_area</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">contour</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">cv2</span><span class="o">.</span><span class="n">contourArea</span><span class="p">(</span><span class="n">contour</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">min_object_area</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># Filter out too large contours</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">max_object_area</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="n">cv2</span><span class="o">.</span><span class="n">contourArea</span><span class="p">(</span><span class="n">contour</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">max_object_area</span>
+        <span class="p">):</span>
             <span class="k">continue</span>
 
         <span class="c1"># Simplify contour if it has many points</span>
@@ -5024,7 +5056,7 @@ small_object_area: Minimum area in pixels to keep an object</p></td>
 
 
 <h3 id="geoai.extract.ObjectDetector.masks_to_vector" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">masks_to_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">simplify_tolerance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">small_object_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nms_iou_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">regularize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">angle_threshold</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">rectangularity_threshold</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">masks_to_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">simplify_tolerance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_object_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_object_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nms_iou_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">regularize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">angle_threshold</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">rectangularity_threshold</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span></code>
 
 
 <a href="#geoai.extract.ObjectDetector.masks_to_vector" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -5069,9 +5101,15 @@ small_object_area: Minimum area in pixels to keep an object</p></td>
         <td><code>None</code></td>
       </tr>
       <tr>
-        <td><code>small_object_area</code></td>
+        <td><code>min_object_area</code></td>
         <td></td>
-        <td><p>Minimum area in pixels to keep an object (default: self.small_object_area)</p></td>
+        <td><p>Minimum area in pixels to keep an object (default: self.min_object_area)</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>max_object_area</code></td>
+        <td></td>
+        <td><p>Minimum area in pixels to keep an object (default: self.max_object_area)</p></td>
         <td><code>None</code></td>
       </tr>
       <tr>
@@ -5123,7 +5161,8 @@ small_object_area: Minimum area in pixels to keep an object</p></td>
     <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">simplify_tolerance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">mask_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">small_object_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">min_object_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_object_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">nms_iou_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">regularize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">angle_threshold</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
@@ -5137,7 +5176,8 @@ small_object_area: Minimum area in pixels to keep an object</p></td>
 <span class="sd">        output_path: Path to save the output GeoJSON (default: mask_path with .geojson extension)</span>
 <span class="sd">        simplify_tolerance: Tolerance for polygon simplification (default: self.simplify_tolerance)</span>
 <span class="sd">        mask_threshold: Threshold for mask binarization (default: self.mask_threshold)</span>
-<span class="sd">        small_object_area: Minimum area in pixels to keep an object (default: self.small_object_area)</span>
+<span class="sd">        min_object_area: Minimum area in pixels to keep an object (default: self.min_object_area)</span>
+<span class="sd">        max_object_area: Minimum area in pixels to keep an object (default: self.max_object_area)</span>
 <span class="sd">        nms_iou_threshold: IoU threshold for non-maximum suppression (default: self.nms_iou_threshold)</span>
 <span class="sd">        regularize: Whether to regularize objects to right angles (default: True)</span>
 <span class="sd">        angle_threshold: Maximum deviation from 90 degrees for regularization (default: 15)</span>
@@ -5155,10 +5195,11 @@ small_object_area: Minimum area in pixels to keep an object</p></td>
     <span class="n">mask_threshold</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">mask_threshold</span> <span class="k">if</span> <span class="n">mask_threshold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_threshold</span>
     <span class="p">)</span>
-    <span class="n">small_object_area</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">small_object_area</span>
-        <span class="k">if</span> <span class="n">small_object_area</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-        <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">small_object_area</span>
+    <span class="n">min_object_area</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">min_object_area</span> <span class="k">if</span> <span class="n">min_object_area</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_object_area</span>
+    <span class="p">)</span>
+    <span class="n">max_object_area</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">max_object_area</span> <span class="k">if</span> <span class="n">max_object_area</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_object_area</span>
     <span class="p">)</span>
     <span class="n">nms_iou_threshold</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">nms_iou_threshold</span>
@@ -5172,7 +5213,8 @@ small_object_area: Minimum area in pixels to keep an object</p></td>
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Converting mask to GeoJSON with parameters:&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Mask threshold: </span><span class="si">{</span><span class="n">mask_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Min object area: </span><span class="si">{</span><span class="n">small_object_area</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Min object area: </span><span class="si">{</span><span class="n">min_object_area</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Max object area: </span><span class="si">{</span><span class="n">max_object_area</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Simplify tolerance: </span><span class="si">{</span><span class="n">simplify_tolerance</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- NMS IoU threshold: </span><span class="si">{</span><span class="n">nms_iou_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Regularize objects: </span><span class="si">{</span><span class="n">regularize</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -5218,7 +5260,11 @@ small_object_area: Minimum area in pixels to keep an object</p></td>
             <span class="n">area</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CC_STAT_AREA</span><span class="p">]</span>
 
             <span class="c1"># Skip if too small</span>
-            <span class="k">if</span> <span class="n">area</span> <span class="o">&lt;</span> <span class="n">small_object_area</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">area</span> <span class="o">&lt;</span> <span class="n">min_object_area</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Skip if too large</span>
+            <span class="k">if</span> <span class="n">max_object_area</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">max_object_area</span><span class="p">:</span>
                 <span class="k">continue</span>
 
             <span class="c1"># Create a mask for this object</span>
@@ -5388,7 +5434,7 @@ overlap: Overlap between adjacent tiles (0.0-1.0)
 chip_size: Size of image chips for processing (height, width)
 nms_iou_threshold: IoU threshold for non-maximum suppression (0.0-1.0)
 mask_threshold: Threshold for mask binarization (0.0-1.0)
-small_object_area: Minimum area in pixels to keep an object
+min_object_area: Minimum area in pixels to keep an object
 simplify_tolerance: Tolerance for polygon simplification</p></td>
         <td><code>{}</code></td>
       </tr>
@@ -5436,7 +5482,7 @@ simplify_tolerance: Tolerance for polygon simplification</p></td>
 <span class="sd">            chip_size: Size of image chips for processing (height, width)</span>
 <span class="sd">            nms_iou_threshold: IoU threshold for non-maximum suppression (0.0-1.0)</span>
 <span class="sd">            mask_threshold: Threshold for mask binarization (0.0-1.0)</span>
-<span class="sd">            small_object_area: Minimum area in pixels to keep an object</span>
+<span class="sd">            min_object_area: Minimum area in pixels to keep an object</span>
 <span class="sd">            simplify_tolerance: Tolerance for polygon simplification</span>
 
 <span class="sd">    Returns:</span>
@@ -5450,7 +5496,8 @@ simplify_tolerance: Tolerance for polygon simplification</p></td>
     <span class="n">chip_size</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;chip_size&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">)</span>
     <span class="n">nms_iou_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;nms_iou_threshold&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nms_iou_threshold</span><span class="p">)</span>
     <span class="n">mask_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mask_threshold&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_threshold</span><span class="p">)</span>
-    <span class="n">small_object_area</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;small_object_area&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">small_object_area</span><span class="p">)</span>
+    <span class="n">min_object_area</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min_object_area&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_object_area</span><span class="p">)</span>
+    <span class="n">max_object_area</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_object_area&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_object_area</span><span class="p">)</span>
     <span class="n">simplify_tolerance</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;simplify_tolerance&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">simplify_tolerance</span><span class="p">)</span>
 
     <span class="c1"># Print parameters being used</span>
@@ -5460,7 +5507,8 @@ simplify_tolerance: Tolerance for polygon simplification</p></td>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Chip size: </span><span class="si">{</span><span class="n">chip_size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- NMS IoU threshold: </span><span class="si">{</span><span class="n">nms_iou_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Mask threshold: </span><span class="si">{</span><span class="n">mask_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Min object area: </span><span class="si">{</span><span class="n">small_object_area</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Min object area: </span><span class="si">{</span><span class="n">min_object_area</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Max object area: </span><span class="si">{</span><span class="n">max_object_area</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Simplify tolerance: </span><span class="si">{</span><span class="n">simplify_tolerance</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Filter edge objects: </span><span class="si">{</span><span class="n">filter_edges</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">filter_edges</span><span class="p">:</span>
@@ -5591,7 +5639,8 @@ simplify_tolerance: Tolerance for polygon simplification</p></td>
                     <span class="n">binary_mask</span><span class="p">,</span>
                     <span class="n">simplify_tolerance</span><span class="o">=</span><span class="n">simplify_tolerance</span><span class="p">,</span>
                     <span class="n">mask_threshold</span><span class="o">=</span><span class="n">mask_threshold</span><span class="p">,</span>
-                    <span class="n">small_object_area</span><span class="o">=</span><span class="n">small_object_area</span><span class="p">,</span>
+                    <span class="n">min_object_area</span><span class="o">=</span><span class="n">min_object_area</span><span class="p">,</span>
+                    <span class="n">max_object_area</span><span class="o">=</span><span class="n">max_object_area</span><span class="p">,</span>
                 <span class="p">)</span>
 
                 <span class="c1"># Skip if no valid polygons</span>
