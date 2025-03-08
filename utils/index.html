@@ -1416,6 +1416,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#geoai.utils.orthogonalize" class="md-nav__link">
+    <span class="md-ellipsis">
+      orthogonalize()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#geoai.utils.plot_batch" class="md-nav__link">
     <span class="md-ellipsis">
       plot_batch()
@@ -1821,6 +1830,15 @@
   <a href="#geoai.utils.masks_to_vector" class="md-nav__link">
     <span class="md-ellipsis">
       masks_to_vector()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geoai.utils.orthogonalize" class="md-nav__link">
+    <span class="md-ellipsis">
+      orthogonalize()
     </span>
   </a>
   
@@ -7390,6 +7408,912 @@ Defaults to 1.0, which keeps the original pixel</p></td>
         <span class="k">if</span> <span class="n">output_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2"> building footprints to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">gdf</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="geoai.utils.orthogonalize" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">orthogonalize</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">min_area</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">min_segments</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">area_tolerance</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">detect_triangles</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+
+
+<a href="#geoai.utils.orthogonalize" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Orthogonalizes object masks in a GeoTIFF file.</p>
+<p>This function reads a GeoTIFF containing object masks (binary or labeled regions),
+converts the raster masks to vector polygons, applies orthogonalization to each polygon,
+and optionally writes the result to a GeoJSON file.
+The source code is adapted from the Solar Panel Detection algorithm by Esri.
+See https://www.arcgis.com/home/item.html?id=c2508d72f2614104bfcfd5ccf1429284.
+Credits to Esri for the original code.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>input_path</code></td>
+        <td><code>str</code></td>
+        <td><p>Path to the input GeoTIFF file.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>output_path</code></td>
+        <td><code>str</code></td>
+        <td><p>Path to save the output GeoJSON file. If None, no file is saved.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>epsilon</code></td>
+        <td><code>float</code></td>
+        <td><p>Simplification tolerance for the Douglas-Peucker algorithm.
+Higher values result in more simplification. Default is 0.2.</p></td>
+        <td><code>0.2</code></td>
+      </tr>
+      <tr>
+        <td><code>min_area</code></td>
+        <td><code>float</code></td>
+        <td><p>Minimum area of polygons to process (smaller ones are kept as-is).</p></td>
+        <td><code>10</code></td>
+      </tr>
+      <tr>
+        <td><code>min_segments</code></td>
+        <td><code>int</code></td>
+        <td><p>Minimum number of segments to keep after simplification.
+Default is 4 (for rectangular shapes).</p></td>
+        <td><code>4</code></td>
+      </tr>
+      <tr>
+        <td><code>area_tolerance</code></td>
+        <td><code>float</code></td>
+        <td><p>Allowed ratio of area change. Values less than 1.0 restrict
+area change. Default is 0.7 (allows reduction to 70% of original area).</p></td>
+        <td><code>0.7</code></td>
+      </tr>
+      <tr>
+        <td><code>detect_triangles</code></td>
+        <td><code>bool</code></td>
+        <td><p>If True, performs additional check to avoid creating triangular shapes.</p></td>
+        <td><code>True</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>geopandas.GeoDataFrame</code></td>
+      <td><p>A GeoDataFrame containing the orthogonalized features.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>geoai/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">orthogonalize</span><span class="p">(</span>
+    <span class="n">input_path</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">min_area</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">min_segments</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">area_tolerance</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+    <span class="n">detect_triangles</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Orthogonalizes object masks in a GeoTIFF file.</span>
+
+<span class="sd">    This function reads a GeoTIFF containing object masks (binary or labeled regions),</span>
+<span class="sd">    converts the raster masks to vector polygons, applies orthogonalization to each polygon,</span>
+<span class="sd">    and optionally writes the result to a GeoJSON file.</span>
+<span class="sd">    The source code is adapted from the Solar Panel Detection algorithm by Esri.</span>
+<span class="sd">    See https://www.arcgis.com/home/item.html?id=c2508d72f2614104bfcfd5ccf1429284.</span>
+<span class="sd">    Credits to Esri for the original code.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        input_path (str): Path to the input GeoTIFF file.</span>
+<span class="sd">        output_path (str, optional): Path to save the output GeoJSON file. If None, no file is saved.</span>
+<span class="sd">        epsilon (float, optional): Simplification tolerance for the Douglas-Peucker algorithm.</span>
+<span class="sd">            Higher values result in more simplification. Default is 0.2.</span>
+<span class="sd">        min_area (float, optional): Minimum area of polygons to process (smaller ones are kept as-is).</span>
+<span class="sd">        min_segments (int, optional): Minimum number of segments to keep after simplification.</span>
+<span class="sd">            Default is 4 (for rectangular shapes).</span>
+<span class="sd">        area_tolerance (float, optional): Allowed ratio of area change. Values less than 1.0 restrict</span>
+<span class="sd">            area change. Default is 0.7 (allows reduction to 70% of original area).</span>
+<span class="sd">        detect_triangles (bool, optional): If True, performs additional check to avoid creating triangular shapes.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        geopandas.GeoDataFrame: A GeoDataFrame containing the orthogonalized features.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">orthogonalize_ring</span><span class="p">(</span><span class="n">ring</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">min_segments</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Orthogonalizes a ring (list of coordinates).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ring (list): List of [x, y] coordinates forming a ring</span>
+<span class="sd">            epsilon (float, optional): Simplification tolerance</span>
+<span class="sd">            min_segments (int, optional): Minimum number of segments to keep</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: Orthogonalized list of coordinates</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ring</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ring</span>
+
+        <span class="c1"># Convert to numpy array</span>
+        <span class="n">ring_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ring</span><span class="p">)</span>
+
+        <span class="c1"># Get orientation</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">get_orientation</span><span class="p">(</span><span class="n">ring_arr</span><span class="p">))</span>
+
+        <span class="c1"># Simplify using Ramer-Douglas-Peucker algorithm</span>
+        <span class="n">ring_arr</span> <span class="o">=</span> <span class="n">simplify</span><span class="p">(</span><span class="n">ring_arr</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">epsilon</span><span class="p">)</span>
+
+        <span class="c1"># If simplified too much, adjust epsilon to maintain minimum segments</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ring_arr</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">min_segments</span><span class="p">:</span>
+            <span class="c1"># Try with smaller epsilon until we get at least min_segments points</span>
+            <span class="k">for</span> <span class="n">adjust_factor</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]:</span>
+                <span class="n">test_arr</span> <span class="o">=</span> <span class="n">simplify</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ring</span><span class="p">),</span> <span class="n">eps</span><span class="o">=</span><span class="n">epsilon</span> <span class="o">*</span> <span class="n">adjust_factor</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">test_arr</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">min_segments</span><span class="p">:</span>
+                    <span class="n">ring_arr</span> <span class="o">=</span> <span class="n">test_arr</span>
+                    <span class="k">break</span>
+
+        <span class="c1"># Convert to dataframe for processing</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">to_dataframe</span><span class="p">(</span><span class="n">ring_arr</span><span class="p">)</span>
+
+        <span class="c1"># Add orientation information</span>
+        <span class="n">add_orientation</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">angle</span><span class="p">)</span>
+
+        <span class="c1"># Align segments to orthogonal directions</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">align</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+        <span class="c1"># Merge collinear line segments</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">merge_lines</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ring</span>
+
+        <span class="c1"># If we have a triangle-like result (3 segments), return the original shape</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ring</span>
+
+        <span class="c1"># Join the orthogonalized segments back into a ring</span>
+        <span class="n">joined_ring</span> <span class="o">=</span> <span class="n">join_ring</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+        <span class="c1"># If the join operation didn&#39;t produce a valid ring, return the original</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">joined_ring</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">joined_ring</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ring</span>
+
+        <span class="c1"># Basic validation: if result has 3 or fewer points (triangle), use original</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">joined_ring</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ring</span>
+
+        <span class="c1"># Convert back to a list and ensure it&#39;s closed</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">joined_ring</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">result</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">vectorize_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">transform</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts a binary mask to vector polygons.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            mask (numpy.ndarray): Binary mask where non-zero values represent objects</span>
+<span class="sd">            transform (rasterio.transform.Affine): Affine transformation matrix</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: List of GeoJSON features</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">shapes</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">shapes</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">)</span>
+        <span class="n">features_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">shape</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">shapes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># Only process non-zero values (actual objects)</span>
+                <span class="n">features_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)},</span>
+                        <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">shape</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">features_list</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">rasterize_features</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts vector features back to a raster mask.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            features (list): List of GeoJSON features</span>
+<span class="sd">            shape (tuple): Shape of the output raster (height, width)</span>
+<span class="sd">            transform (rasterio.transform.Affine): Affine transformation matrix</span>
+<span class="sd">            dtype (numpy.dtype, optional): Data type of the output raster</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: Rasterized mask</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">rasterize</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">(</span><span class="n">feature</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">],</span> <span class="n">feature</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">features</span>
+            <span class="p">],</span>
+            <span class="n">out_shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span>
+            <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span>
+            <span class="n">fill</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mask</span>
+
+    <span class="c1"># The following helper functions are from the original code</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_orientation</span><span class="p">(</span><span class="n">contour</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the orientation angle of a contour.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            contour (numpy.ndarray): Array of shape (n, 2) containing point coordinates</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Orientation angle in radians</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">box</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">minAreaRect</span><span class="p">(</span><span class="n">contour</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+        <span class="p">(</span><span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">),</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">),</span> <span class="n">angle</span> <span class="o">=</span> <span class="n">box</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">simplify</span><span class="p">(</span><span class="n">contour</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Simplify a contour using the Ramer-Douglas-Peucker algorithm.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            contour (numpy.ndarray): Array of shape (n, 2) containing point coordinates</span>
+<span class="sd">            eps (float, optional): Epsilon value for simplification</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: Simplified contour</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">rdp</span><span class="p">(</span><span class="n">contour</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="n">eps</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dataframe</span><span class="p">(</span><span class="n">ring</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a ring to a pandas DataFrame with line segment information.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ring (numpy.ndarray): Array of shape (n, 2) containing point coordinates</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: DataFrame with line segment information</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ring</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;y1&quot;</span><span class="p">])</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;x2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;y2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;y1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;angle_atan&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;y2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;y1&quot;</span><span class="p">]),</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">]))</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;angle_atan_deg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;angle_atan&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">57.2958</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;len&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;y2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;y1&quot;</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;cx&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x2&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;cy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;y2&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;y1&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_orientation</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add orientation information to the DataFrame.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            df (pandas.DataFrame): DataFrame with line segment information</span>
+<span class="sd">            angle (float): Orientation angle in degrees</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None: Modifies the DataFrame in-place</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rtangle</span> <span class="o">=</span> <span class="n">angle</span> <span class="o">+</span> <span class="mi">90</span>
+        <span class="n">is_parallel</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;angle_atan_deg&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">angle</span> <span class="o">-</span> <span class="mi">45</span><span class="p">))</span>
+            <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;angle_atan_deg&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">angle</span> <span class="o">+</span> <span class="mi">45</span><span class="p">))</span>
+        <span class="p">)</span> <span class="o">|</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;angle_atan_deg&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">180</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">angle</span> <span class="o">-</span> <span class="mi">45</span><span class="p">))</span>
+            <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;angle_atan_deg&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">180</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">angle</span> <span class="o">+</span> <span class="mi">45</span><span class="p">))</span>
+        <span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;angle&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;angle&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;angle&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">is_parallel</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">rtangle</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">align</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Align line segments to their nearest orthogonal direction.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            df (pandas.DataFrame): DataFrame with line segment information</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: DataFrame with aligned line segments</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Handle edge case with empty dataframe</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">df_clone</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># Ensure angle column exists and has valid values</span>
+        <span class="k">if</span> <span class="s2">&quot;angle&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df_clone</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;angle&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="c1"># If angle data is missing, add default angles based on atan2</span>
+            <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;angle&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;angle_atan&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Ensure length and center point data is valid</span>
+        <span class="k">if</span> <span class="s2">&quot;len&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df_clone</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;len&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="c1"># Recalculate lengths if missing</span>
+            <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;len&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;x2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+                <span class="o">+</span> <span class="p">(</span><span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;y2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;y1&quot;</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;cx&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df_clone</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;cx&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;cx&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;x2&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span>
+
+        <span class="k">if</span> <span class="s2">&quot;cy&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df_clone</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;cy&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;cy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;y1&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;y2&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span>
+
+        <span class="c1"># Apply orthogonal alignment</span>
+        <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;cx&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="p">((</span><span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;len&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;angle&quot;</span><span class="p">]))</span>
+        <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;x2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;cx&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="p">((</span><span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;len&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;angle&quot;</span><span class="p">]))</span>
+        <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;y1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;cy&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="p">((</span><span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;len&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;angle&quot;</span><span class="p">]))</span>
+        <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;y2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;cy&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="p">((</span><span class="n">df_clone</span><span class="p">[</span><span class="s2">&quot;len&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;angle&quot;</span><span class="p">]))</span>
+
+        <span class="k">return</span> <span class="n">df_clone</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">merge_lines</span><span class="p">(</span><span class="n">df_aligned</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Merge collinear line segments.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            df_aligned (pandas.DataFrame): DataFrame with aligned line segments</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: DataFrame with merged line segments</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ortho_lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">groups</span> <span class="o">=</span> <span class="n">df_aligned</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">df_aligned</span><span class="p">[</span><span class="s2">&quot;angle&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">()</span> <span class="o">!=</span> <span class="n">df_aligned</span><span class="p">[</span><span class="s2">&quot;angle&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+            <span class="n">group_cx</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;cx&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">y</span><span class="p">[</span><span class="s2">&quot;len&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">y</span><span class="p">[</span><span class="s2">&quot;len&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">group_cy</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;cy&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">y</span><span class="p">[</span><span class="s2">&quot;len&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">y</span><span class="p">[</span><span class="s2">&quot;len&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">cumlen</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="s2">&quot;len&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+            <span class="n">ortho_lines</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">group_cx</span><span class="p">,</span> <span class="n">group_cy</span><span class="p">,</span> <span class="n">cumlen</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="s2">&quot;angle&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="n">ortho_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">rot_angle</span> <span class="ow">in</span> <span class="n">ortho_lines</span><span class="p">:</span>
+            <span class="n">X1</span> <span class="o">=</span> <span class="n">cx</span> <span class="o">-</span> <span class="p">(</span><span class="n">length</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rot_angle</span><span class="p">)</span>
+            <span class="n">X2</span> <span class="o">=</span> <span class="n">cx</span> <span class="o">+</span> <span class="p">(</span><span class="n">length</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rot_angle</span><span class="p">)</span>
+            <span class="n">Y1</span> <span class="o">=</span> <span class="n">cy</span> <span class="o">-</span> <span class="p">(</span><span class="n">length</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rot_angle</span><span class="p">)</span>
+            <span class="n">Y2</span> <span class="o">=</span> <span class="n">cy</span> <span class="o">+</span> <span class="p">(</span><span class="n">length</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rot_angle</span><span class="p">)</span>
+
+            <span class="n">ortho_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;x1&quot;</span><span class="p">:</span> <span class="n">X1</span><span class="p">,</span>
+                    <span class="s2">&quot;y1&quot;</span><span class="p">:</span> <span class="n">Y1</span><span class="p">,</span>
+                    <span class="s2">&quot;x2&quot;</span><span class="p">:</span> <span class="n">X2</span><span class="p">,</span>
+                    <span class="s2">&quot;y2&quot;</span><span class="p">:</span> <span class="n">Y2</span><span class="p">,</span>
+                    <span class="s2">&quot;len&quot;</span><span class="p">:</span> <span class="n">length</span><span class="p">,</span>
+                    <span class="s2">&quot;cx&quot;</span><span class="p">:</span> <span class="n">cx</span><span class="p">,</span>
+                    <span class="s2">&quot;cy&quot;</span><span class="p">:</span> <span class="n">cy</span><span class="p">,</span>
+                    <span class="s2">&quot;angle&quot;</span><span class="p">:</span> <span class="n">rot_angle</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">ortho_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">ortho_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;angle&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">ortho_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;angle&quot;</span><span class="p">]</span>
+        <span class="p">):</span>  <span class="c1"># join first and last segment if they&#39;re in same direction</span>
+            <span class="n">totlen</span> <span class="o">=</span> <span class="n">ortho_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;len&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">ortho_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;len&quot;</span><span class="p">]</span>
+            <span class="n">merge_cx</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">ortho_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;cx&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">ortho_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;len&quot;</span><span class="p">])</span>
+                <span class="o">+</span> <span class="p">(</span><span class="n">ortho_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;cx&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">ortho_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;len&quot;</span><span class="p">])</span>
+            <span class="p">)</span> <span class="o">/</span> <span class="n">totlen</span>
+
+            <span class="n">merge_cy</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">ortho_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;cy&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">ortho_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;len&quot;</span><span class="p">])</span>
+                <span class="o">+</span> <span class="p">(</span><span class="n">ortho_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;cy&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">ortho_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;len&quot;</span><span class="p">])</span>
+            <span class="p">)</span> <span class="o">/</span> <span class="n">totlen</span>
+
+            <span class="n">rot_angle</span> <span class="o">=</span> <span class="n">ortho_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;angle&quot;</span><span class="p">]</span>
+            <span class="n">X1</span> <span class="o">=</span> <span class="n">merge_cx</span> <span class="o">-</span> <span class="p">(</span><span class="n">totlen</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rot_angle</span><span class="p">)</span>
+            <span class="n">X2</span> <span class="o">=</span> <span class="n">merge_cx</span> <span class="o">+</span> <span class="p">(</span><span class="n">totlen</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rot_angle</span><span class="p">)</span>
+            <span class="n">Y1</span> <span class="o">=</span> <span class="n">merge_cy</span> <span class="o">-</span> <span class="p">(</span><span class="n">totlen</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rot_angle</span><span class="p">)</span>
+            <span class="n">Y2</span> <span class="o">=</span> <span class="n">merge_cy</span> <span class="o">+</span> <span class="p">(</span><span class="n">totlen</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rot_angle</span><span class="p">)</span>
+
+            <span class="n">ortho_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;x1&quot;</span><span class="p">:</span> <span class="n">X1</span><span class="p">,</span>
+                <span class="s2">&quot;y1&quot;</span><span class="p">:</span> <span class="n">Y1</span><span class="p">,</span>
+                <span class="s2">&quot;x2&quot;</span><span class="p">:</span> <span class="n">X2</span><span class="p">,</span>
+                <span class="s2">&quot;y2&quot;</span><span class="p">:</span> <span class="n">Y2</span><span class="p">,</span>
+                <span class="s2">&quot;len&quot;</span><span class="p">:</span> <span class="n">totlen</span><span class="p">,</span>
+                <span class="s2">&quot;cx&quot;</span><span class="p">:</span> <span class="n">merge_cx</span><span class="p">,</span>
+                <span class="s2">&quot;cy&quot;</span><span class="p">:</span> <span class="n">merge_cy</span><span class="p">,</span>
+                <span class="s2">&quot;angle&quot;</span><span class="p">:</span> <span class="n">rot_angle</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">ortho_list</span> <span class="o">=</span> <span class="n">ortho_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">ortho_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ortho_list</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ortho_df</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_intersection</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">x3</span><span class="p">,</span> <span class="n">y3</span><span class="p">,</span> <span class="n">x4</span><span class="p">,</span> <span class="n">y4</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find the intersection point of two line segments.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x1, y1, x2, y2: Coordinates of the first line segment</span>
+<span class="sd">            x3, y3, x4, y4: Coordinates of the second line segment</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: [x, y] coordinates of the intersection point</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ZeroDivisionError: If the lines are parallel or collinear</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Calculate the denominator of the intersection formula</span>
+        <span class="n">denominator</span> <span class="o">=</span> <span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">x2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y3</span> <span class="o">-</span> <span class="n">y4</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">x3</span> <span class="o">-</span> <span class="n">x4</span><span class="p">)</span>
+
+        <span class="c1"># Check if lines are parallel or collinear (denominator close to zero)</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">denominator</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ZeroDivisionError</span><span class="p">(</span><span class="s2">&quot;Lines are parallel or collinear&quot;</span><span class="p">)</span>
+
+        <span class="n">px</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">x1</span> <span class="o">*</span> <span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span> <span class="o">*</span> <span class="n">x2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">x3</span> <span class="o">-</span> <span class="n">x4</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">x2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">x3</span> <span class="o">*</span> <span class="n">y4</span> <span class="o">-</span> <span class="n">y3</span> <span class="o">*</span> <span class="n">x4</span><span class="p">)</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="n">denominator</span>
+        <span class="n">py</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">x1</span> <span class="o">*</span> <span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span> <span class="o">*</span> <span class="n">x2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y3</span> <span class="o">-</span> <span class="n">y4</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">x3</span> <span class="o">*</span> <span class="n">y4</span> <span class="o">-</span> <span class="n">y3</span> <span class="o">*</span> <span class="n">x4</span><span class="p">)</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="n">denominator</span>
+
+        <span class="c1"># Check if the intersection point is within a reasonable distance</span>
+        <span class="c1"># from both line segments to avoid extreme extrapolation</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">point_on_segment</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
+            <span class="c1"># Check if point (x,y) is near the line segment from (x1,y1) to (x2,y2)</span>
+            <span class="c1"># First check if it&#39;s near the infinite line</span>
+            <span class="n">line_len</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">line_len</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">tolerance</span>
+
+            <span class="n">t</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">line_len</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="c1"># Check distance to the infinite line</span>
+            <span class="n">proj_x</span> <span class="o">=</span> <span class="n">x1</span> <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span>
+            <span class="n">proj_y</span> <span class="o">=</span> <span class="n">y1</span> <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span>
+            <span class="n">dist_to_line</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">proj_x</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">proj_y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+            <span class="c1"># Check if the projection is near the segment, not just the infinite line</span>
+            <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">tolerance</span> <span class="ow">or</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">tolerance</span><span class="p">:</span>
+                <span class="c1"># If far from the segment, compute distance to the nearest endpoint</span>
+                <span class="n">dist_to_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">dist_to_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">x2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">dist_to_start</span><span class="p">,</span> <span class="n">dist_to_end</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">tolerance</span> <span class="o">*</span> <span class="mi">2</span>
+
+            <span class="k">return</span> <span class="n">dist_to_line</span> <span class="o">&lt;=</span> <span class="n">tolerance</span>
+
+        <span class="c1"># Check if intersection is reasonably close to both line segments</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span>
+            <span class="n">point_on_segment</span><span class="p">(</span><span class="n">px</span><span class="p">,</span> <span class="n">py</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="n">point_on_segment</span><span class="p">(</span><span class="n">px</span><span class="p">,</span> <span class="n">py</span><span class="p">,</span> <span class="n">x3</span><span class="p">,</span> <span class="n">y3</span><span class="p">,</span> <span class="n">x4</span><span class="p">,</span> <span class="n">y4</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="c1"># If intersection is far from segments, it&#39;s probably extrapolating too much</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Intersection point too far from line segments&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">px</span><span class="p">,</span> <span class="n">py</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">join_ring</span><span class="p">(</span><span class="n">merged_df</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Join line segments to form a closed ring.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            merged_df (pandas.DataFrame): DataFrame with merged line segments</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: Array of shape (1, n, 2) containing the ring coordinates</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Handle edge cases</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">merged_df</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="c1"># Not enough segments to form a valid polygon</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[]])</span>
+
+        <span class="n">ring</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Find intersections between adjacent line segments</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">merged_df</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">merged_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">x3</span><span class="p">,</span> <span class="n">y3</span><span class="p">,</span> <span class="n">x4</span><span class="p">,</span> <span class="n">y4</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">merged_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">intersection</span> <span class="o">=</span> <span class="n">find_intersection</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">x3</span><span class="p">,</span> <span class="n">y3</span><span class="p">,</span> <span class="n">x4</span><span class="p">,</span> <span class="n">y4</span><span class="p">)</span>
+
+                <span class="c1"># Check if the intersection point is too far from either line segment</span>
+                <span class="c1"># This helps prevent extending edges beyond reasonable bounds</span>
+                <span class="n">dist_to_seg1</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">intersection</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">intersection</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">intersection</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">intersection</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+                <span class="p">)</span>
+                <span class="n">dist_to_seg2</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">intersection</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x3</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">intersection</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y3</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">intersection</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x4</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">intersection</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y4</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Use the maximum of line segment lengths as a reference</span>
+                <span class="n">max_len</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x4</span> <span class="o">-</span> <span class="n">x3</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y4</span> <span class="o">-</span> <span class="n">y3</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+                <span class="p">)</span>
+
+                <span class="c1"># If intersection is too far away, use the endpoint of the first segment instead</span>
+                <span class="k">if</span> <span class="n">dist_to_seg1</span> <span class="o">&gt;</span> <span class="n">max_len</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="ow">or</span> <span class="n">dist_to_seg2</span> <span class="o">&gt;</span> <span class="n">max_len</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">:</span>
+                    <span class="n">ring</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">ring</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">intersection</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># If intersection calculation fails, use the endpoint of the first segment</span>
+                <span class="n">ring</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">])</span>
+
+        <span class="c1"># Connect last segment with first segment</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">merged_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">x3</span><span class="p">,</span> <span class="n">y3</span><span class="p">,</span> <span class="n">x4</span><span class="p">,</span> <span class="n">y4</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">merged_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">intersection</span> <span class="o">=</span> <span class="n">find_intersection</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">x3</span><span class="p">,</span> <span class="n">y3</span><span class="p">,</span> <span class="n">x4</span><span class="p">,</span> <span class="n">y4</span><span class="p">)</span>
+
+            <span class="c1"># Check if the intersection point is too far from either line segment</span>
+            <span class="n">dist_to_seg1</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">intersection</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">intersection</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">intersection</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">intersection</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">dist_to_seg2</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">intersection</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x3</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">intersection</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y3</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">intersection</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x4</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">intersection</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y4</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="p">)</span>
+
+            <span class="n">max_len</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x4</span> <span class="o">-</span> <span class="n">x3</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y4</span> <span class="o">-</span> <span class="n">y3</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">dist_to_seg1</span> <span class="o">&gt;</span> <span class="n">max_len</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="ow">or</span> <span class="n">dist_to_seg2</span> <span class="o">&gt;</span> <span class="n">max_len</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">:</span>
+                <span class="n">ring</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ring</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">intersection</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># If intersection calculation fails, use the endpoint of the last segment</span>
+            <span class="n">ring</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">])</span>
+
+        <span class="c1"># Ensure the ring is closed</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ring</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">ring</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">ring</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="n">ring</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">ring</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">ring</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ring</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ring</span><span class="p">])</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">rdp</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">algo</span><span class="o">=</span><span class="s2">&quot;iter&quot;</span><span class="p">,</span> <span class="n">return_mask</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Simplifies a given array of points using the Ramer-Douglas-Peucker algorithm.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            M (numpy.ndarray): Array of shape (n, d) containing point coordinates</span>
+<span class="sd">            epsilon (float, optional): Epsilon value for simplification</span>
+<span class="sd">            dist (callable, optional): Distance function</span>
+<span class="sd">            algo (str, optional): Algorithm to use (&#39;iter&#39; or &#39;rec&#39;)</span>
+<span class="sd">            return_mask (bool, optional): Whether to return a mask instead of the simplified array</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray or list: Simplified points or mask</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">dist</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">pldist</span>
+
+        <span class="k">if</span> <span class="n">algo</span> <span class="o">==</span> <span class="s2">&quot;iter&quot;</span><span class="p">:</span>
+            <span class="n">algo</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">rdp_iter</span><span class="p">,</span> <span class="n">return_mask</span><span class="o">=</span><span class="n">return_mask</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s2">&quot;rec&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">return_mask</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                    <span class="s1">&#39;return_mask=True not supported with algo=&quot;rec&quot;&#39;</span>
+                <span class="p">)</span>
+            <span class="n">algo</span> <span class="o">=</span> <span class="n">rdp_rec</span>
+
+        <span class="k">if</span> <span class="s2">&quot;numpy&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">M</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">algo</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">algo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">M</span><span class="p">),</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">pldist</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the distance from &#39;point&#39; to the line given by &#39;start&#39; and &#39;end&#39;.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            point (numpy.ndarray): Point coordinates</span>
+<span class="sd">            start (numpy.ndarray): Start point of the line</span>
+<span class="sd">            end (numpy.ndarray): End point of the line</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Distance from point to line</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">point</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+
+        <span class="c1"># Fix for NumPy 2.0 deprecation warning - handle 2D vectors properly</span>
+        <span class="c1"># Instead of using cross product directly, calculate the area of the</span>
+        <span class="c1"># parallelogram formed by the vectors and divide by the length of the line</span>
+        <span class="n">line_vec</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span>
+        <span class="n">point_vec</span> <span class="o">=</span> <span class="n">point</span> <span class="o">-</span> <span class="n">start</span>
+
+        <span class="c1"># Area of parallelogram = |a|*|b|*sin(θ)</span>
+        <span class="c1"># For 2D vectors: |a×b| = |a|*|b|*sin(θ) = determinant([ax, ay], [bx, by])</span>
+        <span class="n">area</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">line_vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">point_vec</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">line_vec</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">point_vec</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># Distance = Area / |line_vec|</span>
+        <span class="k">return</span> <span class="n">area</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">line_vec</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">rdp_rec</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="n">pldist</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Recursive implementation of the Ramer-Douglas-Peucker algorithm.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            M (numpy.ndarray): Array of shape (n, d) containing point coordinates</span>
+<span class="sd">            epsilon (float): Epsilon value for simplification</span>
+<span class="sd">            dist (callable, optional): Distance function</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: Simplified points</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dmax</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">M</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="n">dmax</span><span class="p">:</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="n">dmax</span> <span class="o">=</span> <span class="n">d</span>
+
+        <span class="k">if</span> <span class="n">dmax</span> <span class="o">&gt;</span> <span class="n">epsilon</span><span class="p">:</span>
+            <span class="n">r1</span> <span class="o">=</span> <span class="n">rdp_rec</span><span class="p">(</span><span class="n">M</span><span class="p">[:</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span>
+            <span class="n">r2</span> <span class="o">=</span> <span class="n">rdp_rec</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="n">index</span><span class="p">:],</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">r1</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">r2</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">M</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_rdp_iter</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">start_index</span><span class="p">,</span> <span class="n">last_index</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="n">pldist</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal iterative implementation of the Ramer-Douglas-Peucker algorithm.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            M (numpy.ndarray): Array of shape (n, d) containing point coordinates</span>
+<span class="sd">            start_index (int): Start index</span>
+<span class="sd">            last_index (int): Last index</span>
+<span class="sd">            epsilon (float): Epsilon value for simplification</span>
+<span class="sd">            dist (callable, optional): Distance function</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: Boolean mask of points to keep</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">stk</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">stk</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">start_index</span><span class="p">,</span> <span class="n">last_index</span><span class="p">])</span>
+        <span class="n">global_start_index</span> <span class="o">=</span> <span class="n">start_index</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">last_index</span> <span class="o">-</span> <span class="n">start_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="n">stk</span><span class="p">:</span>
+            <span class="n">start_index</span><span class="p">,</span> <span class="n">last_index</span> <span class="o">=</span> <span class="n">stk</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+            <span class="n">dmax</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">start_index</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">last_index</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">indices</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">global_start_index</span><span class="p">]:</span>
+                    <span class="n">d</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">M</span><span class="p">[</span><span class="n">start_index</span><span class="p">],</span> <span class="n">M</span><span class="p">[</span><span class="n">last_index</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="n">dmax</span><span class="p">:</span>
+                        <span class="n">index</span> <span class="o">=</span> <span class="n">i</span>
+                        <span class="n">dmax</span> <span class="o">=</span> <span class="n">d</span>
+
+            <span class="k">if</span> <span class="n">dmax</span> <span class="o">&gt;</span> <span class="n">epsilon</span><span class="p">:</span>
+                <span class="n">stk</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">start_index</span><span class="p">,</span> <span class="n">index</span><span class="p">])</span>
+                <span class="n">stk</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">,</span> <span class="n">last_index</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">last_index</span><span class="p">):</span>
+                    <span class="n">indices</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">global_start_index</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="n">indices</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">rdp_iter</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="n">pldist</span><span class="p">,</span> <span class="n">return_mask</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Iterative implementation of the Ramer-Douglas-Peucker algorithm.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            M (numpy.ndarray): Array of shape (n, d) containing point coordinates</span>
+<span class="sd">            epsilon (float): Epsilon value for simplification</span>
+<span class="sd">            dist (callable, optional): Distance function</span>
+<span class="sd">            return_mask (bool, optional): Whether to return a mask instead of the simplified array</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: Simplified points or boolean mask</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">_rdp_iter</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">M</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">return_mask</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">mask</span>
+
+        <span class="k">return</span> <span class="n">M</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+
+    <span class="c1"># Read the raster data</span>
+    <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">input_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+        <span class="c1"># Read the first band (assuming it contains the mask)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">transform</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">transform</span>
+        <span class="n">crs</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">crs</span>
+
+        <span class="c1"># Extract shapes from the raster mask</span>
+        <span class="n">shapes</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">shapes</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">)</span>
+
+        <span class="c1"># Convert shapes to GeoJSON features</span>
+        <span class="n">features_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">shape</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">shapes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># Only process non-zero values (actual objects)</span>
+                <span class="c1"># Convert GeoJSON geometry to Shapely polygon</span>
+                <span class="n">polygon</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">shape</span><span class="p">[</span><span class="s2">&quot;coordinates&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+                <span class="c1"># Skip tiny polygons</span>
+                <span class="k">if</span> <span class="n">polygon</span><span class="o">.</span><span class="n">area</span> <span class="o">&lt;</span> <span class="n">min_area</span><span class="p">:</span>
+                    <span class="n">features_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)},</span>
+                            <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">shape</span><span class="p">,</span>
+                        <span class="p">}</span>
+                    <span class="p">)</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Check if shape is triangular and if we want to avoid triangular shapes</span>
+                <span class="k">if</span> <span class="n">detect_triangles</span><span class="p">:</span>
+                    <span class="c1"># Create a simplified version to check number of vertices</span>
+                    <span class="n">simple_polygon</span> <span class="o">=</span> <span class="n">polygon</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">epsilon</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="nb">len</span><span class="p">(</span><span class="n">simple_polygon</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">4</span>
+                    <span class="p">):</span>  <span class="c1"># 3 points + closing point</span>
+                        <span class="c1"># Likely a triangular shape - skip orthogonalization</span>
+                        <span class="n">features_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)},</span>
+                                <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">shape</span><span class="p">,</span>
+                            <span class="p">}</span>
+                        <span class="p">)</span>
+                        <span class="k">continue</span>
+
+                <span class="c1"># Process larger, non-triangular polygons</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># Convert shapely polygon to a ring format for orthogonalization</span>
+                    <span class="n">exterior_ring</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">polygon</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
+                    <span class="n">interior_rings</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="nb">list</span><span class="p">(</span><span class="n">interior</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span> <span class="k">for</span> <span class="n">interior</span> <span class="ow">in</span> <span class="n">polygon</span><span class="o">.</span><span class="n">interiors</span>
+                    <span class="p">]</span>
+
+                    <span class="c1"># Calculate bounding box aspect ratio to help with parameter tuning</span>
+                    <span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span> <span class="o">=</span> <span class="n">polygon</span><span class="o">.</span><span class="n">bounds</span>
+                    <span class="n">width</span> <span class="o">=</span> <span class="n">maxx</span> <span class="o">-</span> <span class="n">minx</span>
+                    <span class="n">height</span> <span class="o">=</span> <span class="n">maxy</span> <span class="o">-</span> <span class="n">miny</span>
+                    <span class="n">aspect_ratio</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+
+                    <span class="c1"># Determine if this shape is likely to be a building/rectangular object</span>
+                    <span class="c1"># Long thin objects might require different treatment</span>
+                    <span class="n">is_rectangular</span> <span class="o">=</span> <span class="n">aspect_ratio</span> <span class="o">&lt;</span> <span class="mf">3.0</span>
+
+                    <span class="c1"># Rectangular objects usually need more careful orthogonalization</span>
+                    <span class="n">epsilon_adjusted</span> <span class="o">=</span> <span class="n">epsilon</span>
+                    <span class="n">min_segments_adjusted</span> <span class="o">=</span> <span class="n">min_segments</span>
+
+                    <span class="k">if</span> <span class="n">is_rectangular</span><span class="p">:</span>
+                        <span class="c1"># For rectangular objects, use more conservative epsilon</span>
+                        <span class="n">epsilon_adjusted</span> <span class="o">=</span> <span class="n">epsilon</span> <span class="o">*</span> <span class="mf">0.75</span>
+                        <span class="c1"># Ensure we get at least 4 points for a proper rectangle</span>
+                        <span class="n">min_segments_adjusted</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">min_segments</span><span class="p">)</span>
+
+                    <span class="c1"># Orthogonalize the exterior and interior rings</span>
+                    <span class="n">orthogonalized_exterior</span> <span class="o">=</span> <span class="n">orthogonalize_ring</span><span class="p">(</span>
+                        <span class="n">exterior_ring</span><span class="p">,</span>
+                        <span class="n">epsilon</span><span class="o">=</span><span class="n">epsilon_adjusted</span><span class="p">,</span>
+                        <span class="n">min_segments</span><span class="o">=</span><span class="n">min_segments_adjusted</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                    <span class="n">orthogonalized_interiors</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="n">orthogonalize_ring</span><span class="p">(</span>
+                            <span class="n">ring</span><span class="p">,</span>
+                            <span class="n">epsilon</span><span class="o">=</span><span class="n">epsilon_adjusted</span><span class="p">,</span>
+                            <span class="n">min_segments</span><span class="o">=</span><span class="n">min_segments_adjusted</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="k">for</span> <span class="n">ring</span> <span class="ow">in</span> <span class="n">interior_rings</span>
+                    <span class="p">]</span>
+
+                    <span class="c1"># Validate the result - calculate area change</span>
+                    <span class="n">original_area</span> <span class="o">=</span> <span class="n">polygon</span><span class="o">.</span><span class="n">area</span>
+                    <span class="n">orthogonalized_poly</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">orthogonalized_exterior</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">orthogonalized_poly</span><span class="o">.</span><span class="n">is_valid</span><span class="p">:</span>
+                        <span class="n">area_ratio</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">orthogonalized_poly</span><span class="o">.</span><span class="n">area</span> <span class="o">/</span> <span class="n">original_area</span>
+                            <span class="k">if</span> <span class="n">original_area</span> <span class="o">&gt;</span> <span class="mi">0</span>
+                            <span class="k">else</span> <span class="mi">0</span>
+                        <span class="p">)</span>
+
+                        <span class="c1"># If area changed too much, revert to original</span>
+                        <span class="k">if</span> <span class="n">area_ratio</span> <span class="o">&lt;</span> <span class="n">area_tolerance</span> <span class="ow">or</span> <span class="n">area_ratio</span> <span class="o">&gt;</span> <span class="p">(</span>
+                            <span class="mf">1.0</span> <span class="o">/</span> <span class="n">area_tolerance</span>
+                        <span class="p">):</span>
+                            <span class="c1"># Use original polygon instead</span>
+                            <span class="n">geometry</span> <span class="o">=</span> <span class="n">shape</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="c1"># Create a new geometry with orthogonalized rings</span>
+                            <span class="n">geometry</span> <span class="o">=</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">orthogonalized_exterior</span><span class="p">],</span>
+                            <span class="p">}</span>
+
+                            <span class="c1"># Add interior rings if they exist</span>
+                            <span class="k">if</span> <span class="n">orthogonalized_interiors</span><span class="p">:</span>
+                                <span class="n">geometry</span><span class="p">[</span><span class="s2">&quot;coordinates&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                                    <span class="p">[</span><span class="n">ring</span> <span class="k">for</span> <span class="n">ring</span> <span class="ow">in</span> <span class="n">orthogonalized_interiors</span><span class="p">]</span>
+                                <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># If resulting polygon is invalid, use original</span>
+                        <span class="n">geometry</span> <span class="o">=</span> <span class="n">shape</span>
+
+                    <span class="c1"># Add the feature to the list</span>
+                    <span class="n">features_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)},</span>
+                            <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">geometry</span><span class="p">,</span>
+                        <span class="p">}</span>
+                    <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="c1"># Keep the original shape if orthogonalization fails</span>
+                    <span class="n">features_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)},</span>
+                            <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">shape</span><span class="p">,</span>
+                        <span class="p">}</span>
+                    <span class="p">)</span>
+
+        <span class="c1"># Create the final GeoJSON structure</span>
+        <span class="n">geojson</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;FeatureCollection&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;crs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">crs</span><span class="p">)}},</span>
+            <span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">features_list</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Convert to GeoDataFrame and set the CRS</span>
+        <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">.</span><span class="n">from_features</span><span class="p">(</span><span class="n">geojson</span><span class="p">[</span><span class="s2">&quot;features&quot;</span><span class="p">],</span> <span class="n">crs</span><span class="o">=</span><span class="n">crs</span><span class="p">)</span>
+
+        <span class="c1"># Save to file if output_path is provided</span>
+        <span class="k">if</span> <span class="n">output_path</span><span class="p">:</span>
+            <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">gdf</span>
 </code></pre></div>
