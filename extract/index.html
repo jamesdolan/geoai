@@ -4739,6 +4739,8 @@ ObjectDetector        </code>
         <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">confidence_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">mask_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">min_object_area</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">max_object_area</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span>
         <span class="n">overlap</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
         <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
         <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -4747,11 +4749,16 @@ ObjectDetector        </code>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Save masks with confidence values as a multi-band GeoTIFF.</span>
 
+<span class="sd">        Objects with area smaller than min_object_area or larger than max_object_area</span>
+<span class="sd">        will be filtered out.</span>
+
 <span class="sd">        Args:</span>
 <span class="sd">            raster_path: Path to input raster</span>
 <span class="sd">            output_path: Path for output GeoTIFF</span>
 <span class="sd">            confidence_threshold: Minimum confidence score (0.0-1.0)</span>
 <span class="sd">            mask_threshold: Threshold for mask binarization (0.0-1.0)</span>
+<span class="sd">            min_object_area: Minimum area (in pixels) for an object to be included</span>
+<span class="sd">            max_object_area: Maximum area (in pixels) for an object to be included</span>
 <span class="sd">            overlap: Overlap between tiles (0.0-1.0)</span>
 <span class="sd">            batch_size: Batch size for processing</span>
 <span class="sd">            verbose: Whether to print detailed processing information</span>
@@ -4864,6 +4871,21 @@ ObjectDetector        </code>
                     <span class="k">for</span> <span class="n">mask_idx</span><span class="p">,</span> <span class="n">mask</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">masks</span><span class="p">):</span>
                         <span class="c1"># Convert to binary mask</span>
                         <span class="n">binary_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">mask</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">mask_threshold</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span> <span class="o">*</span> <span class="mi">255</span>
+
+                        <span class="c1"># Check object area - calculate number of pixels in the mask</span>
+                        <span class="n">object_area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">binary_mask</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+
+                        <span class="c1"># Skip objects that don&#39;t meet area criteria</span>
+                        <span class="k">if</span> <span class="p">(</span>
+                            <span class="n">object_area</span> <span class="o">&lt;</span> <span class="n">min_object_area</span>
+                            <span class="ow">or</span> <span class="n">object_area</span> <span class="o">&gt;</span> <span class="n">max_object_area</span>
+                        <span class="p">):</span>
+                            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                                <span class="nb">print</span><span class="p">(</span>
+                                    <span class="sa">f</span><span class="s2">&quot;Filtering out object with area </span><span class="si">{</span><span class="n">object_area</span><span class="si">}</span><span class="s2"> pixels&quot;</span>
+                                <span class="p">)</span>
+                            <span class="k">continue</span>
+
                         <span class="n">conf_value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="n">mask_idx</span><span class="p">]</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)</span>  <span class="c1"># Scale to 0-255</span>
 
                         <span class="c1"># Update the mask and confidence arrays</span>
@@ -5493,7 +5515,7 @@ nms_iou_threshold: IoU threshold for filtering</p></td>
 
 
 <h3 id="geoai.extract.ObjectDetector.generate_masks" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">generate_masks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">confidence_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">generate_masks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">confidence_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_object_area</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_object_area</span><span class="o">=</span><span class="n">inf</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 
 <a href="#geoai.extract.ObjectDetector.generate_masks" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -5501,6 +5523,8 @@ nms_iou_threshold: IoU threshold for filtering</p></td>
     <div class="doc doc-contents ">
 
       <p>Save masks with confidence values as a multi-band GeoTIFF.</p>
+<p>Objects with area smaller than min_object_area or larger than max_object_area
+will be filtered out.</p>
 
 <p><strong>Parameters:</strong></p>
 <table>
@@ -5536,6 +5560,18 @@ nms_iou_threshold: IoU threshold for filtering</p></td>
         <td></td>
         <td><p>Threshold for mask binarization (0.0-1.0)</p></td>
         <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>min_object_area</code></td>
+        <td></td>
+        <td><p>Minimum area (in pixels) for an object to be included</p></td>
+        <td><code>10</code></td>
+      </tr>
+      <tr>
+        <td><code>max_object_area</code></td>
+        <td></td>
+        <td><p>Maximum area (in pixels) for an object to be included</p></td>
+        <td><code>inf</code></td>
       </tr>
       <tr>
         <td><code>overlap</code></td>
@@ -5580,6 +5616,8 @@ nms_iou_threshold: IoU threshold for filtering</p></td>
     <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">confidence_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">mask_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">min_object_area</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">max_object_area</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span>
     <span class="n">overlap</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
     <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
     <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -5588,11 +5626,16 @@ nms_iou_threshold: IoU threshold for filtering</p></td>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Save masks with confidence values as a multi-band GeoTIFF.</span>
 
+<span class="sd">    Objects with area smaller than min_object_area or larger than max_object_area</span>
+<span class="sd">    will be filtered out.</span>
+
 <span class="sd">    Args:</span>
 <span class="sd">        raster_path: Path to input raster</span>
 <span class="sd">        output_path: Path for output GeoTIFF</span>
 <span class="sd">        confidence_threshold: Minimum confidence score (0.0-1.0)</span>
 <span class="sd">        mask_threshold: Threshold for mask binarization (0.0-1.0)</span>
+<span class="sd">        min_object_area: Minimum area (in pixels) for an object to be included</span>
+<span class="sd">        max_object_area: Maximum area (in pixels) for an object to be included</span>
 <span class="sd">        overlap: Overlap between tiles (0.0-1.0)</span>
 <span class="sd">        batch_size: Batch size for processing</span>
 <span class="sd">        verbose: Whether to print detailed processing information</span>
@@ -5705,6 +5748,21 @@ nms_iou_threshold: IoU threshold for filtering</p></td>
                 <span class="k">for</span> <span class="n">mask_idx</span><span class="p">,</span> <span class="n">mask</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">masks</span><span class="p">):</span>
                     <span class="c1"># Convert to binary mask</span>
                     <span class="n">binary_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">mask</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">mask_threshold</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span> <span class="o">*</span> <span class="mi">255</span>
+
+                    <span class="c1"># Check object area - calculate number of pixels in the mask</span>
+                    <span class="n">object_area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">binary_mask</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+
+                    <span class="c1"># Skip objects that don&#39;t meet area criteria</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">object_area</span> <span class="o">&lt;</span> <span class="n">min_object_area</span>
+                        <span class="ow">or</span> <span class="n">object_area</span> <span class="o">&gt;</span> <span class="n">max_object_area</span>
+                    <span class="p">):</span>
+                        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span>
+                                <span class="sa">f</span><span class="s2">&quot;Filtering out object with area </span><span class="si">{</span><span class="n">object_area</span><span class="si">}</span><span class="s2"> pixels&quot;</span>
+                            <span class="p">)</span>
+                        <span class="k">continue</span>
+
                     <span class="n">conf_value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="n">mask_idx</span><span class="p">]</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)</span>  <span class="c1"># Scale to 0-255</span>
 
                     <span class="c1"># Update the mask and confidence arrays</span>
