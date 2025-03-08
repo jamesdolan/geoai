@@ -625,6 +625,28 @@
   
   
     <li class="md-nav__item">
+      <a href="../examples/solar_panel_detection/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Solar panel detection
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../examples/data_visualization/" class="md-nav__link">
         
   
@@ -1408,6 +1430,30 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#geoai.extract.SolarPanelDetector" class="md-nav__link">
+    <span class="md-ellipsis">
+      SolarPanelDetector
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SolarPanelDetector">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#geoai.extract.SolarPanelDetector.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1755,6 +1801,30 @@
         
           <li class="md-nav__item">
   <a href="#geoai.extract.ShipDetector.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geoai.extract.SolarPanelDetector" class="md-nav__link">
+    <span class="md-ellipsis">
+      SolarPanelDetector
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SolarPanelDetector">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#geoai.extract.SolarPanelDetector.__init__" class="md-nav__link">
     <span class="md-ellipsis">
       __init__()
     </span>
@@ -4946,7 +5016,7 @@ ObjectDetector        </code>
                 <span class="c1"># Save to file if requested</span>
                 <span class="k">if</span> <span class="n">output_path</span><span class="p">:</span>
                     <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GeoJSON&quot;</span><span class="p">)</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2"> cars with confidence to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2"> objects with confidence to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
                 <span class="k">return</span> <span class="n">gdf</span>
             <span class="k">else</span><span class="p">:</span>
@@ -7437,7 +7507,7 @@ mask_threshold: Threshold for mask binarization (0.0-1.0)</p></td>
             <span class="c1"># Save to file if requested</span>
             <span class="k">if</span> <span class="n">output_path</span><span class="p">:</span>
                 <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GeoJSON&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2"> cars with confidence to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2"> objects with confidence to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="n">gdf</span>
         <span class="k">else</span><span class="p">:</span>
@@ -8061,6 +8131,162 @@ ShipDetector            (<a class="autorefs autorefs-internal" title="geoai.extr
           <summary>Source code in <code>geoai/extract.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">model_path</span><span class="o">=</span><span class="s2">&quot;ship_detection.pth&quot;</span><span class="p">,</span> <span class="n">repo_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialize the object extractor.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_path: Path to the .pth model file.</span>
+<span class="sd">        repo_id: Repo ID for loading models from the Hub.</span>
+<span class="sd">        model: Custom model to use for inference.</span>
+<span class="sd">        device: Device to use for inference (&#39;cuda:0&#39;, &#39;cpu&#39;, etc.).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="n">model_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">,</span> <span class="n">repo_id</span><span class="o">=</span><span class="n">repo_id</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span>
+    <span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="geoai.extract.SolarPanelDetector" class="doc doc-heading">
+        <code>
+SolarPanelDetector            (<a class="autorefs autorefs-internal" title="geoai.extract.ObjectDetector" href="#geoai.extract.ObjectDetector">ObjectDetector</a>)
+        </code>
+
+
+
+<a href="#geoai.extract.SolarPanelDetector" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Solar panel detection using a pre-trained Mask R-CNN model.</p>
+<p>This class extends the
+<code>ObjectDetector</code> class with additional methods for solar panel detection."</p>
+
+        <details class="quote">
+          <summary>Source code in <code>geoai/extract.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SolarPanelDetector</span><span class="p">(</span><span class="n">ObjectDetector</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solar panel detection using a pre-trained Mask R-CNN model.</span>
+
+<span class="sd">    This class extends the</span>
+<span class="sd">    `ObjectDetector` class with additional methods for solar panel detection.&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">model_path</span><span class="o">=</span><span class="s2">&quot;solar_panel_detection.pth&quot;</span><span class="p">,</span>
+        <span class="n">repo_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the object extractor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model_path: Path to the .pth model file.</span>
+<span class="sd">            repo_id: Repo ID for loading models from the Hub.</span>
+<span class="sd">            model: Custom model to use for inference.</span>
+<span class="sd">            device: Device to use for inference (&#39;cuda:0&#39;, &#39;cpu&#39;, etc.).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">model_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">,</span> <span class="n">repo_id</span><span class="o">=</span><span class="n">repo_id</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span>
+        <span class="p">)</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="geoai.extract.SolarPanelDetector.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_path</span><span class="o">=</span><span class="s1">&#39;solar_panel_detection.pth&#39;</span><span class="p">,</span> <span class="n">repo_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-special"><code>special</code></small>
+  </span>
+
+<a href="#geoai.extract.SolarPanelDetector.__init__" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Initialize the object extractor.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>model_path</code></td>
+        <td></td>
+        <td><p>Path to the .pth model file.</p></td>
+        <td><code>&#39;solar_panel_detection.pth&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>repo_id</code></td>
+        <td></td>
+        <td><p>Repo ID for loading models from the Hub.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>model</code></td>
+        <td></td>
+        <td><p>Custom model to use for inference.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>device</code></td>
+        <td></td>
+        <td><p>Device to use for inference ('cuda:0', 'cpu', etc.).</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>geoai/extract.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">model_path</span><span class="o">=</span><span class="s2">&quot;solar_panel_detection.pth&quot;</span><span class="p">,</span>
+    <span class="n">repo_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialize the object extractor.</span>
