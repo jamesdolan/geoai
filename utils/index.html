@@ -10655,7 +10655,7 @@ If False, only pixels whose center is within the geometry will be burned in.</p>
 
 
 <h2 id="geoai.utils.view_vector" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">view_vector</span><span class="p">(</span><span class="n">vector_data</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">basemap</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">classification</span><span class="o">=</span><span class="s1">&#39;quantiles&#39;</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">highlight_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">highlight_color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">view_vector</span><span class="p">(</span><span class="n">vector_data</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">basemap</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">basemap_type</span><span class="o">=</span><span class="s1">&#39;streets&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">classification</span><span class="o">=</span><span class="s1">&#39;quantiles&#39;</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">highlight_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">highlight_color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span></code>
 
 
 <a href="#geoai.utils.view_vector" class="headerlink" title="Permanent link">&para;</a></h2>
@@ -10723,6 +10723,13 @@ Defaults to (10, 10).</p></td>
         <td><p>Whether to add a web basemap. Requires contextily.
 Defaults to False.</p></td>
         <td><code>False</code></td>
+      </tr>
+      <tr>
+        <td><code>basemap_type</code></td>
+        <td><code>str</code></td>
+        <td><p>Type of basemap to use. Options: 'streets', 'satellite'.
+Defaults to 'streets'.</p></td>
+        <td><code>&#39;streets&#39;</code></td>
       </tr>
       <tr>
         <td><code>alpha</code></td>
@@ -10822,6 +10829,7 @@ is not saved. Defaults to None.</p></td>
     <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">basemap</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">basemap_type</span><span class="o">=</span><span class="s2">&quot;streets&quot;</span><span class="p">,</span>
     <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
     <span class="n">edge_color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
     <span class="n">classification</span><span class="o">=</span><span class="s2">&quot;quantiles&quot;</span><span class="p">,</span>
@@ -10851,6 +10859,8 @@ is not saved. Defaults to None.</p></td>
 <span class="sd">        legend (bool, optional): Whether to display a legend. Defaults to True.</span>
 <span class="sd">        basemap (bool, optional): Whether to add a web basemap. Requires contextily.</span>
 <span class="sd">            Defaults to False.</span>
+<span class="sd">        basemap_type (str, optional): Type of basemap to use. Options: &#39;streets&#39;, &#39;satellite&#39;.</span>
+<span class="sd">            Defaults to &#39;streets&#39;.</span>
 <span class="sd">        alpha (float, optional): Transparency of the vector features, between 0-1.</span>
 <span class="sd">            Defaults to 0.7.</span>
 <span class="sd">        edge_color (str, optional): Color for feature edges. Defaults to &quot;black&quot;.</span>
@@ -10938,10 +10948,13 @@ is not saved. Defaults to None.</p></td>
             <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">highlight_color</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">5</span>
         <span class="p">)</span>
 
-    <span class="c1"># Add basemap if requested</span>
     <span class="k">if</span> <span class="n">basemap</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">ctx</span><span class="o">.</span><span class="n">add_basemap</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">gdf</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">ctx</span><span class="o">.</span><span class="n">providers</span><span class="o">.</span><span class="n">OpenStreetMap</span><span class="o">.</span><span class="n">Mapnik</span><span class="p">)</span>
+            <span class="n">basemap_options</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;streets&quot;</span><span class="p">:</span> <span class="n">ctx</span><span class="o">.</span><span class="n">providers</span><span class="o">.</span><span class="n">OpenStreetMap</span><span class="o">.</span><span class="n">Mapnik</span><span class="p">,</span>
+                <span class="s2">&quot;satellite&quot;</span><span class="p">:</span> <span class="n">ctx</span><span class="o">.</span><span class="n">providers</span><span class="o">.</span><span class="n">Esri</span><span class="o">.</span><span class="n">WorldImagery</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">ctx</span><span class="o">.</span><span class="n">add_basemap</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">gdf</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">basemap_options</span><span class="p">[</span><span class="n">basemap_type</span><span class="p">])</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not add basemap: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
