@@ -11154,7 +11154,10 @@ get_folium_tile_layer function. Defaults to None.</p></td>
         <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;max_zoom&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">30</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vector_data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">vector_data</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">vector_data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">vector_data</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.parquet&quot;</span><span class="p">):</span>
+            <span class="n">vector_data</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">vector_data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">vector_data</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">vector_data</span><span class="p">)</span>
 
     <span class="c1"># Check if input is a GeoDataFrame</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vector_data</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">):</span>

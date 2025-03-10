@@ -2265,6 +2265,7 @@ It inherits from NonGeoDataset to avoid spatial indexing issues.</p>
         <span class="n">chip_size</span><span class="o">=</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span>
         <span class="n">overlap</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
         <span class="n">transforms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">band_indexes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2275,6 +2276,7 @@ It inherits from NonGeoDataset to avoid spatial indexing issues.</p>
 <span class="sd">            chip_size: Size of image chips to extract (height, width). Default is (512, 512).</span>
 <span class="sd">            overlap: Amount of overlap between adjacent tiles (0.0-1.0). Default is 0.5 (50%).</span>
 <span class="sd">            transforms: Transforms to apply to the image. Default is None.</span>
+<span class="sd">            band_indexes: List of band indexes to use. Default is None (use all bands).</span>
 <span class="sd">            verbose: Whether to print detailed processing information. Default is False.</span>
 
 <span class="sd">        Raises:</span>
@@ -2287,6 +2289,7 @@ It inherits from NonGeoDataset to avoid spatial indexing issues.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span> <span class="o">=</span> <span class="n">chip_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">overlap</span> <span class="o">=</span> <span class="n">overlap</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span> <span class="o">=</span> <span class="n">transforms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">band_indexes</span> <span class="o">=</span> <span class="n">band_indexes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">warned_about_bands</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -2396,7 +2399,10 @@ It inherits from NonGeoDataset to avoid spatial indexing issues.</p>
                 <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">warned_about_bands</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image has </span><span class="si">{</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> bands, using first 3 bands only&quot;</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">warned_about_bands</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">band_indexes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">band_indexes</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
             <span class="k">elif</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="c1"># If image has fewer than 3 bands, duplicate the last band to make 3</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">warned_about_bands</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
@@ -2567,7 +2573,10 @@ proper coverage of the entire raster including edges.</p>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">warned_about_bands</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image has </span><span class="si">{</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> bands, using first 3 bands only&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">warned_about_bands</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">band_indexes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">band_indexes</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
         <span class="k">elif</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
             <span class="c1"># If image has fewer than 3 bands, duplicate the last band to make 3</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">warned_about_bands</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
@@ -2629,7 +2638,7 @@ proper coverage of the entire raster including edges.</p>
 
 
 <h3 id="geoai.extract.CustomDataset.__init__" class="doc doc-heading">
-<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">chip_size</span><span class="o">=</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span> <span class="n">overlap</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">chip_size</span><span class="o">=</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span> <span class="n">overlap</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">band_indexes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
   <span class="doc doc-properties">
       <small class="doc doc-property doc-property-special"><code>special</code></small>
@@ -2677,6 +2686,12 @@ proper coverage of the entire raster including edges.</p>
         <td><code>None</code></td>
       </tr>
       <tr>
+        <td><code>band_indexes</code></td>
+        <td></td>
+        <td><p>List of band indexes to use. Default is None (use all bands).</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
         <td><code>verbose</code></td>
         <td></td>
         <td><p>Whether to print detailed processing information. Default is False.</p></td>
@@ -2707,6 +2722,7 @@ proper coverage of the entire raster including edges.</p>
     <span class="n">chip_size</span><span class="o">=</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span>
     <span class="n">overlap</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
     <span class="n">transforms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">band_indexes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2717,6 +2733,7 @@ proper coverage of the entire raster including edges.</p>
 <span class="sd">        chip_size: Size of image chips to extract (height, width). Default is (512, 512).</span>
 <span class="sd">        overlap: Amount of overlap between adjacent tiles (0.0-1.0). Default is 0.5 (50%).</span>
 <span class="sd">        transforms: Transforms to apply to the image. Default is None.</span>
+<span class="sd">        band_indexes: List of band indexes to use. Default is None (use all bands).</span>
 <span class="sd">        verbose: Whether to print detailed processing information. Default is False.</span>
 
 <span class="sd">    Raises:</span>
@@ -2729,6 +2746,7 @@ proper coverage of the entire raster including edges.</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span> <span class="o">=</span> <span class="n">chip_size</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">overlap</span> <span class="o">=</span> <span class="n">overlap</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span> <span class="o">=</span> <span class="n">transforms</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">band_indexes</span> <span class="o">=</span> <span class="n">band_indexes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">warned_about_bands</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -3227,7 +3245,7 @@ ObjectDetector        </code>
 
 <span class="sd">        Args:</span>
 <span class="sd">            mask_path: Path to the object masks GeoTIFF</span>
-<span class="sd">            output_path: Path to save the output GeoJSON (default: mask_path with .geojson extension)</span>
+<span class="sd">            output_path: Path to save the output GeoJSON or Parquet file (default: mask_path with .geojson extension)</span>
 <span class="sd">            simplify_tolerance: Tolerance for polygon simplification (default: self.simplify_tolerance)</span>
 <span class="sd">            mask_threshold: Threshold for mask binarization (default: self.mask_threshold)</span>
 <span class="sd">            min_object_area: Minimum area in pixels to keep an object (default: self.min_object_area)</span>
@@ -3412,7 +3430,10 @@ ObjectDetector        </code>
 
             <span class="c1"># Save to file</span>
             <span class="k">if</span> <span class="n">output_path</span><span class="p">:</span>
-                <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">output_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.parquet&quot;</span><span class="p">):</span>
+                    <span class="n">gdf</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2"> objects to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="n">gdf</span>
@@ -3425,6 +3446,7 @@ ObjectDetector        </code>
         <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
         <span class="n">filter_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">edge_buffer</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">band_indexes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -3432,10 +3454,11 @@ ObjectDetector        </code>
 
 <span class="sd">        Args:</span>
 <span class="sd">            raster_path: Path to input raster file</span>
-<span class="sd">            output_path: Path to output GeoJSON file (optional)</span>
+<span class="sd">            output_path: Path to output GeoJSON or Parquet file (optional)</span>
 <span class="sd">            batch_size: Batch size for processing</span>
 <span class="sd">            filter_edges: Whether to filter out objects at the edges of the image</span>
 <span class="sd">            edge_buffer: Size of edge buffer in pixels to filter out objects (if filter_edges=True)</span>
+<span class="sd">            band_indexes: List of band indexes to use (if None, use all bands)</span>
 <span class="sd">            **kwargs: Additional parameters:</span>
 <span class="sd">                confidence_threshold: Minimum confidence score to keep a detection (0.0-1.0)</span>
 <span class="sd">                overlap: Overlap between adjacent tiles (0.0-1.0)</span>
@@ -3476,7 +3499,10 @@ ObjectDetector        </code>
 
         <span class="c1"># Create dataset</span>
         <span class="n">dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span>
-            <span class="n">raster_path</span><span class="o">=</span><span class="n">raster_path</span><span class="p">,</span> <span class="n">chip_size</span><span class="o">=</span><span class="n">chip_size</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="n">overlap</span>
+            <span class="n">raster_path</span><span class="o">=</span><span class="n">raster_path</span><span class="p">,</span>
+            <span class="n">chip_size</span><span class="o">=</span><span class="n">chip_size</span><span class="p">,</span>
+            <span class="n">overlap</span><span class="o">=</span><span class="n">overlap</span><span class="p">,</span>
+            <span class="n">band_indexes</span><span class="o">=</span><span class="n">band_indexes</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">raster_stats</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">raster_stats</span>
 
@@ -3654,7 +3680,10 @@ ObjectDetector        </code>
 
         <span class="c1"># Save to file if requested</span>
         <span class="k">if</span> <span class="n">output_path</span><span class="p">:</span>
-            <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GeoJSON&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">output_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.parquet&quot;</span><span class="p">):</span>
+                <span class="n">gdf</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GeoJSON&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2"> objects to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">gdf</span>
@@ -4524,6 +4553,7 @@ ObjectDetector        </code>
         <span class="n">max_object_area</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span>
         <span class="n">overlap</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
         <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">band_indexes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
@@ -4542,6 +4572,7 @@ ObjectDetector        </code>
 <span class="sd">            max_object_area: Maximum area (in pixels) for an object to be included</span>
 <span class="sd">            overlap: Overlap between tiles (0.0-1.0)</span>
 <span class="sd">            batch_size: Batch size for processing</span>
+<span class="sd">            band_indexes: List of band indexes to use (default: all bands)</span>
 <span class="sd">            verbose: Whether to print detailed processing information</span>
 
 <span class="sd">        Returns:</span>
@@ -4566,6 +4597,7 @@ ObjectDetector        </code>
                 <span class="n">raster_path</span><span class="o">=</span><span class="n">raster_path</span><span class="p">,</span>
                 <span class="n">chip_size</span><span class="o">=</span><span class="n">chip_size</span><span class="p">,</span>
                 <span class="n">overlap</span><span class="o">=</span><span class="n">overlap</span><span class="p">,</span>
+                <span class="n">band_indexes</span><span class="o">=</span><span class="n">band_indexes</span><span class="p">,</span>
                 <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
             <span class="p">)</span>
 
@@ -5296,7 +5328,7 @@ nms_iou_threshold: IoU threshold for filtering</p></td>
 
 
 <h3 id="geoai.extract.ObjectDetector.generate_masks" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">generate_masks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">confidence_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_object_area</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_object_area</span><span class="o">=</span><span class="n">inf</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">generate_masks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">confidence_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_object_area</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_object_area</span><span class="o">=</span><span class="n">inf</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">band_indexes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 
 <a href="#geoai.extract.ObjectDetector.generate_masks" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -5367,6 +5399,12 @@ will be filtered out.</p>
         <td><code>4</code></td>
       </tr>
       <tr>
+        <td><code>band_indexes</code></td>
+        <td></td>
+        <td><p>List of band indexes to use (default: all bands)</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
         <td><code>verbose</code></td>
         <td></td>
         <td><p>Whether to print detailed processing information</p></td>
@@ -5401,6 +5439,7 @@ will be filtered out.</p>
     <span class="n">max_object_area</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span>
     <span class="n">overlap</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
     <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">band_indexes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
@@ -5419,6 +5458,7 @@ will be filtered out.</p>
 <span class="sd">        max_object_area: Maximum area (in pixels) for an object to be included</span>
 <span class="sd">        overlap: Overlap between tiles (0.0-1.0)</span>
 <span class="sd">        batch_size: Batch size for processing</span>
+<span class="sd">        band_indexes: List of band indexes to use (default: all bands)</span>
 <span class="sd">        verbose: Whether to print detailed processing information</span>
 
 <span class="sd">    Returns:</span>
@@ -5443,6 +5483,7 @@ will be filtered out.</p>
             <span class="n">raster_path</span><span class="o">=</span><span class="n">raster_path</span><span class="p">,</span>
             <span class="n">chip_size</span><span class="o">=</span><span class="n">chip_size</span><span class="p">,</span>
             <span class="n">overlap</span><span class="o">=</span><span class="n">overlap</span><span class="p">,</span>
+            <span class="n">band_indexes</span><span class="o">=</span><span class="n">band_indexes</span><span class="p">,</span>
             <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -5923,7 +5964,7 @@ max_object_area: Maximum area in pixels to keep an object</p></td>
       <tr>
         <td><code>output_path</code></td>
         <td></td>
-        <td><p>Path to save the output GeoJSON (default: mask_path with .geojson extension)</p></td>
+        <td><p>Path to save the output GeoJSON or Parquet file (default: mask_path with .geojson extension)</p></td>
         <td><code>None</code></td>
       </tr>
       <tr>
@@ -6011,7 +6052,7 @@ max_object_area: Maximum area in pixels to keep an object</p></td>
 
 <span class="sd">    Args:</span>
 <span class="sd">        mask_path: Path to the object masks GeoTIFF</span>
-<span class="sd">        output_path: Path to save the output GeoJSON (default: mask_path with .geojson extension)</span>
+<span class="sd">        output_path: Path to save the output GeoJSON or Parquet file (default: mask_path with .geojson extension)</span>
 <span class="sd">        simplify_tolerance: Tolerance for polygon simplification (default: self.simplify_tolerance)</span>
 <span class="sd">        mask_threshold: Threshold for mask binarization (default: self.mask_threshold)</span>
 <span class="sd">        min_object_area: Minimum area in pixels to keep an object (default: self.min_object_area)</span>
@@ -6196,7 +6237,10 @@ max_object_area: Maximum area in pixels to keep an object</p></td>
 
         <span class="c1"># Save to file</span>
         <span class="k">if</span> <span class="n">output_path</span><span class="p">:</span>
-            <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">output_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.parquet&quot;</span><span class="p">):</span>
+                <span class="n">gdf</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2"> objects to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">gdf</span>
@@ -6213,7 +6257,7 @@ max_object_area: Maximum area in pixels to keep an object</p></td>
 
 
 <h3 id="geoai.extract.ObjectDetector.process_raster" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">process_raster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">filter_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">edge_buffer</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">process_raster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">filter_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">edge_buffer</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">band_indexes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 
 <a href="#geoai.extract.ObjectDetector.process_raster" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -6242,7 +6286,7 @@ max_object_area: Maximum area in pixels to keep an object</p></td>
       <tr>
         <td><code>output_path</code></td>
         <td></td>
-        <td><p>Path to output GeoJSON file (optional)</p></td>
+        <td><p>Path to output GeoJSON or Parquet file (optional)</p></td>
         <td><code>None</code></td>
       </tr>
       <tr>
@@ -6262,6 +6306,12 @@ max_object_area: Maximum area in pixels to keep an object</p></td>
         <td></td>
         <td><p>Size of edge buffer in pixels to filter out objects (if filter_edges=True)</p></td>
         <td><code>20</code></td>
+      </tr>
+      <tr>
+        <td><code>band_indexes</code></td>
+        <td></td>
+        <td><p>List of band indexes to use (if None, use all bands)</p></td>
+        <td><code>None</code></td>
       </tr>
       <tr>
         <td><code>**kwargs</code></td>
@@ -6303,6 +6353,7 @@ simplify_tolerance: Tolerance for polygon simplification</p></td>
     <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
     <span class="n">filter_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">edge_buffer</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">band_indexes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -6310,10 +6361,11 @@ simplify_tolerance: Tolerance for polygon simplification</p></td>
 
 <span class="sd">    Args:</span>
 <span class="sd">        raster_path: Path to input raster file</span>
-<span class="sd">        output_path: Path to output GeoJSON file (optional)</span>
+<span class="sd">        output_path: Path to output GeoJSON or Parquet file (optional)</span>
 <span class="sd">        batch_size: Batch size for processing</span>
 <span class="sd">        filter_edges: Whether to filter out objects at the edges of the image</span>
 <span class="sd">        edge_buffer: Size of edge buffer in pixels to filter out objects (if filter_edges=True)</span>
+<span class="sd">        band_indexes: List of band indexes to use (if None, use all bands)</span>
 <span class="sd">        **kwargs: Additional parameters:</span>
 <span class="sd">            confidence_threshold: Minimum confidence score to keep a detection (0.0-1.0)</span>
 <span class="sd">            overlap: Overlap between adjacent tiles (0.0-1.0)</span>
@@ -6354,7 +6406,10 @@ simplify_tolerance: Tolerance for polygon simplification</p></td>
 
     <span class="c1"># Create dataset</span>
     <span class="n">dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span>
-        <span class="n">raster_path</span><span class="o">=</span><span class="n">raster_path</span><span class="p">,</span> <span class="n">chip_size</span><span class="o">=</span><span class="n">chip_size</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="n">overlap</span>
+        <span class="n">raster_path</span><span class="o">=</span><span class="n">raster_path</span><span class="p">,</span>
+        <span class="n">chip_size</span><span class="o">=</span><span class="n">chip_size</span><span class="p">,</span>
+        <span class="n">overlap</span><span class="o">=</span><span class="n">overlap</span><span class="p">,</span>
+        <span class="n">band_indexes</span><span class="o">=</span><span class="n">band_indexes</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">raster_stats</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">raster_stats</span>
 
@@ -6532,7 +6587,10 @@ simplify_tolerance: Tolerance for polygon simplification</p></td>
 
     <span class="c1"># Save to file if requested</span>
     <span class="k">if</span> <span class="n">output_path</span><span class="p">:</span>
-        <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GeoJSON&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">output_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.parquet&quot;</span><span class="p">):</span>
+            <span class="n">gdf</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GeoJSON&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2"> objects to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">gdf</span>
