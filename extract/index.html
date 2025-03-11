@@ -713,6 +713,28 @@
   
   
     <li class="md-nav__item">
+      <a href="../examples/parking_spot_detection/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Parking spot detection
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../examples/data_visualization/" class="md-nav__link">
         
   
@@ -1187,6 +1209,30 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#geoai.extract.ParkingSplotDetector" class="md-nav__link">
+    <span class="md-ellipsis">
+      ParkingSplotDetector
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ParkingSplotDetector">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#geoai.extract.ParkingSplotDetector.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#geoai.extract.ShipDetector" class="md-nav__link">
     <span class="md-ellipsis">
       ShipDetector
@@ -1581,6 +1627,30 @@
   <a href="#geoai.extract.ObjectDetector.visualize_results" class="md-nav__link">
     <span class="md-ellipsis">
       visualize_results()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geoai.extract.ParkingSplotDetector" class="md-nav__link">
+    <span class="md-ellipsis">
+      ParkingSplotDetector
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ParkingSplotDetector">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#geoai.extract.ParkingSplotDetector.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__()
     </span>
   </a>
   
@@ -2929,7 +2999,9 @@ ObjectDetector        </code>
 <span class="sd">    Object extraction using Mask R-CNN with TorchGeo.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">repo_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">model_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">repo_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the object extractor.</span>
 
@@ -2937,6 +3009,7 @@ ObjectDetector        </code>
 <span class="sd">            model_path: Path to the .pth model file.</span>
 <span class="sd">            repo_id: Hugging Face repository ID for model download.</span>
 <span class="sd">            model: Pre-initialized model object (optional).</span>
+<span class="sd">            num_classes: Number of classes for detection (default: 2).</span>
 <span class="sd">            device: Device to use for inference (&#39;cuda:0&#39;, &#39;cpu&#39;, etc.).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Set device</span>
@@ -2956,7 +3029,7 @@ ObjectDetector        </code>
         <span class="bp">self</span><span class="o">.</span><span class="n">simplify_tolerance</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># Tolerance for polygon simplification</span>
 
         <span class="c1"># Initialize model</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="n">num_classes</span><span class="p">)</span>
 
         <span class="c1"># Download model if needed</span>
         <span class="k">if</span> <span class="n">model_path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">model_path</span><span class="p">)):</span>
@@ -3001,11 +3074,12 @@ ObjectDetector        </code>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Please specify a local model path or ensure internet connectivity.&quot;</span><span class="p">)</span>
             <span class="k">raise</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">initialize_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize a deep learning model for object detection.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            model (torch.nn.Module): A pre-initialized model object.</span>
+<span class="sd">            num_classes (int): Number of classes for detection.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            torch.nn.Module: A deep learning model for object detection.</span>
@@ -3020,7 +3094,7 @@ ObjectDetector        </code>
             <span class="n">model</span> <span class="o">=</span> <span class="n">maskrcnn_resnet50_fpn</span><span class="p">(</span>
                 <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># Background + object</span>
+                <span class="n">num_classes</span><span class="o">=</span><span class="n">num_classes</span><span class="p">,</span>  <span class="c1"># Background + object</span>
                 <span class="n">weights_backbone</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="c1"># These parameters ensure consistent normalization</span>
                 <span class="n">image_mean</span><span class="o">=</span><span class="n">image_mean</span><span class="p">,</span>
@@ -4772,7 +4846,7 @@ ObjectDetector        </code>
         <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">confidence_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
         <span class="n">min_object_area</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">max_object_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">max_object_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -4783,7 +4857,7 @@ ObjectDetector        </code>
 <span class="sd">            output_path: Path for output GeoJSON.</span>
 <span class="sd">            confidence_threshold: Minimum confidence score (0.0-1.0). Default: 0.5</span>
 <span class="sd">            min_object_area: Minimum area in pixels to keep an object. Default: 100</span>
-<span class="sd">            max_object_size: Maximum area in pixels to keep an object. Default: None</span>
+<span class="sd">            max_object_area: Maximum area in pixels to keep an object. Default: None</span>
 <span class="sd">            **kwargs: Additional parameters</span>
 
 <span class="sd">        Returns:</span>
@@ -4807,8 +4881,9 @@ ObjectDetector        </code>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="n">num_features</span><span class="si">}</span><span class="s2"> connected components&quot;</span><span class="p">)</span>
 
             <span class="c1"># Process each component</span>
-            <span class="n">car_polygons</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">car_confidences</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">polygons</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">confidences</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">pixels</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="c1"># Add progress bar</span>
             <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing components&quot;</span><span class="p">):</span>
@@ -4839,8 +4914,8 @@ ObjectDetector        </code>
                     <span class="k">if</span> <span class="n">area</span> <span class="o">&lt;</span> <span class="n">min_object_area</span><span class="p">:</span>
                         <span class="k">continue</span>
 
-                    <span class="k">if</span> <span class="n">max_object_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">max_object_size</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">max_object_area</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">max_object_area</span><span class="p">:</span>
                             <span class="k">continue</span>
 
                     <span class="c1"># Get minimum area rectangle</span>
@@ -4857,16 +4932,18 @@ ObjectDetector        </code>
                     <span class="n">poly</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">geo_points</span><span class="p">)</span>
 
                     <span class="c1"># Add to lists</span>
-                    <span class="n">car_polygons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
-                    <span class="n">car_confidences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">confidence</span><span class="p">)</span>
+                    <span class="n">polygons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
+                    <span class="n">confidences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">confidence</span><span class="p">)</span>
+                    <span class="n">pixels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">area</span><span class="p">)</span>
 
             <span class="c1"># Create GeoDataFrame</span>
-            <span class="k">if</span> <span class="n">car_polygons</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">polygons</span><span class="p">:</span>
                 <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
                     <span class="p">{</span>
-                        <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">car_polygons</span><span class="p">,</span>
-                        <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">car_confidences</span><span class="p">,</span>
-                        <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">car_polygons</span><span class="p">),</span>
+                        <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">polygons</span><span class="p">,</span>
+                        <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">confidences</span><span class="p">,</span>
+                        <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">polygons</span><span class="p">),</span>
+                        <span class="s2">&quot;pixels&quot;</span><span class="p">:</span> <span class="n">pixels</span><span class="p">,</span>
                     <span class="p">},</span>
                     <span class="n">crs</span><span class="o">=</span><span class="n">crs</span><span class="p">,</span>
                 <span class="p">)</span>
@@ -4878,7 +4955,7 @@ ObjectDetector        </code>
 
                 <span class="k">return</span> <span class="n">gdf</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No valid car polygons found&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No valid polygons found&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="kc">None</span>
 </code></pre></div>
         </details>
@@ -4900,7 +4977,7 @@ ObjectDetector        </code>
 
 
 <h3 id="geoai.extract.ObjectDetector.__init__" class="doc doc-heading">
-<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">repo_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">repo_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
   <span class="doc doc-properties">
       <small class="doc doc-property doc-property-special"><code>special</code></small>
@@ -4942,6 +5019,12 @@ ObjectDetector        </code>
         <td><code>None</code></td>
       </tr>
       <tr>
+        <td><code>num_classes</code></td>
+        <td></td>
+        <td><p>Number of classes for detection (default: 2).</p></td>
+        <td><code>2</code></td>
+      </tr>
+      <tr>
         <td><code>device</code></td>
         <td></td>
         <td><p>Device to use for inference ('cuda:0', 'cpu', etc.).</p></td>
@@ -4951,7 +5034,9 @@ ObjectDetector        </code>
 </table>
         <details class="quote">
           <summary>Source code in <code>geoai/extract.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">repo_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">model_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">repo_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialize the object extractor.</span>
 
@@ -4959,6 +5044,7 @@ ObjectDetector        </code>
 <span class="sd">        model_path: Path to the .pth model file.</span>
 <span class="sd">        repo_id: Hugging Face repository ID for model download.</span>
 <span class="sd">        model: Pre-initialized model object (optional).</span>
+<span class="sd">        num_classes: Number of classes for detection (default: 2).</span>
 <span class="sd">        device: Device to use for inference (&#39;cuda:0&#39;, &#39;cpu&#39;, etc.).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Set device</span>
@@ -4978,7 +5064,7 @@ ObjectDetector        </code>
     <span class="bp">self</span><span class="o">.</span><span class="n">simplify_tolerance</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># Tolerance for polygon simplification</span>
 
     <span class="c1"># Initialize model</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="n">num_classes</span><span class="p">)</span>
 
     <span class="c1"># Download model if needed</span>
     <span class="k">if</span> <span class="n">model_path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">model_path</span><span class="p">)):</span>
@@ -5664,7 +5750,7 @@ will be filtered out.</p>
 
 
 <h3 id="geoai.extract.ObjectDetector.initialize_model" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">initialize_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">initialize_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></code>
 
 
 <a href="#geoai.extract.ObjectDetector.initialize_model" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -5690,6 +5776,12 @@ will be filtered out.</p>
         <td><p>A pre-initialized model object.</p></td>
         <td><em>required</em></td>
       </tr>
+      <tr>
+        <td><code>num_classes</code></td>
+        <td><code>int</code></td>
+        <td><p>Number of classes for detection.</p></td>
+        <td><code>2</code></td>
+      </tr>
   </tbody>
 </table>
 <p><strong>Returns:</strong></p>
@@ -5709,11 +5801,12 @@ will be filtered out.</p>
 </table>
         <details class="quote">
           <summary>Source code in <code>geoai/extract.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">initialize_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">initialize_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize a deep learning model for object detection.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        model (torch.nn.Module): A pre-initialized model object.</span>
+<span class="sd">        num_classes (int): Number of classes for detection.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        torch.nn.Module: A deep learning model for object detection.</span>
@@ -5728,7 +5821,7 @@ will be filtered out.</p>
         <span class="n">model</span> <span class="o">=</span> <span class="n">maskrcnn_resnet50_fpn</span><span class="p">(</span>
             <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># Background + object</span>
+            <span class="n">num_classes</span><span class="o">=</span><span class="n">num_classes</span><span class="p">,</span>  <span class="c1"># Background + object</span>
             <span class="n">weights_backbone</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="c1"># These parameters ensure consistent normalization</span>
             <span class="n">image_mean</span><span class="o">=</span><span class="n">image_mean</span><span class="p">,</span>
@@ -7245,7 +7338,7 @@ mask_threshold: Threshold for mask binarization (0.0-1.0)</p></td>
 
 
 <h3 id="geoai.extract.ObjectDetector.vectorize_masks" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">vectorize_masks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">masks_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">confidence_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">min_object_area</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_object_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">vectorize_masks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">masks_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">confidence_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">min_object_area</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_object_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 
 <a href="#geoai.extract.ObjectDetector.vectorize_masks" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -7290,7 +7383,7 @@ mask_threshold: Threshold for mask binarization (0.0-1.0)</p></td>
         <td><code>100</code></td>
       </tr>
       <tr>
-        <td><code>max_object_size</code></td>
+        <td><code>max_object_area</code></td>
         <td></td>
         <td><p>Maximum area in pixels to keep an object. Default: None</p></td>
         <td><code>None</code></td>
@@ -7326,7 +7419,7 @@ mask_threshold: Threshold for mask binarization (0.0-1.0)</p></td>
     <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">confidence_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
     <span class="n">min_object_area</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">max_object_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_object_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -7337,7 +7430,7 @@ mask_threshold: Threshold for mask binarization (0.0-1.0)</p></td>
 <span class="sd">        output_path: Path for output GeoJSON.</span>
 <span class="sd">        confidence_threshold: Minimum confidence score (0.0-1.0). Default: 0.5</span>
 <span class="sd">        min_object_area: Minimum area in pixels to keep an object. Default: 100</span>
-<span class="sd">        max_object_size: Maximum area in pixels to keep an object. Default: None</span>
+<span class="sd">        max_object_area: Maximum area in pixels to keep an object. Default: None</span>
 <span class="sd">        **kwargs: Additional parameters</span>
 
 <span class="sd">    Returns:</span>
@@ -7361,8 +7454,9 @@ mask_threshold: Threshold for mask binarization (0.0-1.0)</p></td>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="n">num_features</span><span class="si">}</span><span class="s2"> connected components&quot;</span><span class="p">)</span>
 
         <span class="c1"># Process each component</span>
-        <span class="n">car_polygons</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">car_confidences</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">polygons</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">confidences</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">pixels</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Add progress bar</span>
         <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing components&quot;</span><span class="p">):</span>
@@ -7393,8 +7487,8 @@ mask_threshold: Threshold for mask binarization (0.0-1.0)</p></td>
                 <span class="k">if</span> <span class="n">area</span> <span class="o">&lt;</span> <span class="n">min_object_area</span><span class="p">:</span>
                     <span class="k">continue</span>
 
-                <span class="k">if</span> <span class="n">max_object_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">max_object_size</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">max_object_area</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">max_object_area</span><span class="p">:</span>
                         <span class="k">continue</span>
 
                 <span class="c1"># Get minimum area rectangle</span>
@@ -7411,16 +7505,18 @@ mask_threshold: Threshold for mask binarization (0.0-1.0)</p></td>
                 <span class="n">poly</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">geo_points</span><span class="p">)</span>
 
                 <span class="c1"># Add to lists</span>
-                <span class="n">car_polygons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
-                <span class="n">car_confidences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">confidence</span><span class="p">)</span>
+                <span class="n">polygons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
+                <span class="n">confidences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">confidence</span><span class="p">)</span>
+                <span class="n">pixels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">area</span><span class="p">)</span>
 
         <span class="c1"># Create GeoDataFrame</span>
-        <span class="k">if</span> <span class="n">car_polygons</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">polygons</span><span class="p">:</span>
             <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
                 <span class="p">{</span>
-                    <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">car_polygons</span><span class="p">,</span>
-                    <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">car_confidences</span><span class="p">,</span>
-                    <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">car_polygons</span><span class="p">),</span>
+                    <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">polygons</span><span class="p">,</span>
+                    <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">confidences</span><span class="p">,</span>
+                    <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">polygons</span><span class="p">),</span>
+                    <span class="s2">&quot;pixels&quot;</span><span class="p">:</span> <span class="n">pixels</span><span class="p">,</span>
                 <span class="p">},</span>
                 <span class="n">crs</span><span class="o">=</span><span class="n">crs</span><span class="p">,</span>
             <span class="p">)</span>
@@ -7432,7 +7528,7 @@ mask_threshold: Threshold for mask binarization (0.0-1.0)</p></td>
 
             <span class="k">return</span> <span class="n">gdf</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No valid car polygons found&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No valid polygons found&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 </code></pre></div>
         </details>
@@ -7917,6 +8013,178 @@ ensuring proper alignment between the GeoDataFrame polygons and the image.</p>
                 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">sample_output</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sample visualization saved to </span><span class="si">{</span><span class="n">sample_output</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="geoai.extract.ParkingSplotDetector" class="doc doc-heading">
+        <code>
+ParkingSplotDetector            (<a class="autorefs autorefs-internal" title="geoai.extract.ObjectDetector" href="#geoai.extract.ObjectDetector">ObjectDetector</a>)
+        </code>
+
+
+
+<a href="#geoai.extract.ParkingSplotDetector" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Car detection using a pre-trained Mask R-CNN model.</p>
+<p>This class extends the <code>ObjectDetector</code> class with additional methods for car detection.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>geoai/extract.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ParkingSplotDetector</span><span class="p">(</span><span class="n">ObjectDetector</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Car detection using a pre-trained Mask R-CNN model.</span>
+
+<span class="sd">    This class extends the `ObjectDetector` class with additional methods for car detection.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">model_path</span><span class="o">=</span><span class="s2">&quot;parking_spot_detection.pth&quot;</span><span class="p">,</span>
+        <span class="n">repo_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">num_classes</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the object extractor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model_path: Path to the .pth model file.</span>
+<span class="sd">            repo_id: Repo ID for loading models from the Hub.</span>
+<span class="sd">            model: Custom model to use for inference.</span>
+<span class="sd">            num_classes: Number of classes for the model. Default: 3</span>
+<span class="sd">            device: Device to use for inference (&#39;cuda:0&#39;, &#39;cpu&#39;, etc.).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">model_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">,</span>
+            <span class="n">repo_id</span><span class="o">=</span><span class="n">repo_id</span><span class="p">,</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">num_classes</span><span class="o">=</span><span class="n">num_classes</span><span class="p">,</span>
+            <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
+        <span class="p">)</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="geoai.extract.ParkingSplotDetector.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_path</span><span class="o">=</span><span class="s1">&#39;parking_spot_detection.pth&#39;</span><span class="p">,</span> <span class="n">repo_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-special"><code>special</code></small>
+  </span>
+
+<a href="#geoai.extract.ParkingSplotDetector.__init__" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Initialize the object extractor.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>model_path</code></td>
+        <td></td>
+        <td><p>Path to the .pth model file.</p></td>
+        <td><code>&#39;parking_spot_detection.pth&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>repo_id</code></td>
+        <td></td>
+        <td><p>Repo ID for loading models from the Hub.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>model</code></td>
+        <td></td>
+        <td><p>Custom model to use for inference.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>num_classes</code></td>
+        <td></td>
+        <td><p>Number of classes for the model. Default: 3</p></td>
+        <td><code>3</code></td>
+      </tr>
+      <tr>
+        <td><code>device</code></td>
+        <td></td>
+        <td><p>Device to use for inference ('cuda:0', 'cpu', etc.).</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>geoai/extract.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">model_path</span><span class="o">=</span><span class="s2">&quot;parking_spot_detection.pth&quot;</span><span class="p">,</span>
+    <span class="n">repo_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">num_classes</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialize the object extractor.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_path: Path to the .pth model file.</span>
+<span class="sd">        repo_id: Repo ID for loading models from the Hub.</span>
+<span class="sd">        model: Custom model to use for inference.</span>
+<span class="sd">        num_classes: Number of classes for the model. Default: 3</span>
+<span class="sd">        device: Device to use for inference (&#39;cuda:0&#39;, &#39;cpu&#39;, etc.).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="n">model_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">,</span>
+        <span class="n">repo_id</span><span class="o">=</span><span class="n">repo_id</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">num_classes</span><span class="o">=</span><span class="n">num_classes</span><span class="p">,</span>
+        <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
+    <span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
