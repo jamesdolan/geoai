@@ -910,6 +910,28 @@
   
   
     <li class="md-nav__item">
+      <a href="../hf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    hf module
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../segmentation/" class="md-nav__link">
         
   
@@ -1906,8 +1928,8 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        GeoDataFrame or list of shapely Polygons with regularized building footprints</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polygon</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">shapely.affinity</span><span class="w"> </span><span class="kn">import</span> <span class="n">rotate</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polygon</span>
 
     <span class="c1"># Analyze the overall dataset to set appropriate parameters</span>
     <span class="k">if</span> <span class="n">is_gdf</span> <span class="o">:=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">building_polygons</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">):</span>
@@ -6721,8 +6743,8 @@ Defaults to 1.0, which keeps the original pixel</p></td>
 <span class="sd">    Returns:</span>
 <span class="sd">        GeoDataFrame or list of shapely Polygons with regularized building footprints</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polygon</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">shapely.affinity</span><span class="w"> </span><span class="kn">import</span> <span class="n">rotate</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polygon</span>
 
     <span class="c1"># Use minimum_rotated_rectangle instead of oriented_envelope</span>
     <span class="k">try</span><span class="p">:</span>
@@ -9058,6 +9080,7 @@ Defaults to True.</p></td>
 <span class="sd">        &gt;&gt;&gt; raster = read_raster(&quot;path/to/data.tif&quot;, masked=False)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">urllib.parse</span>
+
     <span class="kn">from</span><span class="w"> </span><span class="nn">rasterio.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">RasterioIOError</span>
 
     <span class="c1"># Determine if source is a URL or local file</span>
@@ -9218,8 +9241,9 @@ Defaults to None.</p></td>
 <span class="sd">        &gt;&gt;&gt; gdf = read_vector(&quot;path/to/data.gpkg&quot;, layer=&quot;layer_name&quot;)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="kn">import</span><span class="w"> </span><span class="nn">fiona</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">urllib.parse</span>
+
+    <span class="kn">import</span><span class="w"> </span><span class="nn">fiona</span>
 
     <span class="c1"># Determine if source is a URL or local file</span>
     <span class="n">parsed_url</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
@@ -9422,8 +9446,8 @@ Defaults to None.</p></td>
 <span class="sd">    Returns:</span>
 <span class="sd">        Union[Tuple[np.ndarray, pd.DataFrame], Tuple[xr.DataArray, pd.DataFrame]]: Labeled image and properties DataFrame.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">skimage</span><span class="w"> </span><span class="kn">import</span> <span class="n">measure</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">scipy.ndimage</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ndi</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">skimage</span><span class="w"> </span><span class="kn">import</span> <span class="n">measure</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">ds</span> <span class="o">=</span> <span class="n">rxr</span><span class="o">.</span><span class="n">open_rasterio</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
@@ -9690,9 +9714,9 @@ rotated rectangles.</p>
 <span class="sd">    Returns:</span>
 <span class="sd">        GeoDataFrame or list of shapely Polygons with regularized building footprints</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polygon</span><span class="p">,</span> <span class="n">shape</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">shapely.affinity</span><span class="w"> </span><span class="kn">import</span> <span class="n">rotate</span><span class="p">,</span> <span class="n">translate</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">shapely</span><span class="w"> </span><span class="kn">import</span> <span class="n">wkt</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">shapely.affinity</span><span class="w"> </span><span class="kn">import</span> <span class="n">rotate</span><span class="p">,</span> <span class="n">translate</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polygon</span><span class="p">,</span> <span class="n">shape</span>
 
     <span class="n">regularized_buildings</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -11102,8 +11126,8 @@ get_folium_tile_layer function. Defaults to None.</p></td>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">folium</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">folium.plugins</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plugins</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">localtileserver</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_folium_tile_layer</span><span class="p">,</span> <span class="n">TileClient</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">leafmap</span><span class="w"> </span><span class="kn">import</span> <span class="n">cog_tile</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">localtileserver</span><span class="w"> </span><span class="kn">import</span> <span class="n">TileClient</span><span class="p">,</span> <span class="n">get_folium_tile_layer</span>
 
     <span class="n">google_tiles</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;Roadmap&quot;</span><span class="p">:</span> <span class="p">{</span>
