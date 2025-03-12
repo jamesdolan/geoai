@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://geoai.gishub.org/utils/">
       
       
-        <link rel="prev" href="../segmentation/">
+        <link rel="prev" href="../train/">
       
       
       
@@ -755,6 +755,28 @@
   
   
     <li class="md-nav__item">
+      <a href="../examples/train_object_detection_model/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Train object detection model
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../examples/dataviz/raster_viz/" class="md-nav__link">
         
   
@@ -959,6 +981,28 @@
   
   <span class="md-ellipsis">
     segmentation module
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../train/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    train module
     
   </span>
   
@@ -4592,6 +4636,8 @@ If not provided, the filename from the URL will be used.</p></td>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Raster info for </span><span class="si">{</span><span class="n">in_raster</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  CRS: </span><span class="si">{</span><span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Dimensions: </span><span class="si">{</span><span class="n">src</span><span class="o">.</span><span class="n">width</span><span class="si">}</span><span class="s2"> x </span><span class="si">{</span><span class="n">src</span><span class="o">.</span><span class="n">height</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Resolution: </span><span class="si">{</span><span class="n">src</span><span class="o">.</span><span class="n">res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Bands: </span><span class="si">{</span><span class="n">src</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Bounds: </span><span class="si">{</span><span class="n">src</span><span class="o">.</span><span class="n">bounds</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="c1"># Calculate number of tiles</span>
