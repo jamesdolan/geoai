@@ -1288,6 +1288,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#geoai.utils.inspect_pth_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      inspect_pth_file()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#geoai.utils.install_package" class="md-nav__link">
     <span class="md-ellipsis">
       install_package()
@@ -1408,6 +1417,15 @@
   <a href="#geoai.utils.temp_file_path" class="md-nav__link">
     <span class="md-ellipsis">
       temp_file_path()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geoai.utils.try_common_architectures" class="md-nav__link">
+    <span class="md-ellipsis">
+      try_common_architectures()
     </span>
   </a>
   
@@ -1708,6 +1726,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#geoai.utils.inspect_pth_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      inspect_pth_file()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#geoai.utils.install_package" class="md-nav__link">
     <span class="md-ellipsis">
       install_package()
@@ -1828,6 +1855,15 @@
   <a href="#geoai.utils.temp_file_path" class="md-nav__link">
     <span class="md-ellipsis">
       temp_file_path()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geoai.utils.try_common_architectures" class="md-nav__link">
+    <span class="md-ellipsis">
+      try_common_architectures()
     </span>
   </a>
   
@@ -6939,6 +6975,214 @@ Defaults to 1.0, which keeps the original pixel</p></td>
 
 
 
+<h2 id="geoai.utils.inspect_pth_file" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">inspect_pth_file</span><span class="p">(</span><span class="n">pth_path</span><span class="p">)</span></code>
+
+
+<a href="#geoai.utils.inspect_pth_file" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Inspect a PyTorch .pth model file to determine its architecture.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>pth_path</code></td>
+        <td></td>
+        <td><p>Path to the .pth file to inspect</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td><p>Information about the model architecture</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>geoai/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">inspect_pth_file</span><span class="p">(</span><span class="n">pth_path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Inspect a PyTorch .pth model file to determine its architecture.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pth_path: Path to the .pth file to inspect</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Information about the model architecture</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check if file exists</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pth_path</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: File </span><span class="si">{</span><span class="n">pth_path</span><span class="si">}</span><span class="s2"> not found&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="c1"># Load the checkpoint</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">pth_path</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">50</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Inspecting model file: </span><span class="si">{</span><span class="n">pth_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">50</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Check if it&#39;s a state_dict or a complete model</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">,</span> <span class="n">OrderedDict</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s2">&quot;state_dict&quot;</span> <span class="ow">in</span> <span class="n">checkpoint</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found &#39;state_dict&#39; key in the checkpoint.&quot;</span><span class="p">)</span>
+                <span class="n">state_dict</span> <span class="o">=</span> <span class="n">checkpoint</span><span class="p">[</span><span class="s2">&quot;state_dict&quot;</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="s2">&quot;model_state_dict&quot;</span> <span class="ow">in</span> <span class="n">checkpoint</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found &#39;model_state_dict&#39; key in the checkpoint.&quot;</span><span class="p">)</span>
+                <span class="n">state_dict</span> <span class="o">=</span> <span class="n">checkpoint</span><span class="p">[</span><span class="s2">&quot;model_state_dict&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Assuming file contains a direct state_dict.&quot;</span><span class="p">)</span>
+                <span class="n">state_dict</span> <span class="o">=</span> <span class="n">checkpoint</span>
+
+            <span class="c1"># Print the keys in the checkpoint</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Checkpoint contains the following keys:&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">checkpoint</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> (dictionary with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="n">key</span><span class="p">])</span><span class="si">}</span><span class="s2"> items)&quot;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> (shape/size: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="n">key</span><span class="p">])</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="n">key</span><span class="p">],</span><span class="w"> </span><span class="p">(</span><span class="nb">list</span><span class="p">,</span><span class="w"> </span><span class="nb">tuple</span><span class="p">))</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">checkpoint</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">)&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="n">key</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Try to infer the model architecture from the state_dict keys</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Analyzing model architecture from state_dict...&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Extract layer keys for analysis</span>
+            <span class="n">layer_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">state_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+            <span class="c1"># Print the first few layer keys to understand naming pattern</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">First 10 layer names in state_dict:&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">layer_keys</span><span class="p">[:</span><span class="mi">10</span><span class="p">]):</span>
+                <span class="n">shape</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> (shape: </span><span class="si">{</span><span class="n">shape</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Look for architecture indicators in the keys</span>
+            <span class="n">architecture_indicators</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;conv&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;bn&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;layer&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;fc&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;backbone&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;encoder&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;decoder&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;unet&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;resnet&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;classifier&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;deeplab&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;fcn&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">layer_keys</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">indicator</span> <span class="ow">in</span> <span class="n">architecture_indicators</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">indicator</span> <span class="ow">in</span> <span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                        <span class="n">architecture_indicators</span><span class="p">[</span><span class="n">indicator</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Architecture indicators found in layer names:&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">indicator</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">architecture_indicators</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- &#39;</span><span class="si">{</span><span class="n">indicator</span><span class="si">}</span><span class="s2">&#39; appears </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> times&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Count total parameters</span>
+            <span class="n">total_params</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">state_dict</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Total parameters: </span><span class="si">{</span><span class="n">total_params</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Try to load the model with different architectures</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Attempting to match with common architectures...&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Try to identify if it&#39;s a segmentation model</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="s2">&quot;out&quot;</span> <span class="ow">in</span> <span class="n">k</span> <span class="ow">or</span> <span class="s2">&quot;classifier&quot;</span> <span class="ow">in</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">layer_keys</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model appears to be a segmentation model.&quot;</span><span class="p">)</span>
+
+                <span class="c1"># Check if it might be a UNet</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">architecture_indicators</span><span class="p">[</span><span class="s2">&quot;encoder&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
+                    <span class="ow">and</span> <span class="n">architecture_indicators</span><span class="p">[</span><span class="s2">&quot;decoder&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
+                <span class="p">):</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;Architecture seems to be a UNet-based model with encoder-decoder structure.&quot;</span>
+                    <span class="p">)</span>
+                <span class="c1"># Check for FCN or DeepLab indicators</span>
+                <span class="k">elif</span> <span class="n">architecture_indicators</span><span class="p">[</span><span class="s2">&quot;fcn&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;Architecture seems to be FCN-based (Fully Convolutional Network).&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">architecture_indicators</span><span class="p">[</span><span class="s2">&quot;deeplab&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Architecture seems to be DeepLab-based.&quot;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">architecture_indicators</span><span class="p">[</span><span class="s2">&quot;backbone&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;Model has a backbone architecture, likely a modern segmentation model.&quot;</span>
+                    <span class="p">)</span>
+
+            <span class="c1"># Try to infer output classes from the final layer</span>
+            <span class="n">output_layer_keys</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">layer_keys</span> <span class="k">if</span> <span class="s2">&quot;classifier&quot;</span> <span class="ow">in</span> <span class="n">k</span> <span class="ow">or</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.out.weight&quot;</span><span class="p">)</span>
+            <span class="p">]</span>
+            <span class="k">if</span> <span class="n">output_layer_keys</span><span class="p">:</span>
+                <span class="n">output_shape</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="n">output_layer_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">shape</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_shape</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">num_classes</span> <span class="o">=</span> <span class="n">output_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Model likely has </span><span class="si">{</span><span class="n">num_classes</span><span class="si">}</span><span class="s2"> output classes.&quot;</span><span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">SUMMARY:&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The model appears to be&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">architecture_indicators</span><span class="p">[</span><span class="s2">&quot;unet&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;a UNet architecture.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">architecture_indicators</span><span class="p">[</span><span class="s2">&quot;fcn&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;an FCN architecture.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">architecture_indicators</span><span class="p">[</span><span class="s2">&quot;deeplab&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;a DeepLab architecture.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">architecture_indicators</span><span class="p">[</span><span class="s2">&quot;resnet&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ResNet-based.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;a custom architecture.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+            <span class="c1"># Try to load with common models</span>
+            <span class="n">try_common_architectures</span><span class="p">(</span><span class="n">state_dict</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;The file contains an entire model object rather than just a state dictionary.&quot;</span>
+            <span class="p">)</span>
+            <span class="c1"># If it&#39;s a complete model, we can directly examine its architecture</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error loading the model file: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
 <h2 id="geoai.utils.install_package" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">install_package</span><span class="p">(</span><span class="n">package</span><span class="p">)</span></code>
 
@@ -9999,6 +10243,87 @@ rotated rectangles.</p>
     <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">gettempdir</span><span class="p">(),</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_id</span><span class="si">}{</span><span class="n">ext</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">file_path</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="geoai.utils.try_common_architectures" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">try_common_architectures</span><span class="p">(</span><span class="n">state_dict</span><span class="p">)</span></code>
+
+
+<a href="#geoai.utils.try_common_architectures" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Try to load the state_dict into common architectures to see which one fits.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>state_dict</code></td>
+        <td></td>
+        <td><p>The model's state dictionary</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>geoai/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">try_common_architectures</span><span class="p">(</span><span class="n">state_dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Try to load the state_dict into common architectures to see which one fits.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        state_dict: The model&#39;s state dictionary</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">torchinfo</span>
+
+    <span class="c1"># Test models and their initializations</span>
+    <span class="n">models_to_try</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;FCN-ResNet50&quot;</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">fcn_resnet50</span><span class="p">(</span><span class="n">num_classes</span><span class="o">=</span><span class="mi">9</span><span class="p">),</span>
+        <span class="s2">&quot;DeepLabV3-ResNet50&quot;</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">deeplabv3_resnet50</span><span class="p">(</span><span class="n">num_classes</span><span class="o">=</span><span class="mi">9</span><span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Trying to load state_dict into common architectures:&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">model_fn</span> <span class="ow">in</span> <span class="n">models_to_try</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">model_fn</span><span class="p">()</span>
+            <span class="c1"># Sometimes state_dict keys have &#39;model.&#39; prefix</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;model.&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">state_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="n">cleaned_state_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">[</span><span class="mi">6</span><span class="p">:]:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+                <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">cleaned_state_dict</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">state_dict</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: Successfully loaded (may have missing or unexpected keys)&quot;</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Generate model summary</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Summary of </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> architecture:&quot;</span><span class="p">)</span>
+            <span class="n">summary</span> <span class="o">=</span> <span class="n">torchinfo</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">input_size</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">),</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: Failed to load - </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
