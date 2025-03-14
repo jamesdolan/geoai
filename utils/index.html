@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.8">
     
     
       
@@ -9072,7 +9072,7 @@ Defaults to True.</p></td>
 
 
 <h2 id="geoai.utils.raster_to_vector" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">raster_to_vector</span><span class="p">(</span><span class="n">raster_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">min_area</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">simplify_tolerance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">class_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="s1">&#39;geojson&#39;</span><span class="p">,</span> <span class="n">plot_result</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">raster_to_vector</span><span class="p">(</span><span class="n">raster_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">min_area</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">simplify_tolerance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">class_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="n">unique_attribute_value</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="s1">&#39;geojson&#39;</span><span class="p">,</span> <span class="n">plot_result</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
 
 <a href="#geoai.utils.raster_to_vector" class="headerlink" title="Permanent link">&para;</a></h2>
@@ -9135,6 +9135,12 @@ Defaults to True.</p></td>
         <td><code>&#39;class&#39;</code></td>
       </tr>
       <tr>
+        <td><code>unique_attribute_value</code></td>
+        <td><code>bool</code></td>
+        <td><p>Whether to generate unique values for each shape within a class.</p></td>
+        <td><code>False</code></td>
+      </tr>
+      <tr>
         <td><code>output_format</code></td>
         <td><code>str</code></td>
         <td><p>Format for output file - 'geojson', 'shapefile', 'gpkg'.</p></td>
@@ -9173,6 +9179,7 @@ Defaults to True.</p></td>
     <span class="n">simplify_tolerance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">class_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">attribute_name</span><span class="o">=</span><span class="s2">&quot;class&quot;</span><span class="p">,</span>
+    <span class="n">unique_attribute_value</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;geojson&quot;</span><span class="p">,</span>
     <span class="n">plot_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
@@ -9187,6 +9194,7 @@ Defaults to True.</p></td>
 <span class="sd">        simplify_tolerance (float): Tolerance for geometry simplification. None for no simplification.</span>
 <span class="sd">        class_values (list): Specific pixel values to vectorize. If None, all values &gt; threshold are vectorized.</span>
 <span class="sd">        attribute_name (str): Name of the attribute field for the class values.</span>
+<span class="sd">        unique_attribute_value (bool): Whether to generate unique values for each shape within a class.</span>
 <span class="sd">        output_format (str): Format for output file - &#39;geojson&#39;, &#39;shapefile&#39;, &#39;gpkg&#39;.</span>
 <span class="sd">        plot_result (bool): Whether to plot the resulting polygons overlaid on the raster.</span>
 
@@ -9217,7 +9225,7 @@ Defaults to True.</p></td>
         <span class="c1"># Process each class value</span>
         <span class="k">for</span> <span class="n">class_val</span> <span class="ow">in</span> <span class="n">class_values</span><span class="p">:</span>
             <span class="n">mask</span> <span class="o">=</span> <span class="n">masks</span><span class="p">[</span><span class="n">class_val</span><span class="p">]</span>
-
+            <span class="n">shape_count</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="c1"># Vectorize the mask</span>
             <span class="k">for</span> <span class="n">geom</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">features</span><span class="o">.</span><span class="n">shapes</span><span class="p">(</span>
                 <span class="n">mask</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">),</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span>
@@ -9234,7 +9242,14 @@ Defaults to True.</p></td>
                     <span class="n">geom</span> <span class="o">=</span> <span class="n">geom</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">simplify_tolerance</span><span class="p">)</span>
 
                 <span class="c1"># Add to features list with class value</span>
-                <span class="n">all_features</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">geom</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">:</span> <span class="n">class_val</span><span class="p">})</span>
+                <span class="k">if</span> <span class="n">unique_attribute_value</span><span class="p">:</span>
+                    <span class="n">all_features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">{</span><span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">geom</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">:</span> <span class="n">class_val</span> <span class="o">*</span> <span class="n">shape_count</span><span class="p">}</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">all_features</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">geom</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">:</span> <span class="n">class_val</span><span class="p">})</span>
+
+                <span class="n">shape_count</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="c1"># Create GeoDataFrame</span>
         <span class="k">if</span> <span class="n">all_features</span><span class="p">:</span>
@@ -9829,8 +9844,8 @@ Defaults to None.</p></td>
             <span class="s2">&quot;area_bbox&quot;</span><span class="p">,</span>
             <span class="s2">&quot;area_convex&quot;</span><span class="p">,</span>
             <span class="s2">&quot;area_filled&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;major_length&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;minor_length&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;axis_major_length&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;axis_minor_length&quot;</span><span class="p">,</span>
             <span class="s2">&quot;eccentricity&quot;</span><span class="p">,</span>
             <span class="s2">&quot;diameter_areagth&quot;</span><span class="p">,</span>
             <span class="s2">&quot;extent&quot;</span><span class="p">,</span>
@@ -9927,7 +9942,7 @@ Defaults to None.</p></td>
     <span class="p">)</span>
 
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">props</span><span class="p">)</span>
-    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;elongation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;major_length&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;minor_length&quot;</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;elongation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;axis_major_length&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;axis_minor_length&quot;</span><span class="p">]</span>
 
     <span class="n">dtype</span> <span class="o">=</span> <span class="s2">&quot;uint8&quot;</span>
     <span class="k">if</span> <span class="n">num_labels</span> <span class="o">&gt;</span> <span class="mi">255</span> <span class="ow">and</span> <span class="n">num_labels</span> <span class="o">&lt;=</span> <span class="mi">65535</span><span class="p">:</span>
@@ -9944,9 +9959,29 @@ Defaults to None.</p></td>
         <span class="n">da</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">label_image</span>
         <span class="k">if</span> <span class="n">out_image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">da</span><span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">to_raster</span><span class="p">(</span><span class="n">out_image</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">out_vector</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">tmp_vector</span> <span class="o">=</span> <span class="n">temp_file_path</span><span class="p">(</span><span class="s2">&quot;.gpkg&quot;</span><span class="p">)</span>
-                <span class="n">raster_to_vector</span><span class="p">(</span><span class="n">out_image</span><span class="p">,</span> <span class="n">tmp_vector</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">out_vector</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tmp_raster</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">tmp_vector</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">out_image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">tmp_raster</span> <span class="o">=</span> <span class="n">temp_file_path</span><span class="p">(</span><span class="s2">&quot;.tif&quot;</span><span class="p">)</span>
+                    <span class="n">da</span><span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">to_raster</span><span class="p">(</span><span class="n">tmp_raster</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+                    <span class="n">tmp_vector</span> <span class="o">=</span> <span class="n">temp_file_path</span><span class="p">(</span><span class="s2">&quot;.gpkg&quot;</span><span class="p">)</span>
+                    <span class="n">raster_to_vector</span><span class="p">(</span>
+                        <span class="n">tmp_raster</span><span class="p">,</span>
+                        <span class="n">tmp_vector</span><span class="p">,</span>
+                        <span class="n">attribute_name</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span>
+                        <span class="n">unique_attribute_value</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">tmp_vector</span> <span class="o">=</span> <span class="n">temp_file_path</span><span class="p">(</span><span class="s2">&quot;.gpkg&quot;</span><span class="p">)</span>
+                    <span class="n">raster_to_vector</span><span class="p">(</span>
+                        <span class="n">out_image</span><span class="p">,</span>
+                        <span class="n">tmp_vector</span><span class="p">,</span>
+                        <span class="n">attribute_name</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span>
+                        <span class="n">unique_attribute_value</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="p">)</span>
                 <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">tmp_vector</span><span class="p">)</span>
                 <span class="n">gdf</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
                 <span class="n">gdf</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -9954,6 +9989,15 @@ Defaults to None.</p></td>
                 <span class="n">gdf2</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">out_vector</span><span class="p">)</span>
                 <span class="n">gdf2</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="n">df</span> <span class="o">=</span> <span class="n">gdf2</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">tmp_raster</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">tmp_raster</span><span class="p">):</span>
+                        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tmp_raster</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">tmp_vector</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">tmp_vector</span><span class="p">):</span>
+                        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tmp_vector</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: Failed to delete temporary files: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">da</span><span class="p">,</span> <span class="n">df</span>
 </code></pre></div>
         </details>
