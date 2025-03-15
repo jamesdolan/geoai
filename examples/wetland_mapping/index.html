@@ -12,13 +12,13 @@
         <meta name="author" content="opengeos">
       
       
-        <link rel="canonical" href="https://geoai.gishub.org/examples/car_detection/">
+        <link rel="canonical" href="https://geoai.gishub.org/examples/wetland_mapping/">
       
       
-        <link rel="prev" href="../geometric_properties/">
+        <link rel="prev" href="../train_object_detection_model/">
       
       
-        <link rel="next" href="../ship_detection/">
+        <link rel="next" href="../dataviz/raster_viz/">
       
       
       <link rel="icon" href="../../assets/logo.ico">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Car detection - geoai</title>
+        <title>Wetland mapping - geoai</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#car-detection" class="md-skip">
+        <a href="#wetland-mapping-with-geoai" class="md-skip">
           Skip to content
         </a>
       
@@ -117,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Car detection
+              Wetland mapping
             
           </span>
         </div>
@@ -644,31 +644,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Car detection
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../car_detection/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -678,116 +657,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#install-package" class="md-nav__link">
-    <span class="md-ellipsis">
-      Install package
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#import-libraries" class="md-nav__link">
-    <span class="md-ellipsis">
-      Import libraries
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#download-sample-data" class="md-nav__link">
-    <span class="md-ellipsis">
-      Download sample data
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#visualize-the-image" class="md-nav__link">
-    <span class="md-ellipsis">
-      Visualize the image
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#initialize-the-model" class="md-nav__link">
-    <span class="md-ellipsis">
-      Initialize the model
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#extract-cars" class="md-nav__link">
-    <span class="md-ellipsis">
-      Extract cars
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#add-geometric-properties" class="md-nav__link">
-    <span class="md-ellipsis">
-      Add geometric properties
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#visualize-initial-results" class="md-nav__link">
-    <span class="md-ellipsis">
-      Visualize initial results
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#filter-cars-by-area" class="md-nav__link">
-    <span class="md-ellipsis">
-      Filter cars by area
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#visualiza-final-results" class="md-nav__link">
-    <span class="md-ellipsis">
-      Visualiza final results
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -929,10 +798,31 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../wetland_mapping/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Wetland mapping
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -942,6 +832,107 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#install-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install package
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#import-libraries" class="md-nav__link">
+    <span class="md-ellipsis">
+      Import libraries
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#download-sample-naip-imagery" class="md-nav__link">
+    <span class="md-ellipsis">
+      Download sample NAIP imagery
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#download-sample-wetland-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Download sample wetland data
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-training-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create training data
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#train-object-detection-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      Train object detection model
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-inference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Run inference
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vectorize-masks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Vectorize masks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visualize-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      Visualize results
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1262,72 +1253,63 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#download-sample-data" class="md-nav__link">
+  <a href="#download-sample-naip-imagery" class="md-nav__link">
     <span class="md-ellipsis">
-      Download sample data
+      Download sample NAIP imagery
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#visualize-the-image" class="md-nav__link">
+  <a href="#download-sample-wetland-data" class="md-nav__link">
     <span class="md-ellipsis">
-      Visualize the image
+      Download sample wetland data
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#initialize-the-model" class="md-nav__link">
+  <a href="#create-training-data" class="md-nav__link">
     <span class="md-ellipsis">
-      Initialize the model
+      Create training data
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#extract-cars" class="md-nav__link">
+  <a href="#train-object-detection-model" class="md-nav__link">
     <span class="md-ellipsis">
-      Extract cars
+      Train object detection model
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#add-geometric-properties" class="md-nav__link">
+  <a href="#run-inference" class="md-nav__link">
     <span class="md-ellipsis">
-      Add geometric properties
+      Run inference
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#visualize-initial-results" class="md-nav__link">
+  <a href="#vectorize-masks" class="md-nav__link">
     <span class="md-ellipsis">
-      Visualize initial results
+      Vectorize masks
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#filter-cars-by-area" class="md-nav__link">
+  <a href="#visualize-results" class="md-nav__link">
     <span class="md-ellipsis">
-      Filter cars by area
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#visualiza-final-results" class="md-nav__link">
-    <span class="md-ellipsis">
-      Visualiza final results
+      Visualize results
     </span>
   </a>
   
@@ -1346,7 +1328,7 @@
               <article class="md-content__inner md-typeset">
                 
 
-    <a href="/examples/car_detection/car_detection.ipynb" title="Download Notebook" class="md-content__button md-icon">
+    <a href="/examples/wetland_mapping/wetland_mapping.ipynb" title="Download Notebook" class="md-content__button md-icon">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7z"/></svg>
     </a>
 
@@ -1801,7 +1783,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="car-detection">Car Detection<a class="anchor-link" href="#car-detection">¶</a></h1><p><a href="https://colab.research.google.com/github/opengeos/geoai/blob/main/docs/examples/car_detection.ipynb"><img alt="image" src="https://colab.research.google.com/assets/colab-badge.svg"/></a></p>
+<h1 id="wetland-mapping-with-geoai">Wetland Mapping with GeoAI<a class="anchor-link" href="#wetland-mapping-with-geoai">¶</a></h1><p><a href="https://colab.research.google.com/github/opengeos/geoai/blob/main/docs/examples/wetland_mapping.ipynb"><img alt="image" src="https://colab.research.google.com/assets/colab-badge.svg"/></a></p>
 <h2 id="install-package">Install package<a class="anchor-link" href="#install-package">¶</a></h2><p>To use the <code>geoai-py</code> package, ensure it is installed in your environment. Uncomment the command below if needed.</p>
 </div>
 </div>
@@ -1863,9 +1845,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geoai</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">leafmap</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geoai</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-2">import geoai</div>
+<div class="clipboard-copy-txt" id="cell-2">import leafmap
+import geoai</div>
 </div>
 </div>
 </div>
@@ -1878,7 +1862,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="download-sample-data">Download sample data<a class="anchor-link" href="#download-sample-data">¶</a></h2><p>We will download a sample image from Hugging Face Hub to use for car detection. You can find more high-resolution images from <a href="https://openaerialmap.org">OpenAerialMap</a>.</p>
+<h2 id="download-sample-naip-imagery">Download sample NAIP imagery<a class="anchor-link" href="#download-sample-naip-imagery">¶</a></h2><p>Sample NAIP imagery: <a href="https://huggingface.co/datasets/giswqs/geospatial/tree/main/naip">https://huggingface.co/datasets/giswqs/geospatial/tree/main/naip</a></p>
 </div>
 </div>
 </div>
@@ -1901,13 +1885,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">raster_url</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">"https://huggingface.co/datasets/giswqs/geospatial/resolve/main/cars_7cm.tif"</span>
-<span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">train_raster_url</span> <span class="o">=</span> <span class="s2">"https://huggingface.co/datasets/giswqs/geospatial/resolve/main/naip/m_4609931_ne_14_1_20100629.tif"</span>
+<span class="n">test_raster_url</span> <span class="o">=</span> <span class="s2">"https://huggingface.co/datasets/giswqs/geospatial/resolve/main/naip/m_4609932_nw_14_1_20100629.tif"</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-3">raster_url = (
-    "https://huggingface.co/datasets/giswqs/geospatial/resolve/main/cars_7cm.tif"
-)</div>
+<div class="clipboard-copy-txt" id="cell-3">train_raster_url = "https://huggingface.co/datasets/giswqs/geospatial/resolve/main/naip/m_4609931_ne_14_1_20100629.tif"
+test_raster_url = "https://huggingface.co/datasets/giswqs/geospatial/resolve/main/naip/m_4609932_nw_14_1_20100629.tif"</div>
 </div>
 </div>
 </div>
@@ -1932,22 +1914,13 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">raster_path</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">raster_url</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">train_raster_path</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">train_raster_url</span><span class="p">)</span>
+<span class="n">test_raster_path</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">test_raster_url</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-4">raster_path = geoai.download_file(raster_url)</div>
+<div class="clipboard-copy-txt" id="cell-4">train_raster_path = geoai.download_file(train_raster_url)
+test_raster_path = geoai.download_file(test_raster_url)</div>
 </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="visualize-the-image">Visualize the image<a class="anchor-link" href="#visualize-the-image">¶</a></h2>
 </div>
 </div>
 </div>
@@ -1970,22 +1943,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">geoai</span><span class="o">.</span><span class="n">view_raster</span><span class="p">(</span><span class="n">raster_url</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">geoai</span><span class="o">.</span><span class="n">print_raster_info</span><span class="p">(</span><span class="n">test_raster_path</span><span class="p">,</span> <span class="n">show_preview</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-5">geoai.view_raster(raster_url)</div>
+<div class="clipboard-copy-txt" id="cell-5">geoai.print_raster_info(test_raster_path, show_preview=False)</div>
 </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="initialize-the-model">Initialize the model<a class="anchor-link" href="#initialize-the-model">¶</a></h2>
 </div>
 </div>
 </div>
@@ -2008,22 +1970,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">detector</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">CarDetector</span><span class="p">()</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">geoai</span><span class="o">.</span><span class="n">view_raster</span><span class="p">(</span><span class="n">train_raster_url</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-6">detector = geoai.CarDetector()</div>
+<div class="clipboard-copy-txt" id="cell-6">geoai.view_raster(train_raster_url)</div>
 </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="extract-cars">Extract cars<a class="anchor-link" href="#extract-cars">¶</a></h2><p>Extract cars from the image using the model and save the output image.</p>
 </div>
 </div>
 </div>
@@ -2046,23 +1997,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">mask_path</span> <span class="o">=</span> <span class="n">detector</span><span class="o">.</span><span class="n">generate_masks</span><span class="p">(</span>
-    <span class="n">raster_path</span><span class="o">=</span><span class="n">raster_path</span><span class="p">,</span>
-    <span class="n">output_path</span><span class="o">=</span><span class="s2">"cars_masks.tif"</span><span class="p">,</span>
-    <span class="n">confidence_threshold</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
-    <span class="n">mask_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-    <span class="n">overlap</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
-    <span class="n">chip_size</span><span class="o">=</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">),</span>
-<span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">geoai</span><span class="o">.</span><span class="n">view_raster</span><span class="p">(</span><span class="n">test_raster_url</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-7">mask_path = detector.generate_masks(
-    raster_path=raster_path,
-    output_path="cars_masks.tif",
-    confidence_threshold=0.3,
-    mask_threshold=0.5,
-    overlap=0.25,
-    chip_size=(400, 400),
-)</div>
+<div class="clipboard-copy-txt" id="cell-7">geoai.view_raster(test_raster_url)</div>
 </div>
 </div>
 </div>
@@ -2075,7 +2012,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Convert the image masks to polygons and save the output GeoJSON file.</p>
+<h2 id="download-sample-wetland-data">Download sample wetland data<a class="anchor-link" href="#download-sample-wetland-data">¶</a></h2><p>National Wetlands Inventory: <a href="https://www.fws.gov/program/national-wetlands-inventory/wetlands-mapper">https://www.fws.gov/program/national-wetlands-inventory/wetlands-mapper</a></p>
 </div>
 </div>
 </div>
@@ -2098,32 +2035,15 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">gdf</span> <span class="o">=</span> <span class="n">detector</span><span class="o">.</span><span class="n">vectorize_masks</span><span class="p">(</span>
-    <span class="n">masks_path</span><span class="o">=</span><span class="s2">"cars_masks.tif"</span><span class="p">,</span>
-    <span class="n">output_path</span><span class="o">=</span><span class="s2">"cars.geojson"</span><span class="p">,</span>
-    <span class="n">min_object_area</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">max_object_area</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">leafmap</span><span class="o">.</span><span class="n">Map</span><span class="p">()</span>
+<span class="n">m</span><span class="o">.</span><span class="n">add_cog_layer</span><span class="p">(</span><span class="n">train_raster_url</span><span class="p">,</span> <span class="n">bidx</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">"NAIP Imagery"</span><span class="p">)</span>
+<span class="n">m</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-8">gdf = detector.vectorize_masks(
-    masks_path="cars_masks.tif",
-    output_path="cars.geojson",
-    min_object_area=100,
-    max_object_area=2000,
-)</div>
+<div class="clipboard-copy-txt" id="cell-8">m = leafmap.Map()
+m.add_cog_layer(train_raster_url, bidx=[4, 1, 2], name="NAIP Imagery")
+m</div>
 </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="add-geometric-properties">Add geometric properties<a class="anchor-link" href="#add-geometric-properties">¶</a></h2>
 </div>
 </div>
 </div>
@@ -2146,22 +2066,15 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">gdf</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">add_geometric_properties</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">bbox</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">user_roi_bounds</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">bbox</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">bbox</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">99.192</span><span class="p">,</span> <span class="mf">46.56</span><span class="p">,</span> <span class="o">-</span><span class="mf">99.1206</span><span class="p">,</span> <span class="mf">46.6283</span><span class="p">]</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-9">gdf = geoai.add_geometric_properties(gdf)</div>
+<div class="clipboard-copy-txt" id="cell-9">bbox = m.user_roi_bounds()
+if bbox is None:
+    bbox = [-99.192, 46.56, -99.1206, 46.6283]</div>
 </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="visualize-initial-results">Visualize initial results<a class="anchor-link" href="#visualize-initial-results">¶</a></h2>
 </div>
 </div>
 </div>
@@ -2184,22 +2097,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">geoai</span><span class="o">.</span><span class="n">view_vector_interactive</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">"confidence"</span><span class="p">,</span> <span class="n">tiles</span><span class="o">=</span><span class="n">raster_url</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">bbox_geometry</span> <span class="o">=</span> <span class="n">leafmap</span><span class="o">.</span><span class="n">bbox_to_gdf</span><span class="p">(</span><span class="n">bbox</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-10">geoai.view_vector_interactive(gdf, column="confidence", tiles=raster_url)</div>
+<div class="clipboard-copy-txt" id="cell-10">bbox_geometry = leafmap.bbox_to_gdf(bbox)</div>
 </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="filter-cars-by-area">Filter cars by area<a class="anchor-link" href="#filter-cars-by-area">¶</a></h2>
 </div>
 </div>
 </div>
@@ -2222,13 +2124,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">gdf_filter</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span>
-    <span class="p">(</span><span class="n">gdf</span><span class="p">[</span><span class="s2">"area_m2"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">gdf</span><span class="p">[</span><span class="s2">"area_m2"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">gdf</span><span class="p">[</span><span class="s2">"minor_length_m"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
-<span class="p">]</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">nwi_gdf</span> <span class="o">=</span> <span class="n">leafmap</span><span class="o">.</span><span class="n">get_nwi</span><span class="p">(</span><span class="n">bbox_geometry</span><span class="p">)</span>
+<span class="n">nwi_gdf</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-11">gdf_filter = gdf[
-    (gdf["area_m2"] &gt; 8) &amp; (gdf["area_m2"] &lt; 60) &amp; (gdf["minor_length_m"] &gt; 1)
-]</div>
+<div class="clipboard-copy-txt" id="cell-11">nwi_gdf = leafmap.get_nwi(bbox_geometry)
+nwi_gdf.head()</div>
 </div>
 </div>
 </div>
@@ -2253,22 +2153,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">gdf_filter</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">add_nwi</span><span class="p">(</span><span class="n">nwi_gdf</span><span class="p">,</span> <span class="n">col_name</span><span class="o">=</span><span class="s2">"Wetlands.WETLAND_TYPE"</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-12">len(gdf_filter)</div>
+<div class="clipboard-copy-txt" id="cell-12">m.add_nwi(nwi_gdf, col_name="Wetlands.WETLAND_TYPE")</div>
 </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="visualiza-final-results">Visualiza final results<a class="anchor-link" href="#visualiza-final-results">¶</a></h2>
 </div>
 </div>
 </div>
@@ -2291,11 +2180,24 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">geoai</span><span class="o">.</span><span class="n">view_vector_interactive</span><span class="p">(</span><span class="n">gdf_filter</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">"confidence"</span><span class="p">,</span> <span class="n">tiles</span><span class="o">=</span><span class="n">raster_url</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">nwi_geojson</span> <span class="o">=</span> <span class="s2">"nwi_wetlands.geojson"</span>
+<span class="n">nwi_gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">nwi_geojson</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-13">geoai.view_vector_interactive(gdf_filter, column="confidence", tiles=raster_url)</div>
+<div class="clipboard-copy-txt" id="cell-13">nwi_geojson = "nwi_wetlands.geojson"
+nwi_gdf.to_file(nwi_geojson)</div>
 </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="create-training-data">Create training data<a class="anchor-link" href="#create-training-data">¶</a></h2>
 </div>
 </div>
 </div>
@@ -2318,9 +2220,25 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">geoai</span><span class="o">.</span><span class="n">view_vector_interactive</span><span class="p">(</span><span class="n">gdf_filter</span><span class="p">,</span> <span class="n">tiles</span><span class="o">=</span><span class="n">raster_url</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">out_folder</span> <span class="o">=</span> <span class="s2">"output"</span>
+<span class="n">tiles</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">export_geotiff_tiles</span><span class="p">(</span>
+    <span class="n">in_raster</span><span class="o">=</span><span class="n">train_raster_path</span><span class="p">,</span>
+    <span class="n">out_folder</span><span class="o">=</span><span class="n">out_folder</span><span class="p">,</span>
+    <span class="n">in_class_data</span><span class="o">=</span><span class="n">nwi_geojson</span><span class="p">,</span>
+    <span class="n">tile_size</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+    <span class="n">stride</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
+    <span class="n">buffer_radius</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-14">geoai.view_vector_interactive(gdf_filter, tiles=raster_url)</div>
+<div class="clipboard-copy-txt" id="cell-14">out_folder = "output"
+tiles = geoai.export_geotiff_tiles(
+    in_raster=train_raster_path,
+    out_folder=out_folder,
+    in_class_data=nwi_geojson,
+    tile_size=512,
+    stride=256,
+    buffer_radius=0,
+)</div>
 </div>
 </div>
 </div>
@@ -2333,7 +2251,269 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><img alt="image" src="https://github.com/user-attachments/assets/a1e4c871-b152-466a-b902-7c00e62e5444"/></p>
+<h2 id="train-object-detection-model">Train object detection model<a class="anchor-link" href="#train-object-detection-model">¶</a></h2>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-15">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">geoai</span><span class="o">.</span><span class="n">train_MaskRCNN_model</span><span class="p">(</span>
+    <span class="n">images_dir</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">out_folder</span><span class="si">}</span><span class="s2">/images"</span><span class="p">,</span>
+    <span class="n">labels_dir</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">out_folder</span><span class="si">}</span><span class="s2">/labels"</span><span class="p">,</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">out_folder</span><span class="si">}</span><span class="s2">/models"</span><span class="p">,</span>
+    <span class="n">num_channels</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">num_epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span>
+    <span class="n">val_split</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-15">geoai.train_MaskRCNN_model(
+    images_dir=f"{out_folder}/images",
+    labels_dir=f"{out_folder}/labels",
+    output_dir=f"{out_folder}/models",
+    num_channels=4,
+    pretrained=True,
+    batch_size=4,
+    num_epochs=10,
+    learning_rate=0.005,
+    val_split=0.2,
+)</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="run-inference">Run inference<a class="anchor-link" href="#run-inference">¶</a></h2>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-16">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">masks_path</span> <span class="o">=</span> <span class="s2">"naip_test_prediction.tif"</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">out_folder</span><span class="si">}</span><span class="s2">/models/best_model.pth"</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-16">masks_path = "naip_test_prediction.tif"
+model_path = f"{out_folder}/models/best_model.pth"</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-17">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">geoai</span><span class="o">.</span><span class="n">object_detection</span><span class="p">(</span>
+    <span class="n">test_raster_path</span><span class="p">,</span>
+    <span class="n">masks_path</span><span class="p">,</span>
+    <span class="n">model_path</span><span class="p">,</span>
+    <span class="n">window_size</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+    <span class="n">overlap</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
+    <span class="n">confidence_threshold</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">num_channels</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-17">geoai.object_detection(
+    test_raster_path,
+    masks_path,
+    model_path,
+    window_size=512,
+    overlap=256,
+    confidence_threshold=0.3,
+    batch_size=4,
+    num_channels=4,
+)</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="vectorize-masks">Vectorize masks<a class="anchor-link" href="#vectorize-masks">¶</a></h2>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-18">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">output_path</span> <span class="o">=</span> <span class="s2">"naip_test_prediction.geojson"</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">raster_to_vector</span><span class="p">(</span>
+    <span class="n">masks_path</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">min_area</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">simplify_tolerance</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-18">output_path = "naip_test_prediction.geojson"
+gdf = geoai.raster_to_vector(
+    masks_path, output_path, min_area=1000, simplify_tolerance=1
+)</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="visualize-results">Visualize results<a class="anchor-link" href="#visualize-results">¶</a></h2>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-19">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">geoai</span><span class="o">.</span><span class="n">view_vector_interactive</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">tiles</span><span class="o">=</span><span class="n">test_raster_url</span><span class="p">)</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-19">geoai.view_vector_interactive(output_path, tiles=test_raster_url)</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-20">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">geoai</span><span class="o">.</span><span class="n">create_split_map</span><span class="p">(</span>
+    <span class="n">left_layer</span><span class="o">=</span><span class="n">output_path</span><span class="p">,</span>
+    <span class="n">right_layer</span><span class="o">=</span><span class="n">test_raster_url</span><span class="p">,</span>
+    <span class="n">left_args</span><span class="o">=</span><span class="p">{</span><span class="s2">"style"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"color"</span><span class="p">:</span> <span class="s2">"red"</span><span class="p">,</span> <span class="s2">"fillOpacity"</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">}},</span>
+    <span class="n">basemap</span><span class="o">=</span><span class="n">test_raster_url</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-20">geoai.create_split_map(
+    left_layer=output_path,
+    right_layer=test_raster_url,
+    left_args={"style": {"color": "red", "fillOpacity": 0.4}},
+    basemap=test_raster_url,
+)</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><img alt="image" src="https://github.com/user-attachments/assets/ab17cb29-7426-4090-8d02-b3b98dad5d05"/></p>
 </div>
 </div>
 </div>
@@ -2367,7 +2547,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="March 8, 2025 04:55:52"><span class="timeago" datetime="2025-03-08T04:55:52+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="March 8, 2025 04:55:52">2025-03-08</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="March 15, 2025 03:26:24"><span class="timeago" datetime="2025-03-15T03:26:24+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="March 15, 2025 03:26:24">2025-03-15</span>
   </span>
 
     
