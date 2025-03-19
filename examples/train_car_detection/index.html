@@ -12,13 +12,13 @@
         <meta name="author" content="opengeos">
       
       
-        <link rel="canonical" href="https://geoai.gishub.org/examples/train_solar_panel_detection/">
+        <link rel="canonical" href="https://geoai.gishub.org/examples/train_car_detection/">
       
       
-        <link rel="prev" href="../train_building_footprints_usa/">
+        <link rel="prev" href="../train_solar_panel_detection/">
       
       
-        <link rel="next" href="../train_car_detection/">
+        <link rel="next" href="../wetland_mapping/">
       
       
       <link rel="icon" href="../../assets/logo.ico">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Train solar panel detection - geoai</title>
+        <title>Train car detection - geoai</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#train-a-model-for-detecting-solar-panels" class="md-skip">
+        <a href="#train-a-model-for-detecting-cars" class="md-skip">
           Skip to content
         </a>
       
@@ -117,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Train solar panel detection
+              Train car detection
             
           </span>
         </div>
@@ -842,6 +842,28 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../train_solar_panel_detection/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Train solar panel detection
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -858,7 +880,7 @@
           
   
   <span class="md-ellipsis">
-    Train solar panel detection
+    Train car detection
     
   </span>
   
@@ -870,7 +892,7 @@
         
   
   <span class="md-ellipsis">
-    Train solar panel detection
+    Train car detection
     
   </span>
   
@@ -977,28 +999,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../train_car_detection/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Train car detection
-    
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -1416,7 +1416,7 @@
               <article class="md-content__inner md-typeset">
                 
 
-    <a href="/examples/train_solar_panel_detection/train_solar_panel_detection.ipynb" title="Download Notebook" class="md-content__button md-icon">
+    <a href="/examples/train_car_detection/train_car_detection.ipynb" title="Download Notebook" class="md-content__button md-icon">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7z"/></svg>
     </a>
 
@@ -1871,7 +1871,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="train-a-model-for-detecting-solar-panels">Train a Model for Detecting Solar Panels<a class="anchor-link" href="#train-a-model-for-detecting-solar-panels">¶</a></h1><p><a href="https://colab.research.google.com/github/opengeos/geoai/blob/main/docs/examples/train_solar_panel_detection.ipynb"><img alt="image" src="https://colab.research.google.com/assets/colab-badge.svg"/></a></p>
+<h1 id="train-a-model-for-detecting-cars">Train a Model for Detecting Cars<a class="anchor-link" href="#train-a-model-for-detecting-cars">¶</a></h1><p><a href="https://colab.research.google.com/github/opengeos/geoai/blob/main/docs/examples/train_car_detection.ipynb"><img alt="image" src="https://colab.research.google.com/assets/colab-badge.svg"/></a></p>
 <h2 id="install-package">Install package<a class="anchor-link" href="#install-package">¶</a></h2><p>To use the <code>geoai-py</code> package, ensure it is installed in your environment. Uncomment the command below if needed.</p>
 </div>
 </div>
@@ -1971,13 +1971,21 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">train_raster_url</span> <span class="o">=</span> <span class="s2">"https://huggingface.co/datasets/giswqs/geospatial/resolve/main/solar_panels_davis_ca.tif"</span>
-<span class="n">train_vector_url</span> <span class="o">=</span> <span class="s2">"https://huggingface.co/datasets/giswqs/geospatial/resolve/main/solar_panels_davis_ca.geojson"</span>
-<span class="n">test_raster_url</span> <span class="o">=</span> <span class="s2">"https://huggingface.co/datasets/giswqs/geospatial/resolve/main/solar_panels_test_davis_ca.tif"</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">train_raster_url</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"https://huggingface.co/datasets/giswqs/geospatial/resolve/main/cars_7cm.tif"</span>
+<span class="p">)</span>
+<span class="n">train_vector_url</span> <span class="o">=</span> <span class="s2">"https://huggingface.co/datasets/giswqs/geospatial/resolve/main/car_detection.geojson"</span>
+<span class="n">test_raster_url</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"https://huggingface.co/datasets/giswqs/geospatial/resolve/main/cars_test_7cm.tif"</span>
+<span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-3">train_raster_url = "https://huggingface.co/datasets/giswqs/geospatial/resolve/main/solar_panels_davis_ca.tif"
-train_vector_url = "https://huggingface.co/datasets/giswqs/geospatial/resolve/main/solar_panels_davis_ca.geojson"
-test_raster_url = "https://huggingface.co/datasets/giswqs/geospatial/resolve/main/solar_panels_test_davis_ca.tif"</div>
+<div class="clipboard-copy-txt" id="cell-3">train_raster_url = (
+    "https://huggingface.co/datasets/giswqs/geospatial/resolve/main/cars_7cm.tif"
+)
+train_vector_url = "https://huggingface.co/datasets/giswqs/geospatial/resolve/main/car_detection.geojson"
+test_raster_url = (
+    "https://huggingface.co/datasets/giswqs/geospatial/resolve/main/cars_test_7cm.tif"
+)</div>
 </div>
 </div>
 </div>
@@ -2221,10 +2229,10 @@ tiles = geoai.export_geotiff_tiles(
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">masks_path</span> <span class="o">=</span> <span class="s2">"solar_panels_prediction.tif"</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">masks_path</span> <span class="o">=</span> <span class="s2">"cars_prediction.tif"</span>
 <span class="n">model_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">out_folder</span><span class="si">}</span><span class="s2">/models/best_model.pth"</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-9">masks_path = "solar_panels_prediction.tif"
+<div class="clipboard-copy-txt" id="cell-9">masks_path = "cars_prediction.tif"
 model_path = f"{out_folder}/models/best_model.pth"</div>
 </div>
 </div>
@@ -2306,10 +2314,10 @@ model_path = f"{out_folder}/models/best_model.pth"</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">output_path</span> <span class="o">=</span> <span class="s2">"solar_panels_prediction.geojson"</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">output_path</span> <span class="o">=</span> <span class="s2">"cars_prediction.geojson"</span>
 <span class="n">gdf</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">orthogonalize</span><span class="p">(</span><span class="n">masks_path</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-11">output_path = "solar_panels_prediction.geojson"
+<div class="clipboard-copy-txt" id="cell-11">output_path = "cars_prediction.geojson"
 gdf = geoai.orthogonalize(masks_path, output_path, epsilon=2)</div>
 </div>
 </div>
@@ -2398,7 +2406,7 @@ gdf = geoai.orthogonalize(masks_path, output_path, epsilon=2)</div>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><img alt="image" src="https://github.com/user-attachments/assets/69d20aec-991f-4681-b31e-fabcd7e21b91"/></p>
+<p><img alt="image" src="https://github.com/user-attachments/assets/31f4eb34-b829-423d-a9a6-86fd79219770"/></p>
 </div>
 </div>
 </div>
@@ -2432,7 +2440,7 @@ gdf = geoai.orthogonalize(masks_path, output_path, epsilon=2)</div>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="March 19, 2025 20:34:30"><span class="timeago" datetime="2025-03-19T20:34:30+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="March 19, 2025 20:34:30">2025-03-19</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="March 19, 2025 23:30:46"><span class="timeago" datetime="2025-03-19T23:30:46+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="March 19, 2025 23:30:46">2025-03-19</span>
   </span>
 
     
