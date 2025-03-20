@@ -6625,6 +6625,7 @@ ObjectDetector        </code>
         <span class="n">confidence_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
         <span class="n">min_object_area</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
         <span class="n">max_object_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">n_workers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -6636,13 +6637,102 @@ ObjectDetector        </code>
 <span class="sd">            confidence_threshold: Minimum confidence score (0.0-1.0). Default: 0.5</span>
 <span class="sd">            min_object_area: Minimum area in pixels to keep an object. Default: 100</span>
 <span class="sd">            max_object_area: Maximum area in pixels to keep an object. Default: None</span>
+<span class="sd">            n_workers: int, default=None</span>
+<span class="sd">                The number of worker threads to use.</span>
+<span class="sd">                &quot;None&quot; means single-threaded processing.</span>
+<span class="sd">                &quot;-1&quot;   means using all available CPU processors.</span>
+<span class="sd">                Positive integer means using that specific number of threads.</span>
 <span class="sd">            **kwargs: Additional parameters</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            GeoDataFrame with car detections and confidence values</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="k">def</span><span class="w"> </span><span class="nf">_process_single_component</span><span class="p">(</span>
+            <span class="n">component_mask</span><span class="p">,</span>
+            <span class="n">conf_data</span><span class="p">,</span>
+            <span class="n">transform</span><span class="p">,</span>
+            <span class="n">confidence_threshold</span><span class="p">,</span>
+            <span class="n">min_object_area</span><span class="p">,</span>
+            <span class="n">max_object_area</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="c1"># Get confidence value</span>
+            <span class="n">conf_region</span> <span class="o">=</span> <span class="n">conf_data</span><span class="p">[</span><span class="n">component_mask</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">conf_region</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">confidence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">conf_region</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">confidence</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="c1"># Skip if confidence is below threshold</span>
+            <span class="k">if</span> <span class="n">confidence</span> <span class="o">&lt;</span> <span class="n">confidence_threshold</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+            <span class="c1"># Find contours</span>
+            <span class="n">contours</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">findContours</span><span class="p">(</span>
+                <span class="n">component_mask</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">RETR_EXTERNAL</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CHAIN_APPROX_SIMPLE</span>
+            <span class="p">)</span>
+
+            <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">contour</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">:</span>
+                <span class="c1"># Filter by size</span>
+                <span class="n">area</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">contourArea</span><span class="p">(</span><span class="n">contour</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">area</span> <span class="o">&lt;</span> <span class="n">min_object_area</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">max_object_area</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">max_object_area</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Get minimum area rectangle</span>
+                <span class="n">rect</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">minAreaRect</span><span class="p">(</span><span class="n">contour</span><span class="p">)</span>
+                <span class="n">box_points</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">boxPoints</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
+
+                <span class="c1"># Convert to geographic coordinates</span>
+                <span class="n">geo_points</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">box_points</span><span class="p">:</span>
+                    <span class="n">gx</span><span class="p">,</span> <span class="n">gy</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+                    <span class="n">geo_points</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">gx</span><span class="p">,</span> <span class="n">gy</span><span class="p">))</span>
+
+                <span class="c1"># Create polygon</span>
+                <span class="n">poly</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">geo_points</span><span class="p">)</span>
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">poly</span><span class="p">,</span> <span class="n">confidence</span><span class="p">,</span> <span class="n">area</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="n">results</span>
+
+        <span class="kn">import</span><span class="w"> </span><span class="nn">concurrent.futures</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">process_component</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Helper function to process a single component</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="p">(</span>
+                <span class="n">label</span><span class="p">,</span>
+                <span class="n">labeled_mask</span><span class="p">,</span>
+                <span class="n">conf_data</span><span class="p">,</span>
+                <span class="n">transform</span><span class="p">,</span>
+                <span class="n">confidence_threshold</span><span class="p">,</span>
+                <span class="n">min_object_area</span><span class="p">,</span>
+                <span class="n">max_object_area</span><span class="p">,</span>
+            <span class="p">)</span> <span class="o">=</span> <span class="n">args</span>
+
+            <span class="c1"># Create mask for this component</span>
+            <span class="n">component_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">labeled_mask</span> <span class="o">==</span> <span class="n">label</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">_process_single_component</span><span class="p">(</span>
+                <span class="n">component_mask</span><span class="p">,</span>
+                <span class="n">conf_data</span><span class="p">,</span>
+                <span class="n">transform</span><span class="p">,</span>
+                <span class="n">confidence_threshold</span><span class="p">,</span>
+                <span class="n">min_object_area</span><span class="p">,</span>
+                <span class="n">max_object_area</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing masks from: </span><span class="si">{</span><span class="n">masks_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">n_workers</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">n_workers</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
 
         <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">masks_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
             <span class="c1"># Read mask and confidence bands</span>
@@ -6663,56 +6753,68 @@ ObjectDetector        </code>
             <span class="n">confidences</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">pixels</span> <span class="o">=</span> <span class="p">[]</span>
 
-            <span class="c1"># Add progress bar</span>
-            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing components&quot;</span><span class="p">):</span>
-                <span class="c1"># Create mask for this component</span>
-                <span class="n">component_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">labeled_mask</span> <span class="o">==</span> <span class="n">label</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-
-                <span class="c1"># Get confidence value (mean of non-zero values in this region)</span>
-                <span class="n">conf_region</span> <span class="o">=</span> <span class="n">conf_data</span><span class="p">[</span><span class="n">component_mask</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">conf_region</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">confidence</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">conf_region</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
-                    <span class="p">)</span>  <span class="c1"># Convert back to 0-1 range</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">confidence</span> <span class="o">=</span> <span class="mf">0.0</span>
-
-                <span class="c1"># Skip if confidence is below threshold</span>
-                <span class="k">if</span> <span class="n">confidence</span> <span class="o">&lt;</span> <span class="n">confidence_threshold</span><span class="p">:</span>
-                    <span class="k">continue</span>
-
-                <span class="c1"># Find contours</span>
-                <span class="n">contours</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">findContours</span><span class="p">(</span>
-                    <span class="n">component_mask</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">RETR_EXTERNAL</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CHAIN_APPROX_SIMPLE</span>
+            <span class="k">if</span> <span class="n">n_workers</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">n_workers</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;Using single-threaded processing, you can speed up processing by setting n_workers &gt; 1&quot;</span>
                 <span class="p">)</span>
+                <span class="c1"># Add progress bar</span>
+                <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
+                    <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing components&quot;</span>
+                <span class="p">):</span>
+                    <span class="c1"># Create mask for this component</span>
+                    <span class="n">component_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">labeled_mask</span> <span class="o">==</span> <span class="n">label</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
 
-                <span class="k">for</span> <span class="n">contour</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">:</span>
-                    <span class="c1"># Filter by size</span>
-                    <span class="n">area</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">contourArea</span><span class="p">(</span><span class="n">contour</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">area</span> <span class="o">&lt;</span> <span class="n">min_object_area</span><span class="p">:</span>
-                        <span class="k">continue</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">_process_single_component</span><span class="p">(</span>
+                        <span class="n">component_mask</span><span class="p">,</span>
+                        <span class="n">conf_data</span><span class="p">,</span>
+                        <span class="n">transform</span><span class="p">,</span>
+                        <span class="n">confidence_threshold</span><span class="p">,</span>
+                        <span class="n">min_object_area</span><span class="p">,</span>
+                        <span class="n">max_object_area</span><span class="p">,</span>
+                    <span class="p">)</span>
 
-                    <span class="k">if</span> <span class="n">max_object_area</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">max_object_area</span><span class="p">:</span>
-                            <span class="k">continue</span>
+                    <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">poly</span><span class="p">,</span> <span class="n">confidence</span><span class="p">,</span> <span class="n">area</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+                            <span class="c1"># Add to lists</span>
+                            <span class="n">polygons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
+                            <span class="n">confidences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">confidence</span><span class="p">)</span>
+                            <span class="n">pixels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">area</span><span class="p">)</span>
 
-                    <span class="c1"># Get minimum area rectangle</span>
-                    <span class="n">rect</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">minAreaRect</span><span class="p">(</span><span class="n">contour</span><span class="p">)</span>
-                    <span class="n">box_points</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">boxPoints</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Process components in parallel</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using </span><span class="si">{</span><span class="n">n_workers</span><span class="si">}</span><span class="s2"> workers for parallel processing&quot;</span><span class="p">)</span>
 
-                    <span class="c1"># Convert to geographic coordinates</span>
-                    <span class="n">geo_points</span> <span class="o">=</span> <span class="p">[]</span>
-                    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">box_points</span><span class="p">:</span>
-                        <span class="n">gx</span><span class="p">,</span> <span class="n">gy</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-                        <span class="n">geo_points</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">gx</span><span class="p">,</span> <span class="n">gy</span><span class="p">))</span>
+                <span class="n">process_args</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="p">(</span>
+                        <span class="n">label</span><span class="p">,</span>
+                        <span class="n">labeled_mask</span><span class="p">,</span>
+                        <span class="n">conf_data</span><span class="p">,</span>
+                        <span class="n">transform</span><span class="p">,</span>
+                        <span class="n">confidence_threshold</span><span class="p">,</span>
+                        <span class="n">min_object_area</span><span class="p">,</span>
+                        <span class="n">max_object_area</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="p">]</span>
 
-                    <span class="c1"># Create polygon</span>
-                    <span class="n">poly</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">geo_points</span><span class="p">)</span>
+                <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span>
+                    <span class="n">max_workers</span><span class="o">=</span><span class="n">n_workers</span>
+                <span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+                    <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                        <span class="n">tqdm</span><span class="p">(</span>
+                            <span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">process_component</span><span class="p">,</span> <span class="n">process_args</span><span class="p">),</span>
+                            <span class="n">total</span><span class="o">=</span><span class="n">num_features</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing components&quot;</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
 
-                    <span class="c1"># Add to lists</span>
-                    <span class="n">polygons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
-                    <span class="n">confidences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">confidence</span><span class="p">)</span>
-                    <span class="n">pixels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">area</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="n">poly</span><span class="p">,</span> <span class="n">confidence</span><span class="p">,</span> <span class="n">area</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+                                <span class="c1"># Add to lists</span>
+                                <span class="n">polygons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
+                                <span class="n">confidences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">confidence</span><span class="p">)</span>
+                                <span class="n">pixels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">area</span><span class="p">)</span>
 
             <span class="c1"># Create GeoDataFrame</span>
             <span class="k">if</span> <span class="n">polygons</span><span class="p">:</span>
@@ -6731,8 +6833,12 @@ ObjectDetector        </code>
                     <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GeoJSON&quot;</span><span class="p">)</span>
                     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2"> objects with confidence to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
+                <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total processing time: </span><span class="si">{</span><span class="n">end_time</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_time</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">gdf</span>
             <span class="k">else</span><span class="p">:</span>
+                <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total processing time: </span><span class="si">{</span><span class="n">end_time</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_time</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No valid polygons found&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="kc">None</span>
 </code></pre></div>
@@ -9116,7 +9222,7 @@ mask_threshold: Threshold for mask binarization (0.0-1.0)</p></td>
 
 
 <h3 id="geoai.extract.ObjectDetector.vectorize_masks" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">vectorize_masks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">masks_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">confidence_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">min_object_area</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_object_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">vectorize_masks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">masks_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">confidence_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">min_object_area</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_object_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_workers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 
 <a href="#geoai.extract.ObjectDetector.vectorize_masks" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -9167,6 +9273,16 @@ mask_threshold: Threshold for mask binarization (0.0-1.0)</p></td>
         <td><code>None</code></td>
       </tr>
       <tr>
+        <td><code>n_workers</code></td>
+        <td></td>
+        <td><p>int, default=None
+The number of worker threads to use.
+"None" means single-threaded processing.
+"-1"   means using all available CPU processors.
+Positive integer means using that specific number of threads.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
         <td><code>**kwargs</code></td>
         <td></td>
         <td><p>Additional parameters</p></td>
@@ -9198,6 +9314,7 @@ mask_threshold: Threshold for mask binarization (0.0-1.0)</p></td>
     <span class="n">confidence_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
     <span class="n">min_object_area</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
     <span class="n">max_object_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">n_workers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -9209,13 +9326,102 @@ mask_threshold: Threshold for mask binarization (0.0-1.0)</p></td>
 <span class="sd">        confidence_threshold: Minimum confidence score (0.0-1.0). Default: 0.5</span>
 <span class="sd">        min_object_area: Minimum area in pixels to keep an object. Default: 100</span>
 <span class="sd">        max_object_area: Maximum area in pixels to keep an object. Default: None</span>
+<span class="sd">        n_workers: int, default=None</span>
+<span class="sd">            The number of worker threads to use.</span>
+<span class="sd">            &quot;None&quot; means single-threaded processing.</span>
+<span class="sd">            &quot;-1&quot;   means using all available CPU processors.</span>
+<span class="sd">            Positive integer means using that specific number of threads.</span>
 <span class="sd">        **kwargs: Additional parameters</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        GeoDataFrame with car detections and confidence values</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">_process_single_component</span><span class="p">(</span>
+        <span class="n">component_mask</span><span class="p">,</span>
+        <span class="n">conf_data</span><span class="p">,</span>
+        <span class="n">transform</span><span class="p">,</span>
+        <span class="n">confidence_threshold</span><span class="p">,</span>
+        <span class="n">min_object_area</span><span class="p">,</span>
+        <span class="n">max_object_area</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="c1"># Get confidence value</span>
+        <span class="n">conf_region</span> <span class="o">=</span> <span class="n">conf_data</span><span class="p">[</span><span class="n">component_mask</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">conf_region</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">confidence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">conf_region</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">confidence</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="c1"># Skip if confidence is below threshold</span>
+        <span class="k">if</span> <span class="n">confidence</span> <span class="o">&lt;</span> <span class="n">confidence_threshold</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="c1"># Find contours</span>
+        <span class="n">contours</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">findContours</span><span class="p">(</span>
+            <span class="n">component_mask</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">RETR_EXTERNAL</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CHAIN_APPROX_SIMPLE</span>
+        <span class="p">)</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">contour</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">:</span>
+            <span class="c1"># Filter by size</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">contourArea</span><span class="p">(</span><span class="n">contour</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">area</span> <span class="o">&lt;</span> <span class="n">min_object_area</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">max_object_area</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">max_object_area</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Get minimum area rectangle</span>
+            <span class="n">rect</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">minAreaRect</span><span class="p">(</span><span class="n">contour</span><span class="p">)</span>
+            <span class="n">box_points</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">boxPoints</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
+
+            <span class="c1"># Convert to geographic coordinates</span>
+            <span class="n">geo_points</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">box_points</span><span class="p">:</span>
+                <span class="n">gx</span><span class="p">,</span> <span class="n">gy</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+                <span class="n">geo_points</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">gx</span><span class="p">,</span> <span class="n">gy</span><span class="p">))</span>
+
+            <span class="c1"># Create polygon</span>
+            <span class="n">poly</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">geo_points</span><span class="p">)</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">poly</span><span class="p">,</span> <span class="n">confidence</span><span class="p">,</span> <span class="n">area</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">results</span>
+
+    <span class="kn">import</span><span class="w"> </span><span class="nn">concurrent.futures</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_component</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function to process a single component</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">(</span>
+            <span class="n">label</span><span class="p">,</span>
+            <span class="n">labeled_mask</span><span class="p">,</span>
+            <span class="n">conf_data</span><span class="p">,</span>
+            <span class="n">transform</span><span class="p">,</span>
+            <span class="n">confidence_threshold</span><span class="p">,</span>
+            <span class="n">min_object_area</span><span class="p">,</span>
+            <span class="n">max_object_area</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">args</span>
+
+        <span class="c1"># Create mask for this component</span>
+        <span class="n">component_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">labeled_mask</span> <span class="o">==</span> <span class="n">label</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">_process_single_component</span><span class="p">(</span>
+            <span class="n">component_mask</span><span class="p">,</span>
+            <span class="n">conf_data</span><span class="p">,</span>
+            <span class="n">transform</span><span class="p">,</span>
+            <span class="n">confidence_threshold</span><span class="p">,</span>
+            <span class="n">min_object_area</span><span class="p">,</span>
+            <span class="n">max_object_area</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing masks from: </span><span class="si">{</span><span class="n">masks_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">n_workers</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">n_workers</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
 
     <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">masks_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
         <span class="c1"># Read mask and confidence bands</span>
@@ -9236,56 +9442,68 @@ mask_threshold: Threshold for mask binarization (0.0-1.0)</p></td>
         <span class="n">confidences</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">pixels</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c1"># Add progress bar</span>
-        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing components&quot;</span><span class="p">):</span>
-            <span class="c1"># Create mask for this component</span>
-            <span class="n">component_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">labeled_mask</span> <span class="o">==</span> <span class="n">label</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-
-            <span class="c1"># Get confidence value (mean of non-zero values in this region)</span>
-            <span class="n">conf_region</span> <span class="o">=</span> <span class="n">conf_data</span><span class="p">[</span><span class="n">component_mask</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">conf_region</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">confidence</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">conf_region</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
-                <span class="p">)</span>  <span class="c1"># Convert back to 0-1 range</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">confidence</span> <span class="o">=</span> <span class="mf">0.0</span>
-
-            <span class="c1"># Skip if confidence is below threshold</span>
-            <span class="k">if</span> <span class="n">confidence</span> <span class="o">&lt;</span> <span class="n">confidence_threshold</span><span class="p">:</span>
-                <span class="k">continue</span>
-
-            <span class="c1"># Find contours</span>
-            <span class="n">contours</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">findContours</span><span class="p">(</span>
-                <span class="n">component_mask</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">RETR_EXTERNAL</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CHAIN_APPROX_SIMPLE</span>
+        <span class="k">if</span> <span class="n">n_workers</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">n_workers</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Using single-threaded processing, you can speed up processing by setting n_workers &gt; 1&quot;</span>
             <span class="p">)</span>
+            <span class="c1"># Add progress bar</span>
+            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
+                <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing components&quot;</span>
+            <span class="p">):</span>
+                <span class="c1"># Create mask for this component</span>
+                <span class="n">component_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">labeled_mask</span> <span class="o">==</span> <span class="n">label</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
 
-            <span class="k">for</span> <span class="n">contour</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">:</span>
-                <span class="c1"># Filter by size</span>
-                <span class="n">area</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">contourArea</span><span class="p">(</span><span class="n">contour</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">area</span> <span class="o">&lt;</span> <span class="n">min_object_area</span><span class="p">:</span>
-                    <span class="k">continue</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">_process_single_component</span><span class="p">(</span>
+                    <span class="n">component_mask</span><span class="p">,</span>
+                    <span class="n">conf_data</span><span class="p">,</span>
+                    <span class="n">transform</span><span class="p">,</span>
+                    <span class="n">confidence_threshold</span><span class="p">,</span>
+                    <span class="n">min_object_area</span><span class="p">,</span>
+                    <span class="n">max_object_area</span><span class="p">,</span>
+                <span class="p">)</span>
 
-                <span class="k">if</span> <span class="n">max_object_area</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">max_object_area</span><span class="p">:</span>
-                        <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">poly</span><span class="p">,</span> <span class="n">confidence</span><span class="p">,</span> <span class="n">area</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+                        <span class="c1"># Add to lists</span>
+                        <span class="n">polygons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
+                        <span class="n">confidences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">confidence</span><span class="p">)</span>
+                        <span class="n">pixels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">area</span><span class="p">)</span>
 
-                <span class="c1"># Get minimum area rectangle</span>
-                <span class="n">rect</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">minAreaRect</span><span class="p">(</span><span class="n">contour</span><span class="p">)</span>
-                <span class="n">box_points</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">boxPoints</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Process components in parallel</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using </span><span class="si">{</span><span class="n">n_workers</span><span class="si">}</span><span class="s2"> workers for parallel processing&quot;</span><span class="p">)</span>
 
-                <span class="c1"># Convert to geographic coordinates</span>
-                <span class="n">geo_points</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">box_points</span><span class="p">:</span>
-                    <span class="n">gx</span><span class="p">,</span> <span class="n">gy</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-                    <span class="n">geo_points</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">gx</span><span class="p">,</span> <span class="n">gy</span><span class="p">))</span>
+            <span class="n">process_args</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span>
+                    <span class="n">label</span><span class="p">,</span>
+                    <span class="n">labeled_mask</span><span class="p">,</span>
+                    <span class="n">conf_data</span><span class="p">,</span>
+                    <span class="n">transform</span><span class="p">,</span>
+                    <span class="n">confidence_threshold</span><span class="p">,</span>
+                    <span class="n">min_object_area</span><span class="p">,</span>
+                    <span class="n">max_object_area</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">]</span>
 
-                <span class="c1"># Create polygon</span>
-                <span class="n">poly</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">geo_points</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span>
+                <span class="n">max_workers</span><span class="o">=</span><span class="n">n_workers</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+                <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                    <span class="n">tqdm</span><span class="p">(</span>
+                        <span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">process_component</span><span class="p">,</span> <span class="n">process_args</span><span class="p">),</span>
+                        <span class="n">total</span><span class="o">=</span><span class="n">num_features</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing components&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
 
-                <span class="c1"># Add to lists</span>
-                <span class="n">polygons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
-                <span class="n">confidences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">confidence</span><span class="p">)</span>
-                <span class="n">pixels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">area</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">poly</span><span class="p">,</span> <span class="n">confidence</span><span class="p">,</span> <span class="n">area</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+                            <span class="c1"># Add to lists</span>
+                            <span class="n">polygons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
+                            <span class="n">confidences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">confidence</span><span class="p">)</span>
+                            <span class="n">pixels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">area</span><span class="p">)</span>
 
         <span class="c1"># Create GeoDataFrame</span>
         <span class="k">if</span> <span class="n">polygons</span><span class="p">:</span>
@@ -9304,8 +9522,12 @@ mask_threshold: Threshold for mask binarization (0.0-1.0)</p></td>
                 <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GeoJSON&quot;</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2"> objects with confidence to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
+            <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total processing time: </span><span class="si">{</span><span class="n">end_time</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_time</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">gdf</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total processing time: </span><span class="si">{</span><span class="n">end_time</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_time</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No valid polygons found&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 </code></pre></div>
