@@ -1143,6 +1143,66 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#geoai.extract.AgricultureFieldDelineator" class="md-nav__link">
+    <span class="md-ellipsis">
+      AgricultureFieldDelineator
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AgricultureFieldDelineator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#geoai.extract.AgricultureFieldDelineator.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geoai.extract.AgricultureFieldDelineator.initialize_sentinel2_model" class="md-nav__link">
+    <span class="md-ellipsis">
+      initialize_sentinel2_model()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geoai.extract.AgricultureFieldDelineator.preprocess_sentinel_bands" class="md-nav__link">
+    <span class="md-ellipsis">
+      preprocess_sentinel_bands()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geoai.extract.AgricultureFieldDelineator.process_sentinel_raster" class="md-nav__link">
+    <span class="md-ellipsis">
+      process_sentinel_raster()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geoai.extract.AgricultureFieldDelineator.update_band_stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      update_band_stats()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#geoai.extract.BuildingFootprintExtractor" class="md-nav__link">
     <span class="md-ellipsis">
       BuildingFootprintExtractor
@@ -1594,6 +1654,66 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#geoai.extract.AgricultureFieldDelineator" class="md-nav__link">
+    <span class="md-ellipsis">
+      AgricultureFieldDelineator
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AgricultureFieldDelineator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#geoai.extract.AgricultureFieldDelineator.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geoai.extract.AgricultureFieldDelineator.initialize_sentinel2_model" class="md-nav__link">
+    <span class="md-ellipsis">
+      initialize_sentinel2_model()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geoai.extract.AgricultureFieldDelineator.preprocess_sentinel_bands" class="md-nav__link">
+    <span class="md-ellipsis">
+      preprocess_sentinel_bands()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geoai.extract.AgricultureFieldDelineator.process_sentinel_raster" class="md-nav__link">
+    <span class="md-ellipsis">
+      process_sentinel_raster()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geoai.extract.AgricultureFieldDelineator.update_band_stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      update_band_stats()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#geoai.extract.BuildingFootprintExtractor" class="md-nav__link">
     <span class="md-ellipsis">
       BuildingFootprintExtractor
@@ -1944,6 +2064,1468 @@
 
 
 
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="geoai.extract.AgricultureFieldDelineator" class="doc doc-heading">
+        <code>
+AgricultureFieldDelineator            (<a class="autorefs autorefs-internal" title="geoai.extract.ObjectDetector" href="#geoai.extract.ObjectDetector">ObjectDetector</a>)
+        </code>
+
+
+
+<a href="#geoai.extract.AgricultureFieldDelineator" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Agricultural field boundary delineation using a pre-trained Mask R-CNN model.</p>
+<p>This class extends the ObjectDetector class to specifically handle Sentinel-2
+imagery with 12 spectral bands for agricultural field boundary detection.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>band_selection</code></td>
+        <td></td>
+        <td><p>List of band indices to use for prediction (default: RGB)</p></td>
+      </tr>
+      <tr>
+        <td><code>sentinel_band_stats</code></td>
+        <td></td>
+        <td><p>Per-band statistics for Sentinel-2 data</p></td>
+      </tr>
+      <tr>
+        <td><code>use_ndvi</code></td>
+        <td></td>
+        <td><p>Whether to calculate and include NDVI as an additional channel</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>geoai/extract.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">AgricultureFieldDelineator</span><span class="p">(</span><span class="n">ObjectDetector</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Agricultural field boundary delineation using a pre-trained Mask R-CNN model.</span>
+
+<span class="sd">    This class extends the ObjectDetector class to specifically handle Sentinel-2</span>
+<span class="sd">    imagery with 12 spectral bands for agricultural field boundary detection.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        band_selection: List of band indices to use for prediction (default: RGB)</span>
+<span class="sd">        sentinel_band_stats: Per-band statistics for Sentinel-2 data</span>
+<span class="sd">        use_ndvi: Whether to calculate and include NDVI as an additional channel</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">model_path</span><span class="o">=</span><span class="s2">&quot;field_boundary_detector.pth&quot;</span><span class="p">,</span>
+        <span class="n">repo_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">band_selection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">use_ndvi</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the field boundary delineator.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model_path: Path to the .pth model file.</span>
+<span class="sd">            repo_id: Repo ID for loading models from the Hub.</span>
+<span class="sd">            model: Custom model to use for inference.</span>
+<span class="sd">            device: Device to use for inference (&#39;cuda:0&#39;, &#39;cpu&#39;, etc.).</span>
+<span class="sd">            band_selection: List of Sentinel-2 band indices to use (None = adapt based on model)</span>
+<span class="sd">            use_ndvi: Whether to calculate and include NDVI as an additional channel</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Save parameters before calling parent constructor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom_band_selection</span> <span class="o">=</span> <span class="n">band_selection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_ndvi</span> <span class="o">=</span> <span class="n">use_ndvi</span>
+
+        <span class="c1"># Set device (copied from parent init to ensure it&#39;s set before initialize_model)</span>
+        <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda:0&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="c1"># Initialize model differently for multi-spectral input</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_sentinel2_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="c1"># Call parent but with our custom model</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">model_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">,</span> <span class="n">repo_id</span><span class="o">=</span><span class="n">repo_id</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Default Sentinel-2 band statistics (can be overridden with actual stats)</span>
+        <span class="c1"># Band order: [B1, B2, B3, B4, B5, B6, B7, B8, B8A, B9, B10, B11, B12]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sentinel_band_stats</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;means&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="mf">0.0975</span><span class="p">,</span>
+                <span class="mf">0.0476</span><span class="p">,</span>
+                <span class="mf">0.0598</span><span class="p">,</span>
+                <span class="mf">0.0697</span><span class="p">,</span>
+                <span class="mf">0.1077</span><span class="p">,</span>
+                <span class="mf">0.1859</span><span class="p">,</span>
+                <span class="mf">0.2378</span><span class="p">,</span>
+                <span class="mf">0.2061</span><span class="p">,</span>
+                <span class="mf">0.2598</span><span class="p">,</span>
+                <span class="mf">0.4120</span><span class="p">,</span>
+                <span class="mf">0.1956</span><span class="p">,</span>
+                <span class="mf">0.1410</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;stds&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="mf">0.0551</span><span class="p">,</span>
+                <span class="mf">0.0290</span><span class="p">,</span>
+                <span class="mf">0.0298</span><span class="p">,</span>
+                <span class="mf">0.0479</span><span class="p">,</span>
+                <span class="mf">0.0506</span><span class="p">,</span>
+                <span class="mf">0.0505</span><span class="p">,</span>
+                <span class="mf">0.0747</span><span class="p">,</span>
+                <span class="mf">0.0642</span><span class="p">,</span>
+                <span class="mf">0.0782</span><span class="p">,</span>
+                <span class="mf">0.1187</span><span class="p">,</span>
+                <span class="mf">0.0651</span><span class="p">,</span>
+                <span class="mf">0.0679</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Set default band selection (RGB - typically B4, B3, B2 for Sentinel-2)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">band_selection</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">custom_band_selection</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_band_selection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span>  <span class="c1"># R, G, B bands</span>
+
+        <span class="c1"># Customize parameters for field delineation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">confidence_threshold</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># Default confidence threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">overlap</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># Higher overlap for field boundary detection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_object_area</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># Minimum area in pixels for field detection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simplify_tolerance</span> <span class="o">=</span> <span class="mf">2.0</span>  <span class="c1"># Higher tolerance for field boundaries</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize_sentinel2_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize a Mask R-CNN model with a modified first layer to accept Sentinel-2 data.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model: Pre-initialized model (optional)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Modified model with appropriate input channels</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">torchvision</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">torchvision.models.detection</span><span class="w"> </span><span class="kn">import</span> <span class="n">maskrcnn_resnet50_fpn</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">torchvision.models.detection.backbone_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">resnet_fpn_backbone</span>
+
+        <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">model</span>
+
+        <span class="c1"># Determine number of input channels based on band selection and NDVI</span>
+        <span class="n">num_input_channels</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">custom_band_selection</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_band_selection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="mi">3</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_ndvi</span><span class="p">:</span>
+            <span class="n">num_input_channels</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Initializing Mask R-CNN model with </span><span class="si">{</span><span class="n">num_input_channels</span><span class="si">}</span><span class="s2"> input channels&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Create a ResNet50 backbone with modified input channels</span>
+        <span class="n">backbone</span> <span class="o">=</span> <span class="n">resnet_fpn_backbone</span><span class="p">(</span><span class="s2">&quot;resnet50&quot;</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># Replace the first conv layer to accept multi-spectral input</span>
+        <span class="n">original_conv</span> <span class="o">=</span> <span class="n">backbone</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">conv1</span>
+        <span class="n">backbone</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+            <span class="n">num_input_channels</span><span class="p">,</span>
+            <span class="n">original_conv</span><span class="o">.</span><span class="n">out_channels</span><span class="p">,</span>
+            <span class="n">kernel_size</span><span class="o">=</span><span class="n">original_conv</span><span class="o">.</span><span class="n">kernel_size</span><span class="p">,</span>
+            <span class="n">stride</span><span class="o">=</span><span class="n">original_conv</span><span class="o">.</span><span class="n">stride</span><span class="p">,</span>
+            <span class="n">padding</span><span class="o">=</span><span class="n">original_conv</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span>
+            <span class="n">bias</span><span class="o">=</span><span class="n">original_conv</span><span class="o">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Create Mask R-CNN with our modified backbone</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">maskrcnn_resnet50_fpn</span><span class="p">(</span>
+            <span class="n">backbone</span><span class="o">=</span><span class="n">backbone</span><span class="p">,</span>
+            <span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># Background + field</span>
+            <span class="n">image_mean</span><span class="o">=</span><span class="p">[</span><span class="mf">0.485</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_input_channels</span><span class="p">,</span>  <span class="c1"># Extend mean to all channels</span>
+            <span class="n">image_std</span><span class="o">=</span><span class="p">[</span><span class="mf">0.229</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_input_channels</span><span class="p">,</span>  <span class="c1"># Extend std to all channels</span>
+        <span class="p">)</span>
+
+        <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">model</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">preprocess_sentinel_bands</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_data</span><span class="p">,</span> <span class="n">band_selection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_ndvi</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Preprocess Sentinel-2 band data for model input.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image_data: Raw Sentinel-2 image data as numpy array [bands, height, width]</span>
+<span class="sd">            band_selection: List of band indices to use (overrides instance default if provided)</span>
+<span class="sd">            use_ndvi: Whether to include NDVI (overrides instance default if provided)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Processed tensor ready for model input</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Use instance defaults if not specified</span>
+        <span class="n">band_selection</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">band_selection</span> <span class="k">if</span> <span class="n">band_selection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">band_selection</span>
+        <span class="p">)</span>
+        <span class="n">use_ndvi</span> <span class="o">=</span> <span class="n">use_ndvi</span> <span class="k">if</span> <span class="n">use_ndvi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_ndvi</span>
+
+        <span class="c1"># Select bands</span>
+        <span class="n">selected_bands</span> <span class="o">=</span> <span class="n">image_data</span><span class="p">[</span><span class="n">band_selection</span><span class="p">]</span>
+
+        <span class="c1"># Calculate NDVI if requested (using B8 and B4 which are indices 7 and 3)</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">use_ndvi</span>
+            <span class="ow">and</span> <span class="mi">7</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">image_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="ow">and</span> <span class="mi">3</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">image_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="p">):</span>
+            <span class="n">nir</span> <span class="o">=</span> <span class="n">image_data</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>  <span class="c1"># B8 (NIR)</span>
+            <span class="n">red</span> <span class="o">=</span> <span class="n">image_data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>  <span class="c1"># B4 (Red)</span>
+
+            <span class="c1"># Avoid division by zero</span>
+            <span class="n">denominator</span> <span class="o">=</span> <span class="n">nir</span> <span class="o">+</span> <span class="n">red</span>
+            <span class="n">ndvi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">nir</span><span class="p">)</span>
+            <span class="n">valid_mask</span> <span class="o">=</span> <span class="n">denominator</span> <span class="o">&gt;</span> <span class="mi">0</span>
+            <span class="n">ndvi</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">nir</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">red</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">])</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">[</span>
+                <span class="n">valid_mask</span>
+            <span class="p">]</span>
+
+            <span class="c1"># Rescale NDVI from [-1, 1] to [0, 1]</span>
+            <span class="n">ndvi</span> <span class="o">=</span> <span class="p">(</span><span class="n">ndvi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+            <span class="c1"># Add NDVI as an additional channel</span>
+            <span class="n">selected_bands</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">selected_bands</span><span class="p">,</span> <span class="n">ndvi</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]])</span>
+
+        <span class="c1"># Convert to tensor</span>
+        <span class="n">image_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">selected_bands</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+
+        <span class="c1"># Normalize using band statistics</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">band_idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">band_selection</span><span class="p">):</span>
+            <span class="c1"># Make sure band_idx is within range of our statistics</span>
+            <span class="k">if</span> <span class="n">band_idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sentinel_band_stats</span><span class="p">[</span><span class="s2">&quot;means&quot;</span><span class="p">]):</span>
+                <span class="n">mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sentinel_band_stats</span><span class="p">[</span><span class="s2">&quot;means&quot;</span><span class="p">][</span><span class="n">band_idx</span><span class="p">]</span>
+                <span class="n">std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sentinel_band_stats</span><span class="p">[</span><span class="s2">&quot;stds&quot;</span><span class="p">][</span><span class="n">band_idx</span><span class="p">]</span>
+                <span class="n">image_tensor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">image_tensor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">mean</span><span class="p">)</span> <span class="o">/</span> <span class="n">std</span>
+
+        <span class="c1"># If NDVI was added, normalize it too (last channel)</span>
+        <span class="k">if</span> <span class="n">use_ndvi</span><span class="p">:</span>
+            <span class="c1"># NDVI is already roughly in [0,1] range, just standardize it slightly</span>
+            <span class="n">image_tensor</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">image_tensor</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.5</span>
+
+        <span class="k">return</span> <span class="n">image_tensor</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_band_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">band_selection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update band statistics from the input Sentinel-2 raster.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            raster_path: Path to the Sentinel-2 raster file</span>
+<span class="sd">            band_selection: Specific bands to update (None = update all available)</span>
+<span class="sd">            sample_size: Number of random pixels to sample for statistics calculation</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Updated band statistics dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">raster_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+            <span class="c1"># Check if this is likely a Sentinel-2 product</span>
+            <span class="n">band_count</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">count</span>
+            <span class="k">if</span> <span class="n">band_count</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Warning: Raster has only </span><span class="si">{</span><span class="n">band_count</span><span class="si">}</span><span class="s2"> bands, may not be Sentinel-2 data&quot;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Get dimensions</span>
+            <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">width</span>
+
+            <span class="c1"># Determine which bands to analyze</span>
+            <span class="k">if</span> <span class="n">band_selection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">band_selection</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">band_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># 1-indexed</span>
+
+            <span class="c1"># Initialize arrays for band statistics</span>
+            <span class="n">means</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">stds</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># Sample random pixels</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># For reproducibility</span>
+            <span class="n">sample_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">sample_size</span><span class="p">)</span>
+            <span class="n">sample_cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">sample_size</span><span class="p">)</span>
+
+            <span class="c1"># Calculate statistics for each band</span>
+            <span class="k">for</span> <span class="n">band</span> <span class="ow">in</span> <span class="n">band_selection</span><span class="p">:</span>
+                <span class="c1"># Read band data</span>
+                <span class="n">band_data</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">band</span><span class="p">)</span>
+
+                <span class="c1"># Sample values</span>
+                <span class="n">sample_values</span> <span class="o">=</span> <span class="n">band_data</span><span class="p">[</span><span class="n">sample_rows</span><span class="p">,</span> <span class="n">sample_cols</span><span class="p">]</span>
+
+                <span class="c1"># Remove invalid values (e.g., nodata)</span>
+                <span class="n">valid_samples</span> <span class="o">=</span> <span class="n">sample_values</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">sample_values</span><span class="p">)]</span>
+
+                <span class="c1"># Calculate statistics</span>
+                <span class="n">mean</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">valid_samples</span><span class="p">))</span>
+                <span class="n">std</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">valid_samples</span><span class="p">))</span>
+
+                <span class="c1"># Store results</span>
+                <span class="n">means</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span>
+                <span class="n">stds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">std</span><span class="p">)</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Band </span><span class="si">{</span><span class="n">band</span><span class="si">}</span><span class="s2">: mean=</span><span class="si">{</span><span class="n">mean</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, std=</span><span class="si">{</span><span class="n">std</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Update instance variables</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sentinel_band_stats</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;means&quot;</span><span class="p">:</span> <span class="n">means</span><span class="p">,</span> <span class="s2">&quot;stds&quot;</span><span class="p">:</span> <span class="n">stds</span><span class="p">}</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sentinel_band_stats</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_sentinel_raster</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">raster_path</span><span class="p">,</span>
+        <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">band_selection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">use_ndvi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">filter_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">edge_buffer</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Process a Sentinel-2 raster to extract field boundaries.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            raster_path: Path to Sentinel-2 raster file</span>
+<span class="sd">            output_path: Path to output GeoJSON or Parquet file (optional)</span>
+<span class="sd">            batch_size: Batch size for processing</span>
+<span class="sd">            band_selection: List of bands to use (None = use instance default)</span>
+<span class="sd">            use_ndvi: Whether to include NDVI (None = use instance default)</span>
+<span class="sd">            filter_edges: Whether to filter out objects at the edges of the image</span>
+<span class="sd">            edge_buffer: Size of edge buffer in pixels to filter out objects</span>
+<span class="sd">            **kwargs: Additional parameters for processing</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            GeoDataFrame with field boundaries</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Use instance defaults if not specified</span>
+        <span class="n">band_selection</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">band_selection</span> <span class="k">if</span> <span class="n">band_selection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">band_selection</span>
+        <span class="p">)</span>
+        <span class="n">use_ndvi</span> <span class="o">=</span> <span class="n">use_ndvi</span> <span class="k">if</span> <span class="n">use_ndvi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_ndvi</span>
+
+        <span class="c1"># Get parameters from kwargs or use instance defaults</span>
+        <span class="n">confidence_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;confidence_threshold&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">confidence_threshold</span>
+        <span class="p">)</span>
+        <span class="n">overlap</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;overlap&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">overlap</span><span class="p">)</span>
+        <span class="n">chip_size</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;chip_size&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">)</span>
+        <span class="n">nms_iou_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;nms_iou_threshold&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nms_iou_threshold</span><span class="p">)</span>
+        <span class="n">mask_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mask_threshold&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_threshold</span><span class="p">)</span>
+        <span class="n">min_object_area</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min_object_area&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_object_area</span><span class="p">)</span>
+        <span class="n">simplify_tolerance</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;simplify_tolerance&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">simplify_tolerance</span><span class="p">)</span>
+
+        <span class="c1"># Update band statistics if not already done</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;update_stats&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_band_stats</span><span class="p">(</span><span class="n">raster_path</span><span class="p">,</span> <span class="n">band_selection</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing with parameters:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Using bands: </span><span class="si">{</span><span class="n">band_selection</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Include NDVI: </span><span class="si">{</span><span class="n">use_ndvi</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Confidence threshold: </span><span class="si">{</span><span class="n">confidence_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Tile overlap: </span><span class="si">{</span><span class="n">overlap</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Chip size: </span><span class="si">{</span><span class="n">chip_size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Filter edge objects: </span><span class="si">{</span><span class="n">filter_edges</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Create a custom Sentinel-2 dataset class</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">Sentinel2Dataset</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span>
+                <span class="n">raster_path</span><span class="p">,</span>
+                <span class="n">chip_size</span><span class="p">,</span>
+                <span class="n">stride_x</span><span class="p">,</span>
+                <span class="n">stride_y</span><span class="p">,</span>
+                <span class="n">band_selection</span><span class="p">,</span>
+                <span class="n">use_ndvi</span><span class="p">,</span>
+                <span class="n">field_delineator</span><span class="p">,</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span> <span class="o">=</span> <span class="n">raster_path</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span> <span class="o">=</span> <span class="n">chip_size</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stride_x</span> <span class="o">=</span> <span class="n">stride_x</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stride_y</span> <span class="o">=</span> <span class="n">stride_y</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">band_selection</span> <span class="o">=</span> <span class="n">band_selection</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">use_ndvi</span> <span class="o">=</span> <span class="n">use_ndvi</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">field_delineator</span> <span class="o">=</span> <span class="n">field_delineator</span>
+
+                <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">height</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">width</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">count</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">crs</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">transform</span>
+
+                    <span class="c1"># Calculate row_starts and col_starts</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">row_starts</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">col_starts</span> <span class="o">=</span> <span class="p">[]</span>
+
+                    <span class="c1"># Normal row starts using stride</span>
+                    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">stride_y</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">row_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">stride_y</span><span class="p">)</span>
+
+                    <span class="c1"># Add a special last row that ensures we reach the bottom edge</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">row_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># If the image is smaller than chip size, just start at 0</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">row_starts</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">row_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+                    <span class="c1"># Normal column starts using stride</span>
+                    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">stride_x</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">col_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">stride_x</span><span class="p">)</span>
+
+                    <span class="c1"># Add a special last column that ensures we reach the right edge</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">col_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># If the image is smaller than chip size, just start at 0</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">col_starts</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">col_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+                <span class="c1"># Calculate number of tiles</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">row_starts</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">col_starts</span><span class="p">)</span>
+
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Dataset initialized with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rows</span><span class="si">}</span><span class="s2"> rows and </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cols</span><span class="si">}</span><span class="s2"> columns of chips&quot;</span>
+                <span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image dimensions: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="si">}</span><span class="s2"> x </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="si">}</span><span class="s2"> pixels&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Chip size: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> x </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> pixels&quot;</span><span class="p">)</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rows</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cols</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+                <span class="c1"># Convert flat index to grid position</span>
+                <span class="n">row</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">cols</span>
+                <span class="n">col</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">cols</span>
+
+                <span class="c1"># Get pre-calculated starting positions</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">row_starts</span><span class="p">[</span><span class="n">row</span><span class="p">]</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">col_starts</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
+
+                <span class="c1"># Read window from raster</span>
+                <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+                    <span class="c1"># Make sure we don&#39;t read outside the image</span>
+                    <span class="n">width</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span>
+                    <span class="n">height</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">j</span><span class="p">)</span>
+
+                    <span class="n">window</span> <span class="o">=</span> <span class="n">Window</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+                    <span class="c1"># Read all bands</span>
+                    <span class="n">image</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span>
+
+                    <span class="c1"># Handle partial windows at edges by padding</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="ow">or</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="p">):</span>
+                        <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                            <span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                            <span class="n">dtype</span><span class="o">=</span><span class="n">image</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="n">temp</span><span class="p">[:,</span> <span class="p">:</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">:</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span> <span class="o">=</span> <span class="n">image</span>
+                        <span class="n">image</span> <span class="o">=</span> <span class="n">temp</span>
+
+                <span class="c1"># Preprocess bands for the model</span>
+                <span class="n">image_tensor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_delineator</span><span class="o">.</span><span class="n">preprocess_sentinel_bands</span><span class="p">(</span>
+                    <span class="n">image</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">band_selection</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_ndvi</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Get geographic bounds for the window</span>
+                <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+                    <span class="n">window_transform</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">window_transform</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>
+                    <span class="n">minx</span><span class="p">,</span> <span class="n">miny</span> <span class="o">=</span> <span class="n">window_transform</span> <span class="o">*</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+                    <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span> <span class="o">=</span> <span class="n">window_transform</span> <span class="o">*</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="n">bbox</span> <span class="o">=</span> <span class="p">[</span><span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span><span class="p">]</span>
+
+                <span class="k">return</span> <span class="p">{</span>
+                    <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">image_tensor</span><span class="p">,</span>
+                    <span class="s2">&quot;bbox&quot;</span><span class="p">:</span> <span class="n">bbox</span><span class="p">,</span>
+                    <span class="s2">&quot;coords&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">),</span>
+                    <span class="s2">&quot;window_size&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">),</span>
+                <span class="p">}</span>
+
+        <span class="c1"># Calculate stride based on overlap</span>
+        <span class="n">stride_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">overlap</span><span class="p">))</span>
+        <span class="n">stride_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">overlap</span><span class="p">))</span>
+
+        <span class="c1"># Create dataset</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">Sentinel2Dataset</span><span class="p">(</span>
+            <span class="n">raster_path</span><span class="o">=</span><span class="n">raster_path</span><span class="p">,</span>
+            <span class="n">chip_size</span><span class="o">=</span><span class="n">chip_size</span><span class="p">,</span>
+            <span class="n">stride_x</span><span class="o">=</span><span class="n">stride_x</span><span class="p">,</span>
+            <span class="n">stride_y</span><span class="o">=</span><span class="n">stride_y</span><span class="p">,</span>
+            <span class="n">band_selection</span><span class="o">=</span><span class="n">band_selection</span><span class="p">,</span>
+            <span class="n">use_ndvi</span><span class="o">=</span><span class="n">use_ndvi</span><span class="p">,</span>
+            <span class="n">field_delineator</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Define custom collate function</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">custom_collate</span><span class="p">(</span><span class="n">batch</span><span class="p">):</span>
+            <span class="n">elem</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">elem</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;bbox&quot;</span><span class="p">:</span>
+                        <span class="c1"># Don&#39;t collate bbox objects, keep as list</span>
+                        <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># For tensors and other collatable types</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">_utils</span><span class="o">.</span><span class="n">collate</span><span class="o">.</span><span class="n">default_collate</span><span class="p">(</span>
+                                    <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]</span>
+                                <span class="p">)</span>
+                            <span class="p">)</span>
+                        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                            <span class="c1"># Fall back to list for non-collatable types</span>
+                            <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]</span>
+                <span class="k">return</span> <span class="n">result</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Default collate for non-dict types</span>
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">_utils</span><span class="o">.</span><span class="n">collate</span><span class="o">.</span><span class="n">default_collate</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+        <span class="c1"># Create dataloader</span>
+        <span class="n">dataloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+            <span class="n">dataset</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">collate_fn</span><span class="o">=</span><span class="n">custom_collate</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Process batches (call the parent class&#39;s process_raster method)</span>
+        <span class="c1"># We&#39;ll adapt the process_raster method to work with our Sentinel2Dataset</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">process_raster</span><span class="p">(</span>
+            <span class="n">raster_path</span><span class="o">=</span><span class="n">raster_path</span><span class="p">,</span>
+            <span class="n">output_path</span><span class="o">=</span><span class="n">output_path</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">filter_edges</span><span class="o">=</span><span class="n">filter_edges</span><span class="p">,</span>
+            <span class="n">edge_buffer</span><span class="o">=</span><span class="n">edge_buffer</span><span class="p">,</span>
+            <span class="n">confidence_threshold</span><span class="o">=</span><span class="n">confidence_threshold</span><span class="p">,</span>
+            <span class="n">overlap</span><span class="o">=</span><span class="n">overlap</span><span class="p">,</span>
+            <span class="n">chip_size</span><span class="o">=</span><span class="n">chip_size</span><span class="p">,</span>
+            <span class="n">nms_iou_threshold</span><span class="o">=</span><span class="n">nms_iou_threshold</span><span class="p">,</span>
+            <span class="n">mask_threshold</span><span class="o">=</span><span class="n">mask_threshold</span><span class="p">,</span>
+            <span class="n">min_object_area</span><span class="o">=</span><span class="n">min_object_area</span><span class="p">,</span>
+            <span class="n">simplify_tolerance</span><span class="o">=</span><span class="n">simplify_tolerance</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">results</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="geoai.extract.AgricultureFieldDelineator.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_path</span><span class="o">=</span><span class="s1">&#39;field_boundary_detector.pth&#39;</span><span class="p">,</span> <span class="n">repo_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">band_selection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_ndvi</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-special"><code>special</code></small>
+  </span>
+
+<a href="#geoai.extract.AgricultureFieldDelineator.__init__" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Initialize the field boundary delineator.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>model_path</code></td>
+        <td></td>
+        <td><p>Path to the .pth model file.</p></td>
+        <td><code>&#39;field_boundary_detector.pth&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>repo_id</code></td>
+        <td></td>
+        <td><p>Repo ID for loading models from the Hub.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>model</code></td>
+        <td></td>
+        <td><p>Custom model to use for inference.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>device</code></td>
+        <td></td>
+        <td><p>Device to use for inference ('cuda:0', 'cpu', etc.).</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>band_selection</code></td>
+        <td></td>
+        <td><p>List of Sentinel-2 band indices to use (None = adapt based on model)</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>use_ndvi</code></td>
+        <td></td>
+        <td><p>Whether to calculate and include NDVI as an additional channel</p></td>
+        <td><code>False</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>geoai/extract.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">model_path</span><span class="o">=</span><span class="s2">&quot;field_boundary_detector.pth&quot;</span><span class="p">,</span>
+    <span class="n">repo_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">band_selection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">use_ndvi</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialize the field boundary delineator.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_path: Path to the .pth model file.</span>
+<span class="sd">        repo_id: Repo ID for loading models from the Hub.</span>
+<span class="sd">        model: Custom model to use for inference.</span>
+<span class="sd">        device: Device to use for inference (&#39;cuda:0&#39;, &#39;cpu&#39;, etc.).</span>
+<span class="sd">        band_selection: List of Sentinel-2 band indices to use (None = adapt based on model)</span>
+<span class="sd">        use_ndvi: Whether to calculate and include NDVI as an additional channel</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Save parameters before calling parent constructor</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">custom_band_selection</span> <span class="o">=</span> <span class="n">band_selection</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">use_ndvi</span> <span class="o">=</span> <span class="n">use_ndvi</span>
+
+    <span class="c1"># Set device (copied from parent init to ensure it&#39;s set before initialize_model)</span>
+    <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda:0&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="c1"># Initialize model differently for multi-spectral input</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_sentinel2_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+    <span class="c1"># Call parent but with our custom model</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="n">model_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">,</span> <span class="n">repo_id</span><span class="o">=</span><span class="n">repo_id</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Default Sentinel-2 band statistics (can be overridden with actual stats)</span>
+    <span class="c1"># Band order: [B1, B2, B3, B4, B5, B6, B7, B8, B8A, B9, B10, B11, B12]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sentinel_band_stats</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;means&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="mf">0.0975</span><span class="p">,</span>
+            <span class="mf">0.0476</span><span class="p">,</span>
+            <span class="mf">0.0598</span><span class="p">,</span>
+            <span class="mf">0.0697</span><span class="p">,</span>
+            <span class="mf">0.1077</span><span class="p">,</span>
+            <span class="mf">0.1859</span><span class="p">,</span>
+            <span class="mf">0.2378</span><span class="p">,</span>
+            <span class="mf">0.2061</span><span class="p">,</span>
+            <span class="mf">0.2598</span><span class="p">,</span>
+            <span class="mf">0.4120</span><span class="p">,</span>
+            <span class="mf">0.1956</span><span class="p">,</span>
+            <span class="mf">0.1410</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;stds&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="mf">0.0551</span><span class="p">,</span>
+            <span class="mf">0.0290</span><span class="p">,</span>
+            <span class="mf">0.0298</span><span class="p">,</span>
+            <span class="mf">0.0479</span><span class="p">,</span>
+            <span class="mf">0.0506</span><span class="p">,</span>
+            <span class="mf">0.0505</span><span class="p">,</span>
+            <span class="mf">0.0747</span><span class="p">,</span>
+            <span class="mf">0.0642</span><span class="p">,</span>
+            <span class="mf">0.0782</span><span class="p">,</span>
+            <span class="mf">0.1187</span><span class="p">,</span>
+            <span class="mf">0.0651</span><span class="p">,</span>
+            <span class="mf">0.0679</span><span class="p">,</span>
+        <span class="p">],</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Set default band selection (RGB - typically B4, B3, B2 for Sentinel-2)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">band_selection</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom_band_selection</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_band_selection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">else</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="p">)</span>  <span class="c1"># R, G, B bands</span>
+
+    <span class="c1"># Customize parameters for field delineation</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">confidence_threshold</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># Default confidence threshold</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">overlap</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># Higher overlap for field boundary detection</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">min_object_area</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># Minimum area in pixels for field detection</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">simplify_tolerance</span> <span class="o">=</span> <span class="mf">2.0</span>  <span class="c1"># Higher tolerance for field boundaries</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="geoai.extract.AgricultureFieldDelineator.initialize_sentinel2_model" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">initialize_sentinel2_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+<a href="#geoai.extract.AgricultureFieldDelineator.initialize_sentinel2_model" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Initialize a Mask R-CNN model with a modified first layer to accept Sentinel-2 data.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>model</code></td>
+        <td></td>
+        <td><p>Pre-initialized model (optional)</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td><p>Modified model with appropriate input channels</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>geoai/extract.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">initialize_sentinel2_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialize a Mask R-CNN model with a modified first layer to accept Sentinel-2 data.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model: Pre-initialized model (optional)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Modified model with appropriate input channels</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">torchvision</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">torchvision.models.detection</span><span class="w"> </span><span class="kn">import</span> <span class="n">maskrcnn_resnet50_fpn</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">torchvision.models.detection.backbone_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">resnet_fpn_backbone</span>
+
+    <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">model</span>
+
+    <span class="c1"># Determine number of input channels based on band selection and NDVI</span>
+    <span class="n">num_input_channels</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">custom_band_selection</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_band_selection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">else</span> <span class="mi">3</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_ndvi</span><span class="p">:</span>
+        <span class="n">num_input_channels</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Initializing Mask R-CNN model with </span><span class="si">{</span><span class="n">num_input_channels</span><span class="si">}</span><span class="s2"> input channels&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create a ResNet50 backbone with modified input channels</span>
+    <span class="n">backbone</span> <span class="o">=</span> <span class="n">resnet_fpn_backbone</span><span class="p">(</span><span class="s2">&quot;resnet50&quot;</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># Replace the first conv layer to accept multi-spectral input</span>
+    <span class="n">original_conv</span> <span class="o">=</span> <span class="n">backbone</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">conv1</span>
+    <span class="n">backbone</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+        <span class="n">num_input_channels</span><span class="p">,</span>
+        <span class="n">original_conv</span><span class="o">.</span><span class="n">out_channels</span><span class="p">,</span>
+        <span class="n">kernel_size</span><span class="o">=</span><span class="n">original_conv</span><span class="o">.</span><span class="n">kernel_size</span><span class="p">,</span>
+        <span class="n">stride</span><span class="o">=</span><span class="n">original_conv</span><span class="o">.</span><span class="n">stride</span><span class="p">,</span>
+        <span class="n">padding</span><span class="o">=</span><span class="n">original_conv</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span>
+        <span class="n">bias</span><span class="o">=</span><span class="n">original_conv</span><span class="o">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Create Mask R-CNN with our modified backbone</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">maskrcnn_resnet50_fpn</span><span class="p">(</span>
+        <span class="n">backbone</span><span class="o">=</span><span class="n">backbone</span><span class="p">,</span>
+        <span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># Background + field</span>
+        <span class="n">image_mean</span><span class="o">=</span><span class="p">[</span><span class="mf">0.485</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_input_channels</span><span class="p">,</span>  <span class="c1"># Extend mean to all channels</span>
+        <span class="n">image_std</span><span class="o">=</span><span class="p">[</span><span class="mf">0.229</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_input_channels</span><span class="p">,</span>  <span class="c1"># Extend std to all channels</span>
+    <span class="p">)</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="geoai.extract.AgricultureFieldDelineator.preprocess_sentinel_bands" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">preprocess_sentinel_bands</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_data</span><span class="p">,</span> <span class="n">band_selection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_ndvi</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+<a href="#geoai.extract.AgricultureFieldDelineator.preprocess_sentinel_bands" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Preprocess Sentinel-2 band data for model input.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>image_data</code></td>
+        <td></td>
+        <td><p>Raw Sentinel-2 image data as numpy array [bands, height, width]</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>band_selection</code></td>
+        <td></td>
+        <td><p>List of band indices to use (overrides instance default if provided)</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>use_ndvi</code></td>
+        <td></td>
+        <td><p>Whether to include NDVI (overrides instance default if provided)</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td><p>Processed tensor ready for model input</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>geoai/extract.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">preprocess_sentinel_bands</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_data</span><span class="p">,</span> <span class="n">band_selection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_ndvi</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Preprocess Sentinel-2 band data for model input.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        image_data: Raw Sentinel-2 image data as numpy array [bands, height, width]</span>
+<span class="sd">        band_selection: List of band indices to use (overrides instance default if provided)</span>
+<span class="sd">        use_ndvi: Whether to include NDVI (overrides instance default if provided)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Processed tensor ready for model input</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Use instance defaults if not specified</span>
+    <span class="n">band_selection</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">band_selection</span> <span class="k">if</span> <span class="n">band_selection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">band_selection</span>
+    <span class="p">)</span>
+    <span class="n">use_ndvi</span> <span class="o">=</span> <span class="n">use_ndvi</span> <span class="k">if</span> <span class="n">use_ndvi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_ndvi</span>
+
+    <span class="c1"># Select bands</span>
+    <span class="n">selected_bands</span> <span class="o">=</span> <span class="n">image_data</span><span class="p">[</span><span class="n">band_selection</span><span class="p">]</span>
+
+    <span class="c1"># Calculate NDVI if requested (using B8 and B4 which are indices 7 and 3)</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="n">use_ndvi</span>
+        <span class="ow">and</span> <span class="mi">7</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">image_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="ow">and</span> <span class="mi">3</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">image_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="p">):</span>
+        <span class="n">nir</span> <span class="o">=</span> <span class="n">image_data</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>  <span class="c1"># B8 (NIR)</span>
+        <span class="n">red</span> <span class="o">=</span> <span class="n">image_data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>  <span class="c1"># B4 (Red)</span>
+
+        <span class="c1"># Avoid division by zero</span>
+        <span class="n">denominator</span> <span class="o">=</span> <span class="n">nir</span> <span class="o">+</span> <span class="n">red</span>
+        <span class="n">ndvi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">nir</span><span class="p">)</span>
+        <span class="n">valid_mask</span> <span class="o">=</span> <span class="n">denominator</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="n">ndvi</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">nir</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">red</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">])</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">[</span>
+            <span class="n">valid_mask</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Rescale NDVI from [-1, 1] to [0, 1]</span>
+        <span class="n">ndvi</span> <span class="o">=</span> <span class="p">(</span><span class="n">ndvi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+        <span class="c1"># Add NDVI as an additional channel</span>
+        <span class="n">selected_bands</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">selected_bands</span><span class="p">,</span> <span class="n">ndvi</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]])</span>
+
+    <span class="c1"># Convert to tensor</span>
+    <span class="n">image_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">selected_bands</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+
+    <span class="c1"># Normalize using band statistics</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">band_idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">band_selection</span><span class="p">):</span>
+        <span class="c1"># Make sure band_idx is within range of our statistics</span>
+        <span class="k">if</span> <span class="n">band_idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sentinel_band_stats</span><span class="p">[</span><span class="s2">&quot;means&quot;</span><span class="p">]):</span>
+            <span class="n">mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sentinel_band_stats</span><span class="p">[</span><span class="s2">&quot;means&quot;</span><span class="p">][</span><span class="n">band_idx</span><span class="p">]</span>
+            <span class="n">std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sentinel_band_stats</span><span class="p">[</span><span class="s2">&quot;stds&quot;</span><span class="p">][</span><span class="n">band_idx</span><span class="p">]</span>
+            <span class="n">image_tensor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">image_tensor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">mean</span><span class="p">)</span> <span class="o">/</span> <span class="n">std</span>
+
+    <span class="c1"># If NDVI was added, normalize it too (last channel)</span>
+    <span class="k">if</span> <span class="n">use_ndvi</span><span class="p">:</span>
+        <span class="c1"># NDVI is already roughly in [0,1] range, just standardize it slightly</span>
+        <span class="n">image_tensor</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">image_tensor</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.5</span>
+
+    <span class="k">return</span> <span class="n">image_tensor</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="geoai.extract.AgricultureFieldDelineator.process_sentinel_raster" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">process_sentinel_raster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">band_selection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_ndvi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">edge_buffer</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
+<a href="#geoai.extract.AgricultureFieldDelineator.process_sentinel_raster" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Process a Sentinel-2 raster to extract field boundaries.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>raster_path</code></td>
+        <td></td>
+        <td><p>Path to Sentinel-2 raster file</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>output_path</code></td>
+        <td></td>
+        <td><p>Path to output GeoJSON or Parquet file (optional)</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>batch_size</code></td>
+        <td></td>
+        <td><p>Batch size for processing</p></td>
+        <td><code>4</code></td>
+      </tr>
+      <tr>
+        <td><code>band_selection</code></td>
+        <td></td>
+        <td><p>List of bands to use (None = use instance default)</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>use_ndvi</code></td>
+        <td></td>
+        <td><p>Whether to include NDVI (None = use instance default)</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>filter_edges</code></td>
+        <td></td>
+        <td><p>Whether to filter out objects at the edges of the image</p></td>
+        <td><code>True</code></td>
+      </tr>
+      <tr>
+        <td><code>edge_buffer</code></td>
+        <td></td>
+        <td><p>Size of edge buffer in pixels to filter out objects</p></td>
+        <td><code>20</code></td>
+      </tr>
+      <tr>
+        <td><code>**kwargs</code></td>
+        <td></td>
+        <td><p>Additional parameters for processing</p></td>
+        <td><code>{}</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td><p>GeoDataFrame with field boundaries</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>geoai/extract.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">process_sentinel_raster</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">raster_path</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">band_selection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">use_ndvi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">filter_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">edge_buffer</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Process a Sentinel-2 raster to extract field boundaries.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        raster_path: Path to Sentinel-2 raster file</span>
+<span class="sd">        output_path: Path to output GeoJSON or Parquet file (optional)</span>
+<span class="sd">        batch_size: Batch size for processing</span>
+<span class="sd">        band_selection: List of bands to use (None = use instance default)</span>
+<span class="sd">        use_ndvi: Whether to include NDVI (None = use instance default)</span>
+<span class="sd">        filter_edges: Whether to filter out objects at the edges of the image</span>
+<span class="sd">        edge_buffer: Size of edge buffer in pixels to filter out objects</span>
+<span class="sd">        **kwargs: Additional parameters for processing</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        GeoDataFrame with field boundaries</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Use instance defaults if not specified</span>
+    <span class="n">band_selection</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">band_selection</span> <span class="k">if</span> <span class="n">band_selection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">band_selection</span>
+    <span class="p">)</span>
+    <span class="n">use_ndvi</span> <span class="o">=</span> <span class="n">use_ndvi</span> <span class="k">if</span> <span class="n">use_ndvi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_ndvi</span>
+
+    <span class="c1"># Get parameters from kwargs or use instance defaults</span>
+    <span class="n">confidence_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;confidence_threshold&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">confidence_threshold</span>
+    <span class="p">)</span>
+    <span class="n">overlap</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;overlap&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">overlap</span><span class="p">)</span>
+    <span class="n">chip_size</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;chip_size&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">)</span>
+    <span class="n">nms_iou_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;nms_iou_threshold&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nms_iou_threshold</span><span class="p">)</span>
+    <span class="n">mask_threshold</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mask_threshold&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_threshold</span><span class="p">)</span>
+    <span class="n">min_object_area</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min_object_area&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_object_area</span><span class="p">)</span>
+    <span class="n">simplify_tolerance</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;simplify_tolerance&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">simplify_tolerance</span><span class="p">)</span>
+
+    <span class="c1"># Update band statistics if not already done</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;update_stats&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_band_stats</span><span class="p">(</span><span class="n">raster_path</span><span class="p">,</span> <span class="n">band_selection</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing with parameters:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Using bands: </span><span class="si">{</span><span class="n">band_selection</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Include NDVI: </span><span class="si">{</span><span class="n">use_ndvi</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Confidence threshold: </span><span class="si">{</span><span class="n">confidence_threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Tile overlap: </span><span class="si">{</span><span class="n">overlap</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Chip size: </span><span class="si">{</span><span class="n">chip_size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- Filter edge objects: </span><span class="si">{</span><span class="n">filter_edges</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create a custom Sentinel-2 dataset class</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">Sentinel2Dataset</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">raster_path</span><span class="p">,</span>
+            <span class="n">chip_size</span><span class="p">,</span>
+            <span class="n">stride_x</span><span class="p">,</span>
+            <span class="n">stride_y</span><span class="p">,</span>
+            <span class="n">band_selection</span><span class="p">,</span>
+            <span class="n">use_ndvi</span><span class="p">,</span>
+            <span class="n">field_delineator</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span> <span class="o">=</span> <span class="n">raster_path</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span> <span class="o">=</span> <span class="n">chip_size</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stride_x</span> <span class="o">=</span> <span class="n">stride_x</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stride_y</span> <span class="o">=</span> <span class="n">stride_y</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">band_selection</span> <span class="o">=</span> <span class="n">band_selection</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">use_ndvi</span> <span class="o">=</span> <span class="n">use_ndvi</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">field_delineator</span> <span class="o">=</span> <span class="n">field_delineator</span>
+
+            <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">height</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">width</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">count</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">crs</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">transform</span>
+
+                <span class="c1"># Calculate row_starts and col_starts</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">row_starts</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">col_starts</span> <span class="o">=</span> <span class="p">[]</span>
+
+                <span class="c1"># Normal row starts using stride</span>
+                <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">stride_y</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">row_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">stride_y</span><span class="p">)</span>
+
+                <span class="c1"># Add a special last row that ensures we reach the bottom edge</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">row_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># If the image is smaller than chip size, just start at 0</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">row_starts</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">row_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+                <span class="c1"># Normal column starts using stride</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">stride_x</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">col_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">stride_x</span><span class="p">)</span>
+
+                <span class="c1"># Add a special last column that ensures we reach the right edge</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">col_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># If the image is smaller than chip size, just start at 0</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">col_starts</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">col_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="c1"># Calculate number of tiles</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">row_starts</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">col_starts</span><span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Dataset initialized with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rows</span><span class="si">}</span><span class="s2"> rows and </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cols</span><span class="si">}</span><span class="s2"> columns of chips&quot;</span>
+            <span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image dimensions: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="si">}</span><span class="s2"> x </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="si">}</span><span class="s2"> pixels&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Chip size: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> x </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> pixels&quot;</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rows</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cols</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+            <span class="c1"># Convert flat index to grid position</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">cols</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">cols</span>
+
+            <span class="c1"># Get pre-calculated starting positions</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">row_starts</span><span class="p">[</span><span class="n">row</span><span class="p">]</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">col_starts</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
+
+            <span class="c1"># Read window from raster</span>
+            <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+                <span class="c1"># Make sure we don&#39;t read outside the image</span>
+                <span class="n">width</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span>
+                <span class="n">height</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">j</span><span class="p">)</span>
+
+                <span class="n">window</span> <span class="o">=</span> <span class="n">Window</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+                <span class="c1"># Read all bands</span>
+                <span class="n">image</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span>
+
+                <span class="c1"># Handle partial windows at edges by padding</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="ow">or</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="p">):</span>
+                    <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                        <span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                        <span class="n">dtype</span><span class="o">=</span><span class="n">image</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">temp</span><span class="p">[:,</span> <span class="p">:</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">:</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span> <span class="o">=</span> <span class="n">image</span>
+                    <span class="n">image</span> <span class="o">=</span> <span class="n">temp</span>
+
+            <span class="c1"># Preprocess bands for the model</span>
+            <span class="n">image_tensor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_delineator</span><span class="o">.</span><span class="n">preprocess_sentinel_bands</span><span class="p">(</span>
+                <span class="n">image</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">band_selection</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_ndvi</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Get geographic bounds for the window</span>
+            <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raster_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+                <span class="n">window_transform</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">window_transform</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>
+                <span class="n">minx</span><span class="p">,</span> <span class="n">miny</span> <span class="o">=</span> <span class="n">window_transform</span> <span class="o">*</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+                <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span> <span class="o">=</span> <span class="n">window_transform</span> <span class="o">*</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">bbox</span> <span class="o">=</span> <span class="p">[</span><span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span><span class="p">]</span>
+
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">image_tensor</span><span class="p">,</span>
+                <span class="s2">&quot;bbox&quot;</span><span class="p">:</span> <span class="n">bbox</span><span class="p">,</span>
+                <span class="s2">&quot;coords&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">),</span>
+                <span class="s2">&quot;window_size&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">),</span>
+            <span class="p">}</span>
+
+    <span class="c1"># Calculate stride based on overlap</span>
+    <span class="n">stride_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">overlap</span><span class="p">))</span>
+    <span class="n">stride_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">chip_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">overlap</span><span class="p">))</span>
+
+    <span class="c1"># Create dataset</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">Sentinel2Dataset</span><span class="p">(</span>
+        <span class="n">raster_path</span><span class="o">=</span><span class="n">raster_path</span><span class="p">,</span>
+        <span class="n">chip_size</span><span class="o">=</span><span class="n">chip_size</span><span class="p">,</span>
+        <span class="n">stride_x</span><span class="o">=</span><span class="n">stride_x</span><span class="p">,</span>
+        <span class="n">stride_y</span><span class="o">=</span><span class="n">stride_y</span><span class="p">,</span>
+        <span class="n">band_selection</span><span class="o">=</span><span class="n">band_selection</span><span class="p">,</span>
+        <span class="n">use_ndvi</span><span class="o">=</span><span class="n">use_ndvi</span><span class="p">,</span>
+        <span class="n">field_delineator</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Define custom collate function</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_collate</span><span class="p">(</span><span class="n">batch</span><span class="p">):</span>
+        <span class="n">elem</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">elem</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;bbox&quot;</span><span class="p">:</span>
+                    <span class="c1"># Don&#39;t collate bbox objects, keep as list</span>
+                    <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># For tensors and other collatable types</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">_utils</span><span class="o">.</span><span class="n">collate</span><span class="o">.</span><span class="n">default_collate</span><span class="p">(</span>
+                                <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]</span>
+                            <span class="p">)</span>
+                        <span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                        <span class="c1"># Fall back to list for non-collatable types</span>
+                        <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Default collate for non-dict types</span>
+            <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">_utils</span><span class="o">.</span><span class="n">collate</span><span class="o">.</span><span class="n">default_collate</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+    <span class="c1"># Create dataloader</span>
+    <span class="n">dataloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+        <span class="n">dataset</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">collate_fn</span><span class="o">=</span><span class="n">custom_collate</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Process batches (call the parent class&#39;s process_raster method)</span>
+    <span class="c1"># We&#39;ll adapt the process_raster method to work with our Sentinel2Dataset</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">process_raster</span><span class="p">(</span>
+        <span class="n">raster_path</span><span class="o">=</span><span class="n">raster_path</span><span class="p">,</span>
+        <span class="n">output_path</span><span class="o">=</span><span class="n">output_path</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="n">filter_edges</span><span class="o">=</span><span class="n">filter_edges</span><span class="p">,</span>
+        <span class="n">edge_buffer</span><span class="o">=</span><span class="n">edge_buffer</span><span class="p">,</span>
+        <span class="n">confidence_threshold</span><span class="o">=</span><span class="n">confidence_threshold</span><span class="p">,</span>
+        <span class="n">overlap</span><span class="o">=</span><span class="n">overlap</span><span class="p">,</span>
+        <span class="n">chip_size</span><span class="o">=</span><span class="n">chip_size</span><span class="p">,</span>
+        <span class="n">nms_iou_threshold</span><span class="o">=</span><span class="n">nms_iou_threshold</span><span class="p">,</span>
+        <span class="n">mask_threshold</span><span class="o">=</span><span class="n">mask_threshold</span><span class="p">,</span>
+        <span class="n">min_object_area</span><span class="o">=</span><span class="n">min_object_area</span><span class="p">,</span>
+        <span class="n">simplify_tolerance</span><span class="o">=</span><span class="n">simplify_tolerance</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">results</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="geoai.extract.AgricultureFieldDelineator.update_band_stats" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">update_band_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">band_selection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span></code>
+
+
+<a href="#geoai.extract.AgricultureFieldDelineator.update_band_stats" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Update band statistics from the input Sentinel-2 raster.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>raster_path</code></td>
+        <td></td>
+        <td><p>Path to the Sentinel-2 raster file</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>band_selection</code></td>
+        <td></td>
+        <td><p>Specific bands to update (None = update all available)</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>sample_size</code></td>
+        <td></td>
+        <td><p>Number of random pixels to sample for statistics calculation</p></td>
+        <td><code>1000</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td><p>Updated band statistics dictionary</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>geoai/extract.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_band_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster_path</span><span class="p">,</span> <span class="n">band_selection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update band statistics from the input Sentinel-2 raster.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        raster_path: Path to the Sentinel-2 raster file</span>
+<span class="sd">        band_selection: Specific bands to update (None = update all available)</span>
+<span class="sd">        sample_size: Number of random pixels to sample for statistics calculation</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Updated band statistics dictionary</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">raster_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+        <span class="c1"># Check if this is likely a Sentinel-2 product</span>
+        <span class="n">band_count</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">count</span>
+        <span class="k">if</span> <span class="n">band_count</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Warning: Raster has only </span><span class="si">{</span><span class="n">band_count</span><span class="si">}</span><span class="s2"> bands, may not be Sentinel-2 data&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Get dimensions</span>
+        <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">width</span>
+
+        <span class="c1"># Determine which bands to analyze</span>
+        <span class="k">if</span> <span class="n">band_selection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">band_selection</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">band_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># 1-indexed</span>
+
+        <span class="c1"># Initialize arrays for band statistics</span>
+        <span class="n">means</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">stds</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Sample random pixels</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># For reproducibility</span>
+        <span class="n">sample_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">sample_size</span><span class="p">)</span>
+        <span class="n">sample_cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">sample_size</span><span class="p">)</span>
+
+        <span class="c1"># Calculate statistics for each band</span>
+        <span class="k">for</span> <span class="n">band</span> <span class="ow">in</span> <span class="n">band_selection</span><span class="p">:</span>
+            <span class="c1"># Read band data</span>
+            <span class="n">band_data</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">band</span><span class="p">)</span>
+
+            <span class="c1"># Sample values</span>
+            <span class="n">sample_values</span> <span class="o">=</span> <span class="n">band_data</span><span class="p">[</span><span class="n">sample_rows</span><span class="p">,</span> <span class="n">sample_cols</span><span class="p">]</span>
+
+            <span class="c1"># Remove invalid values (e.g., nodata)</span>
+            <span class="n">valid_samples</span> <span class="o">=</span> <span class="n">sample_values</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">sample_values</span><span class="p">)]</span>
+
+            <span class="c1"># Calculate statistics</span>
+            <span class="n">mean</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">valid_samples</span><span class="p">))</span>
+            <span class="n">std</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">valid_samples</span><span class="p">))</span>
+
+            <span class="c1"># Store results</span>
+            <span class="n">means</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span>
+            <span class="n">stds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">std</span><span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Band </span><span class="si">{</span><span class="n">band</span><span class="si">}</span><span class="s2">: mean=</span><span class="si">{</span><span class="n">mean</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, std=</span><span class="si">{</span><span class="n">std</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Update instance variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sentinel_band_stats</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;means&quot;</span><span class="p">:</span> <span class="n">means</span><span class="p">,</span> <span class="s2">&quot;stds&quot;</span><span class="p">:</span> <span class="n">stds</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sentinel_band_stats</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
 
 
 
