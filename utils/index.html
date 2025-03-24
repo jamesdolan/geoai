@@ -1467,6 +1467,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#geoai.utils.mosaic_geotiffs" class="md-nav__link">
+    <span class="md-ellipsis">
+      mosaic_geotiffs()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#geoai.utils.orthogonalize" class="md-nav__link">
     <span class="md-ellipsis">
       orthogonalize()
@@ -1899,6 +1908,15 @@
   <a href="#geoai.utils.masks_to_vector" class="md-nav__link">
     <span class="md-ellipsis">
       masks_to_vector()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geoai.utils.mosaic_geotiffs" class="md-nav__link">
+    <span class="md-ellipsis">
+      mosaic_geotiffs()
     </span>
   </a>
   
@@ -7696,6 +7714,249 @@ Defaults to 1.0, which keeps the original pixel</p></td>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2"> building footprints to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">gdf</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="geoai.utils.mosaic_geotiffs" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">mosaic_geotiffs</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">mask_file</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+<a href="#geoai.utils.mosaic_geotiffs" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Create a mosaic from all GeoTIFF files as a Cloud Optimized GeoTIFF (COG).</p>
+<p>This function identifies all GeoTIFF files in the specified directory,
+creates a seamless mosaic with proper handling of nodata values, and saves
+as a Cloud Optimized GeoTIFF format. If a mask file is provided, the output
+will be clipped to the extent of the mask.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>input_dir</code></td>
+        <td><code>str</code></td>
+        <td><p>Path to the directory containing GeoTIFF files.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>output_file</code></td>
+        <td><code>str</code></td>
+        <td><p>Path to the output Cloud Optimized GeoTIFF file.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>mask_file</code></td>
+        <td><code>str</code></td>
+        <td><p>Path to a mask file to clip the output.
+If provided, the output will be clipped to the extent of this mask.
+Defaults to None.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>bool</code></td>
+      <td><p>True if the mosaic was created successfully, False otherwise.</p></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">mosaic_geotiffs</span><span class="p">(</span><span class="s1">&#39;naip&#39;</span><span class="p">,</span> <span class="s1">&#39;merged_naip.tif&#39;</span><span class="p">)</span>
+<span class="kc">True</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mosaic_geotiffs</span><span class="p">(</span><span class="s1">&#39;naip&#39;</span><span class="p">,</span> <span class="s1">&#39;merged_naip.tif&#39;</span><span class="p">,</span> <span class="s1">&#39;boundary.tif&#39;</span><span class="p">)</span>
+<span class="kc">True</span>
+</code></pre></div>
+
+        <details class="quote">
+          <summary>Source code in <code>geoai/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">mosaic_geotiffs</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">mask_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a mosaic from all GeoTIFF files as a Cloud Optimized GeoTIFF (COG).</span>
+
+<span class="sd">    This function identifies all GeoTIFF files in the specified directory,</span>
+<span class="sd">    creates a seamless mosaic with proper handling of nodata values, and saves</span>
+<span class="sd">    as a Cloud Optimized GeoTIFF format. If a mask file is provided, the output</span>
+<span class="sd">    will be clipped to the extent of the mask.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        input_dir (str): Path to the directory containing GeoTIFF files.</span>
+<span class="sd">        output_file (str): Path to the output Cloud Optimized GeoTIFF file.</span>
+<span class="sd">        mask_file (str, optional): Path to a mask file to clip the output.</span>
+<span class="sd">            If provided, the output will be clipped to the extent of this mask.</span>
+<span class="sd">            Defaults to None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: True if the mosaic was created successfully, False otherwise.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; mosaic_geotiffs(&#39;naip&#39;, &#39;merged_naip.tif&#39;)</span>
+<span class="sd">        True</span>
+<span class="sd">        &gt;&gt;&gt; mosaic_geotiffs(&#39;naip&#39;, &#39;merged_naip.tif&#39;, &#39;boundary.tif&#39;)</span>
+<span class="sd">        True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">osgeo</span><span class="w"> </span><span class="kn">import</span> <span class="n">gdal</span>
+
+    <span class="n">gdal</span><span class="o">.</span><span class="n">UseExceptions</span><span class="p">()</span>
+    <span class="c1"># Get all tif files in the directory</span>
+    <span class="n">tif_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="s2">&quot;*.tif&quot;</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">tif_files</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No GeoTIFF files found in the specified directory.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="c1"># Analyze the first input file to determine compression and nodata settings</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">tif_files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">ds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unable to open </span><span class="si">{</span><span class="n">tif_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="c1"># Get driver metadata from the first file</span>
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">GetDriver</span><span class="p">()</span>
+    <span class="n">creation_options</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Check compression type</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">GetMetadata</span><span class="p">(</span><span class="s2">&quot;IMAGE_STRUCTURE&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;COMPRESSION&quot;</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+        <span class="n">compression</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;COMPRESSION&quot;</span><span class="p">]</span>
+        <span class="n">creation_options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;COMPRESS=</span><span class="si">{</span><span class="n">compression</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Default compression if none detected</span>
+        <span class="n">creation_options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;COMPRESS=LZW&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Add COG-specific creation options</span>
+    <span class="n">creation_options</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;TILED=YES&quot;</span><span class="p">,</span> <span class="s2">&quot;BLOCKXSIZE=512&quot;</span><span class="p">,</span> <span class="s2">&quot;BLOCKYSIZE=512&quot;</span><span class="p">])</span>
+
+    <span class="c1"># Check for nodata value in the first band of the first file</span>
+    <span class="n">band</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">has_nodata</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="n">nodata_value</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">()</span> <span class="k">if</span> <span class="n">has_nodata</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="c1"># Close the dataset</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Create a temporary VRT (Virtual Dataset)</span>
+    <span class="n">vrt_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="s2">&quot;temp_mosaic.vrt&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Build VRT from input files with proper nodata handling</span>
+    <span class="n">vrt_options</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">BuildVRTOptions</span><span class="p">(</span>
+        <span class="n">resampleAlg</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span>
+        <span class="n">srcNodata</span><span class="o">=</span><span class="n">nodata_value</span> <span class="k">if</span> <span class="n">has_nodata</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">VRTNodata</span><span class="o">=</span><span class="n">nodata_value</span> <span class="k">if</span> <span class="n">has_nodata</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">vrt_dataset</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">BuildVRT</span><span class="p">(</span><span class="n">vrt_path</span><span class="p">,</span> <span class="n">tif_files</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">vrt_options</span><span class="p">)</span>
+
+    <span class="c1"># Close the VRT dataset to flush it to disk</span>
+    <span class="n">vrt_dataset</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Create temp mosaic</span>
+    <span class="n">temp_mosaic</span> <span class="o">=</span> <span class="n">output_file</span> <span class="o">+</span> <span class="s2">&quot;.temp.tif&quot;</span>
+
+    <span class="c1"># Convert VRT to GeoTIFF with the same compression as input</span>
+    <span class="n">translate_options</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">TranslateOptions</span><span class="p">(</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;GTiff&quot;</span><span class="p">,</span>
+        <span class="n">creationOptions</span><span class="o">=</span><span class="n">creation_options</span><span class="p">,</span>
+        <span class="n">noData</span><span class="o">=</span><span class="n">nodata_value</span> <span class="k">if</span> <span class="n">has_nodata</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">gdal</span><span class="o">.</span><span class="n">Translate</span><span class="p">(</span><span class="n">temp_mosaic</span><span class="p">,</span> <span class="n">vrt_path</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">translate_options</span><span class="p">)</span>
+
+    <span class="c1"># Apply mask if provided</span>
+    <span class="k">if</span> <span class="n">mask_file</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">mask_file</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Clipping mosaic to mask: </span><span class="si">{</span><span class="n">mask_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Create a temporary clipped file</span>
+        <span class="n">clipped_mosaic</span> <span class="o">=</span> <span class="n">output_file</span> <span class="o">+</span> <span class="s2">&quot;.clipped.tif&quot;</span>
+
+        <span class="c1"># Open mask file</span>
+        <span class="n">mask_ds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">mask_file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mask_ds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unable to open mask file: </span><span class="si">{</span><span class="n">mask_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># Continue without clipping</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Get mask extent</span>
+            <span class="n">mask_geotransform</span> <span class="o">=</span> <span class="n">mask_ds</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
+            <span class="n">mask_projection</span> <span class="o">=</span> <span class="n">mask_ds</span><span class="o">.</span><span class="n">GetProjection</span><span class="p">()</span>
+            <span class="n">mask_ulx</span> <span class="o">=</span> <span class="n">mask_geotransform</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">mask_uly</span> <span class="o">=</span> <span class="n">mask_geotransform</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+            <span class="n">mask_lrx</span> <span class="o">=</span> <span class="n">mask_ulx</span> <span class="o">+</span> <span class="p">(</span><span class="n">mask_geotransform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">mask_ds</span><span class="o">.</span><span class="n">RasterXSize</span><span class="p">)</span>
+            <span class="n">mask_lry</span> <span class="o">=</span> <span class="n">mask_uly</span> <span class="o">+</span> <span class="p">(</span><span class="n">mask_geotransform</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">mask_ds</span><span class="o">.</span><span class="n">RasterYSize</span><span class="p">)</span>
+
+            <span class="c1"># Close mask dataset</span>
+            <span class="n">mask_ds</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="c1"># Use warp options to clip</span>
+            <span class="n">warp_options</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">WarpOptions</span><span class="p">(</span>
+                <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;GTiff&quot;</span><span class="p">,</span>
+                <span class="n">outputBounds</span><span class="o">=</span><span class="p">[</span><span class="n">mask_ulx</span><span class="p">,</span> <span class="n">mask_lry</span><span class="p">,</span> <span class="n">mask_lrx</span><span class="p">,</span> <span class="n">mask_uly</span><span class="p">],</span>
+                <span class="n">dstSRS</span><span class="o">=</span><span class="n">mask_projection</span><span class="p">,</span>
+                <span class="n">creationOptions</span><span class="o">=</span><span class="n">creation_options</span><span class="p">,</span>
+                <span class="n">srcNodata</span><span class="o">=</span><span class="n">nodata_value</span> <span class="k">if</span> <span class="n">has_nodata</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">dstNodata</span><span class="o">=</span><span class="n">nodata_value</span> <span class="k">if</span> <span class="n">has_nodata</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Apply clipping</span>
+            <span class="n">gdal</span><span class="o">.</span><span class="n">Warp</span><span class="p">(</span><span class="n">clipped_mosaic</span><span class="p">,</span> <span class="n">temp_mosaic</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">warp_options</span><span class="p">)</span>
+
+            <span class="c1"># Remove the unclipped temp mosaic and use the clipped one</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">temp_mosaic</span><span class="p">)</span>
+            <span class="n">temp_mosaic</span> <span class="o">=</span> <span class="n">clipped_mosaic</span>
+
+    <span class="c1"># Create internal overviews for the temp mosaic</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">temp_mosaic</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GA_Update</span><span class="p">)</span>
+    <span class="n">overview_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">]</span>
+    <span class="n">ds</span><span class="o">.</span><span class="n">BuildOverviews</span><span class="p">(</span><span class="s2">&quot;NEAREST&quot;</span><span class="p">,</span> <span class="n">overview_list</span><span class="p">)</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Close the dataset to ensure overviews are written</span>
+
+    <span class="c1"># Convert the temp mosaic to a proper COG</span>
+    <span class="n">cog_options</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">TranslateOptions</span><span class="p">(</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;GTiff&quot;</span><span class="p">,</span>
+        <span class="n">creationOptions</span><span class="o">=</span><span class="p">[</span>
+            <span class="s2">&quot;TILED=YES&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;COPY_SRC_OVERVIEWS=YES&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;COMPRESS=DEFLATE&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;PREDICTOR=2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;BLOCKXSIZE=512&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;BLOCKYSIZE=512&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="n">noData</span><span class="o">=</span><span class="n">nodata_value</span> <span class="k">if</span> <span class="n">has_nodata</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">gdal</span><span class="o">.</span><span class="n">Translate</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">temp_mosaic</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">cog_options</span><span class="p">)</span>
+
+    <span class="c1"># Clean up temporary files</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">vrt_path</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">vrt_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">temp_mosaic</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">temp_mosaic</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cloud Optimized GeoTIFF mosaic created successfully: </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">True</span>
 </code></pre></div>
         </details>
     </div>
