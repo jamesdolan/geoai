@@ -1381,6 +1381,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#geoai.utils.download_model_from_hf" class="md-nav__link">
+    <span class="md-ellipsis">
+      download_model_from_hf()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#geoai.utils.export_geotiff_tiles" class="md-nav__link">
     <span class="md-ellipsis">
       export_geotiff_tiles()
@@ -1822,6 +1831,15 @@
   <a href="#geoai.utils.download_file" class="md-nav__link">
     <span class="md-ellipsis">
       download_file()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geoai.utils.download_model_from_hf" class="md-nav__link">
+    <span class="md-ellipsis">
+      download_model_from_hf()
     </span>
   </a>
   
@@ -4711,6 +4729,102 @@ If not provided, the filename from the URL will be used.</p></td>
                 <span class="n">progress_bar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">output_path</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="geoai.utils.download_model_from_hf" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">download_model_from_hf</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">repo_id</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+<a href="#geoai.utils.download_model_from_hf" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Download the object detection model from Hugging Face.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>model_path</code></td>
+        <td></td>
+        <td><p>Path to the model file.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>repo_id</code></td>
+        <td></td>
+        <td><p>Hugging Face repository ID.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td><p>Path to the downloaded model file</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>geoai/utils.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">download_model_from_hf</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">repo_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download the object detection model from Hugging Face.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_path: Path to the model file.</span>
+<span class="sd">        repo_id: Hugging Face repository ID.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Path to the downloaded model file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">huggingface_hub</span><span class="w"> </span><span class="kn">import</span> <span class="n">hf_hub_download</span>
+
+    <span class="k">try</span><span class="p">:</span>
+
+        <span class="c1"># Define the repository ID and model filename</span>
+        <span class="k">if</span> <span class="n">repo_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Repo is is not specified, using default Hugging Face repo_id: giswqs/geoai&quot;</span>
+            <span class="p">)</span>
+            <span class="n">repo_id</span> <span class="o">=</span> <span class="s2">&quot;giswqs/geoai&quot;</span>
+
+        <span class="c1"># Download the model</span>
+        <span class="n">model_path</span> <span class="o">=</span> <span class="n">hf_hub_download</span><span class="p">(</span><span class="n">repo_id</span><span class="o">=</span><span class="n">repo_id</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">model_path</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Model downloaded to: </span><span class="si">{</span><span class="n">model_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">model_path</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error downloading model from Hugging Face: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Please specify a local model path or ensure internet connectivity.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span>
 </code></pre></div>
         </details>
     </div>
