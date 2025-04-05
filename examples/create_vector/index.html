@@ -12,13 +12,13 @@
         <meta name="author" content="opengeos">
       
       
-        <link rel="canonical" href="https://geoai.gishub.org/examples/download_sentinel2/">
+        <link rel="canonical" href="https://geoai.gishub.org/examples/create_vector/">
       
       
-        <link rel="prev" href="../download_data/">
+        <link rel="prev" href="../view_metadata/">
       
       
-        <link rel="next" href="../planetary_computer/">
+        <link rel="next" href="../image_chips/">
       
       
       <link rel="icon" href="../../assets/logo.ico">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Download sentinel2 - geoai</title>
+        <title>Create vector - geoai</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#download-sentinel-2-data-from-planetary-computer" class="md-skip">
+        <a href="#create-vector-labels-for-training-deep-learning-models" class="md-skip">
           Skip to content
         </a>
       
@@ -117,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Download sentinel2
+              Create vector
             
           </span>
         </div>
@@ -481,32 +481,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Download sentinel2
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../download_sentinel2/" class="md-nav__link">
         
   
   
@@ -517,71 +495,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#install-package" class="md-nav__link">
-    <span class="md-ellipsis">
-      Install package
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#import-libraries" class="md-nav__link">
-    <span class="md-ellipsis">
-      Import libraries
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#search-data" class="md-nav__link">
-    <span class="md-ellipsis">
-      Search data
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#download-sample-data" class="md-nav__link">
-    <span class="md-ellipsis">
-      Download sample data
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#visualize-data" class="md-nav__link">
-    <span class="md-ellipsis">
-      Visualize data
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -637,10 +550,32 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../create_vector/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Create vector
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -651,6 +586,71 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#install-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install package
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#import-libraries" class="md-nav__link">
+    <span class="md-ellipsis">
+      Import libraries
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-sample-datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Add sample datasets
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#set-default-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      Set default properties
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#display-the-interactive-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      Display the interactive widget
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1443,27 +1443,27 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#search-data" class="md-nav__link">
+  <a href="#add-sample-datasets" class="md-nav__link">
     <span class="md-ellipsis">
-      Search data
+      Add sample datasets
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#download-sample-data" class="md-nav__link">
+  <a href="#set-default-properties" class="md-nav__link">
     <span class="md-ellipsis">
-      Download sample data
+      Set default properties
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#visualize-data" class="md-nav__link">
+  <a href="#display-the-interactive-widget" class="md-nav__link">
     <span class="md-ellipsis">
-      Visualize data
+      Display the interactive widget
     </span>
   </a>
   
@@ -1482,7 +1482,7 @@
               <article class="md-content__inner md-typeset">
                 
 
-    <a href="/examples/download_sentinel2/download_sentinel2.ipynb" title="Download Notebook" class="md-content__button md-icon">
+    <a href="/examples/create_vector/create_vector.ipynb" title="Download Notebook" class="md-content__button md-icon">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7z"/></svg>
     </a>
 
@@ -1937,8 +1937,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="download-sentinel-2-data-from-planetary-computer">Download Sentinel-2 Data from Planetary Computer<a class="anchor-link" href="#download-sentinel-2-data-from-planetary-computer">¶</a></h1><p><a href="https://colab.research.google.com/github/opengeos/geoai/blob/main/docs/examples/download_sentinel2.ipynb"><img alt="image" src="https://colab.research.google.com/assets/colab-badge.svg"/></a></p>
-<p>The notebook demonstrates how to download Sentinel-2 data from the <a href="https://planetarycomputer.microsoft.com/explore">Planetary Computer</a> using the <code>geoai</code> package.</p>
+<h1 id="create-vector-labels-for-training-deep-learning-models">Create vector labels for training deep learning models<a class="anchor-link" href="#create-vector-labels-for-training-deep-learning-models">¶</a></h1><p><a href="https://colab.research.google.com/github/opengeos/geoai/blob/main/docs/examples/create_vector.ipynb"><img alt="image" src="https://colab.research.google.com/assets/colab-badge.svg"/></a></p>
 <h2 id="install-package">Install package<a class="anchor-link" href="#install-package">¶</a></h2><p>To use the <code>geoai-py</code> package, ensure it is installed in your environment. Uncomment the command below if needed.</p>
 </div>
 </div>
@@ -2015,7 +2014,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="search-data">Search data<a class="anchor-link" href="#search-data">¶</a></h2><p>Go to the <a href="https://planetarycomputer.microsoft.com/explore">Planetary Computer</a> and search for the data you are interested in. Copy the STAC item link and paste it to the code below.</p>
+<h2 id="add-sample-datasets">Add sample datasets<a class="anchor-link" href="#add-sample-datasets">¶</a></h2>
 </div>
 </div>
 </div>
@@ -2038,11 +2037,25 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Example for Sentinel-2 item</span>
-<span class="n">item_url</span> <span class="o">=</span> <span class="s2">"https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-2-l2a/items/S2B_MSIL2A_20250228T173149_R055_T14SLH_20250228T212633"</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">MapLibre</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">"liberty"</span><span class="p">)</span>
+<span class="n">raster_url</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"https://huggingface.co/datasets/giswqs/geospatial/resolve/main/naip_train.tif"</span>
+<span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">add_cog_layer</span><span class="p">(</span><span class="n">raster_url</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"NAIP"</span><span class="p">)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">add_layer_control</span><span class="p">()</span>
+<span class="n">m</span><span class="o">.</span><span class="n">add_draw_control</span><span class="p">(</span>
+    <span class="n">controls</span><span class="o">=</span><span class="p">[</span><span class="s2">"point"</span><span class="p">,</span> <span class="s2">"polygon"</span><span class="p">,</span> <span class="s2">"line_string"</span><span class="p">,</span> <span class="s2">"trash"</span><span class="p">],</span> <span class="n">position</span><span class="o">=</span><span class="s2">"top-right"</span>
+<span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-3"># Example for Sentinel-2 item
-item_url = "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-2-l2a/items/S2B_MSIL2A_20250228T173149_R055_T14SLH_20250228T212633"</div>
+<div class="clipboard-copy-txt" id="cell-3">m = geoai.MapLibre(style="liberty")
+raster_url = (
+    "https://huggingface.co/datasets/giswqs/geospatial/resolve/main/naip_train.tif"
+)
+m.add_cog_layer(raster_url, name="NAIP")
+m.add_layer_control()
+m.add_draw_control(
+    controls=["point", "polygon", "line_string", "trash"], position="top-right"
+)</div>
 </div>
 </div>
 </div>
@@ -2055,7 +2068,7 @@ item_url = "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sent
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="download-sample-data">Download sample data<a class="anchor-link" href="#download-sample-data">¶</a></h2>
+<h2 id="set-default-properties">Set default properties<a class="anchor-link" href="#set-default-properties">¶</a></h2>
 </div>
 </div>
 </div>
@@ -2078,45 +2091,32 @@ item_url = "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sent
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Specify which bands to download (Sentinel-2 bands)</span>
-<span class="n">bands_to_download</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">"B01"</span><span class="p">,</span>
-    <span class="s2">"B02"</span><span class="p">,</span>
-    <span class="s2">"B03"</span><span class="p">,</span>
-    <span class="s2">"B04"</span><span class="p">,</span>
-    <span class="s2">"B05"</span><span class="p">,</span>
-    <span class="s2">"B06"</span><span class="p">,</span>
-    <span class="s2">"B07"</span><span class="p">,</span>
-    <span class="s2">"B08"</span><span class="p">,</span>
-    <span class="s2">"B8A"</span><span class="p">,</span>
-    <span class="s2">"B09"</span><span class="p">,</span>
-    <span class="s2">"B11"</span><span class="p">,</span>
-    <span class="s2">"B12"</span><span class="p">,</span>
-    <span class="s2">"AOT"</span><span class="p">,</span>
-    <span class="s2">"WVP"</span><span class="p">,</span>
-    <span class="s2">"SCL"</span><span class="p">,</span>
-<span class="p">]</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"Type"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"Residential"</span><span class="p">,</span> <span class="s2">"Commercial"</span><span class="p">,</span> <span class="s2">"Industrial"</span><span class="p">],</span>
+    <span class="s2">"Area"</span><span class="p">:</span> <span class="mi">3000</span><span class="p">,</span>
+    <span class="s2">"Name"</span><span class="p">:</span> <span class="s2">"Building"</span><span class="p">,</span>
+    <span class="s2">"City"</span><span class="p">:</span> <span class="s2">"Seattle"</span><span class="p">,</span>
+<span class="p">}</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-4"># Specify which bands to download (Sentinel-2 bands)
-bands_to_download = [
-    "B01",
-    "B02",
-    "B03",
-    "B04",
-    "B05",
-    "B06",
-    "B07",
-    "B08",
-    "B8A",
-    "B09",
-    "B11",
-    "B12",
-    "AOT",
-    "WVP",
-    "SCL",
-]</div>
+<div class="clipboard-copy-txt" id="cell-4">properties = {
+    "Type": ["Residential", "Commercial", "Industrial"],
+    "Area": 3000,
+    "Name": "Building",
+    "City": "Seattle",
+}</div>
 </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="display-the-interactive-widget">Display the interactive widget<a class="anchor-link" href="#display-the-interactive-widget">¶</a></h2>
 </div>
 </div>
 </div>
@@ -2139,91 +2139,11 @@ bands_to_download = [
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Create a directory for the downloaded bands</span>
-<span class="n">output_directory</span> <span class="o">=</span> <span class="s2">"sentinel2_bands"</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">widget</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">create_vector_data</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">file_ext</span><span class="o">=</span><span class="s2">"gpkg"</span><span class="p">)</span>
+<span class="n">widget</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-5"># Create a directory for the downloaded bands
-output_directory = "sentinel2_bands"</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-6">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Download the bands, save them to the output directory, and create a merged GeoTIFF.</span>
-<span class="c1"># The download process may take a while. Please be patient.</span>
-<span class="n">downloaded_bands</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">download_pc_stac_item</span><span class="p">(</span>
-    <span class="n">item_url</span><span class="o">=</span><span class="n">item_url</span><span class="p">,</span>
-    <span class="n">bands</span><span class="o">=</span><span class="n">bands_to_download</span><span class="p">,</span>
-    <span class="n">output_dir</span><span class="o">=</span><span class="n">output_directory</span><span class="p">,</span>
-    <span class="n">show_progress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">merge_bands</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">merged_filename</span><span class="o">=</span><span class="s2">"sentinel2_all_bands.tif"</span><span class="p">,</span>
-    <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># Skip files that already exist</span>
-    <span class="n">cell_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>  <span class="c1"># Resample all bands to 10m resolution</span>
-<span class="p">)</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-6"># Download the bands, save them to the output directory, and create a merged GeoTIFF.
-# The download process may take a while. Please be patient.
-downloaded_bands = geoai.download_pc_stac_item(
-    item_url=item_url,
-    bands=bands_to_download,
-    output_dir=output_directory,
-    show_progress=True,
-    merge_bands=True,
-    merged_filename="sentinel2_all_bands.tif",
-    overwrite=False,  # Skip files that already exist
-    cell_size=10,  # Resample all bands to 10m resolution
-)</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-7">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Print the paths to the downloaded files</span>
-<span class="k">for</span> <span class="n">band</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">downloaded_bands</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Downloaded </span><span class="si">{</span><span class="n">band</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-7"># Print the paths to the downloaded files
-for band, path in downloaded_bands.items():
-    print(f"Downloaded {band}: {path}")</div>
+<div class="clipboard-copy-txt" id="cell-5">widget = geoai.create_vector_data(m, properties, file_ext="gpkg")
+widget</div>
 </div>
 </div>
 </div>
@@ -2236,61 +2156,7 @@ for band, path in downloaded_bands.items():
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="visualize-data">Visualize data<a class="anchor-link" href="#visualize-data">¶</a></h2>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-8">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">raster_url</span> <span class="o">=</span> <span class="s2">"https://huggingface.co/datasets/giswqs/geospatial/resolve/main/sentinel2a_kansas.tif"</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-8">raster_url = "https://huggingface.co/datasets/giswqs/geospatial/resolve/main/sentinel2a_kansas.tif"</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-9">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">geoai</span><span class="o">.</span><span class="n">view_raster</span><span class="p">(</span><span class="n">raster_url</span><span class="p">,</span> <span class="n">bidx</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">rescale</span><span class="o">=</span><span class="s2">"1000,4000"</span><span class="p">)</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-9">geoai.view_raster(raster_url, bidx=[8, 4, 3], rescale="1000,4000")</div>
-</div>
-</div>
+<p><img alt="image" src="https://github.com/user-attachments/assets/822fced3-5ba9-407c-9a17-e9332e2d84ad"/></p>
 </div>
 </div>
 </div>
@@ -2324,7 +2190,7 @@ for band, path in downloaded_bands.items():
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="March 13, 2025 02:46:59"><span class="timeago" datetime="2025-03-13T02:46:59+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="March 13, 2025 02:46:59">2025-03-13</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="April 5, 2025 03:18:33"><span class="timeago" datetime="2025-04-05T03:18:33+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="April 5, 2025 03:18:33">2025-04-05</span>
   </span>
 
     
@@ -2334,7 +2200,7 @@ for band, path in downloaded_bands.items():
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="February 28, 2025 04:38:24"><span class="timeago" datetime="2025-02-28T04:38:24+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="February 28, 2025 04:38:24">2025-02-28</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="March 7, 2025 18:25:29"><span class="timeago" datetime="2025-03-07T18:25:29+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="March 7, 2025 18:25:29">2025-03-07</span>
   </span>
 
     
