@@ -1032,6 +1032,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../examples/regularization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Regularization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../examples/dataviz/raster_viz/" class="md-nav__link">
         
   
@@ -1701,6 +1724,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#geoai.utils.regularize" class="md-nav__link">
+    <span class="md-ellipsis">
+      regularize
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#geoai.utils.temp_file_path" class="md-nav__link">
     <span class="md-ellipsis">
       temp_file_path
@@ -2151,6 +2183,15 @@
   <a href="#geoai.utils.regularization" class="md-nav__link">
     <span class="md-ellipsis">
       regularization
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geoai.utils.regularize" class="md-nav__link">
+    <span class="md-ellipsis">
+      regularize
     </span>
   </a>
   
@@ -18400,6 +18441,513 @@ rotated rectangles.</p>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">regularized_buildings</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="geoai.utils.regularize" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">regularize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">parallel_threshold</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">target_crs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">simplify</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">simplify_tolerance</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">allow_45_degree</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">diagonal_threshold_reduction</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">allow_circles</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">circle_threshold</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">num_cores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">include_metadata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+<a href="#geoai.utils.regularize" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Regularizes polygon geometries in a GeoDataFrame by aligning edges.</p>
+<p>Aligns edges to be parallel or perpendicular (optionally also 45 degrees)
+to their main direction. Handles reprojection, initial simplification,
+regularization, geometry cleanup, and parallel processing.</p>
+<p>This function is a wrapper around the <code>regularize_geodataframe</code> function
+from the <code>buildingregulariser</code> package. Credits to the original author
+Nick Wright. Check out the repo at https://github.com/DPIRD-DMA/Building-Regulariser.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>data</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="geopandas.GeoDataFrame">GeoDataFrame</span>, <span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Input GeoDataFrame with polygon or multipolygon geometries,
+or a file path to the GeoDataFrame.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>parallel_threshold</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Distance threshold for merging nearly parallel adjacent edges
+during regularization. Defaults to 1.0.</p>
+              </div>
+            </td>
+            <td>
+                  <code>1.0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>target_crs</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="typing.Union">Union</span>[<span title="str">str</span>, <span title="pyproj.CRS">CRS</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Target Coordinate Reference System for
+processing. If None, uses the input GeoDataFrame's CRS. Processing is more reliable in a
+projected CRS. Defaults to None.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>simplify</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If True, applies initial simplification to the geometry before
+regularization. Defaults to True.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>simplify_tolerance</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Tolerance for the initial simplification step (if <code>simplify</code>
+is True). Also used for geometry cleanup steps. Defaults to 0.5.</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.5</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>allow_45_degree</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If True, allows edges to be oriented at 45-degree angles relative
+to the main direction during regularization. Defaults to True.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>diagonal_threshold_reduction</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Reduction factor in degrees to reduce the likelihood
+of diagonal edges being created. Larger values reduce the likelihood of diagonal edges.
+Defaults to 15.</p>
+              </div>
+            </td>
+            <td>
+                  <code>15</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>allow_circles</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If True, attempts to detect polygons that are nearly circular and
+replaces them with perfect circles. Defaults to True.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>circle_threshold</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Intersection over Union (IoU) threshold used for circle detection
+(if <code>allow_circles</code> is True). Value between 0 and 1. Defaults to 0.9.</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.9</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>num_cores</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Number of CPU cores to use for parallel processing. If 1, processing is
+done sequentially. Defaults to 1.</p>
+              </div>
+            </td>
+            <td>
+                  <code>1</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>include_metadata</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If True, includes metadata about the regularization process in the
+output GeoDataFrame. Defaults to False.</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>output_path</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to save the output GeoDataFrame. If None, the output is
+not saved. Defaults to None.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>**kwargs</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Additional keyword arguments to pass to the <code>to_file</code> method when saving the output.</p>
+              </div>
+            </td>
+            <td>
+                  <code>{}</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="geopandas.GeoDataFrame">GeoDataFrame</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>gpd.GeoDataFrame: A new GeoDataFrame with regularized polygon geometries. Original attributes are</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="geopandas.GeoDataFrame">GeoDataFrame</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>preserved. Geometries that failed processing might be dropped.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If the input data is not a GeoDataFrame or a file path, or if the input GeoDataFrame is empty.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>geoai/utils.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">6254</span>
+<span class="normal">6255</span>
+<span class="normal">6256</span>
+<span class="normal">6257</span>
+<span class="normal">6258</span>
+<span class="normal">6259</span>
+<span class="normal">6260</span>
+<span class="normal">6261</span>
+<span class="normal">6262</span>
+<span class="normal">6263</span>
+<span class="normal">6264</span>
+<span class="normal">6265</span>
+<span class="normal">6266</span>
+<span class="normal">6267</span>
+<span class="normal">6268</span>
+<span class="normal">6269</span>
+<span class="normal">6270</span>
+<span class="normal">6271</span>
+<span class="normal">6272</span>
+<span class="normal">6273</span>
+<span class="normal">6274</span>
+<span class="normal">6275</span>
+<span class="normal">6276</span>
+<span class="normal">6277</span>
+<span class="normal">6278</span>
+<span class="normal">6279</span>
+<span class="normal">6280</span>
+<span class="normal">6281</span>
+<span class="normal">6282</span>
+<span class="normal">6283</span>
+<span class="normal">6284</span>
+<span class="normal">6285</span>
+<span class="normal">6286</span>
+<span class="normal">6287</span>
+<span class="normal">6288</span>
+<span class="normal">6289</span>
+<span class="normal">6290</span>
+<span class="normal">6291</span>
+<span class="normal">6292</span>
+<span class="normal">6293</span>
+<span class="normal">6294</span>
+<span class="normal">6295</span>
+<span class="normal">6296</span>
+<span class="normal">6297</span>
+<span class="normal">6298</span>
+<span class="normal">6299</span>
+<span class="normal">6300</span>
+<span class="normal">6301</span>
+<span class="normal">6302</span>
+<span class="normal">6303</span>
+<span class="normal">6304</span>
+<span class="normal">6305</span>
+<span class="normal">6306</span>
+<span class="normal">6307</span>
+<span class="normal">6308</span>
+<span class="normal">6309</span>
+<span class="normal">6310</span>
+<span class="normal">6311</span>
+<span class="normal">6312</span>
+<span class="normal">6313</span>
+<span class="normal">6314</span>
+<span class="normal">6315</span>
+<span class="normal">6316</span>
+<span class="normal">6317</span>
+<span class="normal">6318</span>
+<span class="normal">6319</span>
+<span class="normal">6320</span>
+<span class="normal">6321</span>
+<span class="normal">6322</span>
+<span class="normal">6323</span>
+<span class="normal">6324</span>
+<span class="normal">6325</span>
+<span class="normal">6326</span>
+<span class="normal">6327</span>
+<span class="normal">6328</span>
+<span class="normal">6329</span>
+<span class="normal">6330</span>
+<span class="normal">6331</span>
+<span class="normal">6332</span>
+<span class="normal">6333</span>
+<span class="normal">6334</span>
+<span class="normal">6335</span>
+<span class="normal">6336</span>
+<span class="normal">6337</span>
+<span class="normal">6338</span>
+<span class="normal">6339</span>
+<span class="normal">6340</span>
+<span class="normal">6341</span>
+<span class="normal">6342</span>
+<span class="normal">6343</span>
+<span class="normal">6344</span>
+<span class="normal">6345</span>
+<span class="normal">6346</span>
+<span class="normal">6347</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">regularize</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+    <span class="n">parallel_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">target_crs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;pyproj.CRS&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">simplify</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">simplify_tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">allow_45_degree</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">diagonal_threshold_reduction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span>
+    <span class="n">allow_circles</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">circle_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span>
+    <span class="n">num_cores</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">include_metadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Regularizes polygon geometries in a GeoDataFrame by aligning edges.</span>
+
+<span class="sd">    Aligns edges to be parallel or perpendicular (optionally also 45 degrees)</span>
+<span class="sd">    to their main direction. Handles reprojection, initial simplification,</span>
+<span class="sd">    regularization, geometry cleanup, and parallel processing.</span>
+
+<span class="sd">    This function is a wrapper around the `regularize_geodataframe` function</span>
+<span class="sd">    from the `buildingregulariser` package. Credits to the original author</span>
+<span class="sd">    Nick Wright. Check out the repo at https://github.com/DPIRD-DMA/Building-Regulariser.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (Union[gpd.GeoDataFrame, str]): Input GeoDataFrame with polygon or multipolygon geometries,</span>
+<span class="sd">            or a file path to the GeoDataFrame.</span>
+<span class="sd">        parallel_threshold (float, optional): Distance threshold for merging nearly parallel adjacent edges</span>
+<span class="sd">            during regularization. Defaults to 1.0.</span>
+<span class="sd">        target_crs (Optional[Union[str, &quot;pyproj.CRS&quot;]], optional): Target Coordinate Reference System for</span>
+<span class="sd">            processing. If None, uses the input GeoDataFrame&#39;s CRS. Processing is more reliable in a</span>
+<span class="sd">            projected CRS. Defaults to None.</span>
+<span class="sd">        simplify (bool, optional): If True, applies initial simplification to the geometry before</span>
+<span class="sd">            regularization. Defaults to True.</span>
+<span class="sd">        simplify_tolerance (float, optional): Tolerance for the initial simplification step (if `simplify`</span>
+<span class="sd">            is True). Also used for geometry cleanup steps. Defaults to 0.5.</span>
+<span class="sd">        allow_45_degree (bool, optional): If True, allows edges to be oriented at 45-degree angles relative</span>
+<span class="sd">            to the main direction during regularization. Defaults to True.</span>
+<span class="sd">        diagonal_threshold_reduction (float, optional): Reduction factor in degrees to reduce the likelihood</span>
+<span class="sd">            of diagonal edges being created. Larger values reduce the likelihood of diagonal edges.</span>
+<span class="sd">            Defaults to 15.</span>
+<span class="sd">        allow_circles (bool, optional): If True, attempts to detect polygons that are nearly circular and</span>
+<span class="sd">            replaces them with perfect circles. Defaults to True.</span>
+<span class="sd">        circle_threshold (float, optional): Intersection over Union (IoU) threshold used for circle detection</span>
+<span class="sd">            (if `allow_circles` is True). Value between 0 and 1. Defaults to 0.9.</span>
+<span class="sd">        num_cores (int, optional): Number of CPU cores to use for parallel processing. If 1, processing is</span>
+<span class="sd">            done sequentially. Defaults to 1.</span>
+<span class="sd">        include_metadata (bool, optional): If True, includes metadata about the regularization process in the</span>
+<span class="sd">            output GeoDataFrame. Defaults to False.</span>
+<span class="sd">        output_path (Optional[str], optional): Path to save the output GeoDataFrame. If None, the output is</span>
+<span class="sd">            not saved. Defaults to None.</span>
+<span class="sd">        **kwargs: Additional keyword arguments to pass to the `to_file` method when saving the output.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        gpd.GeoDataFrame: A new GeoDataFrame with regularized polygon geometries. Original attributes are</span>
+<span class="sd">        preserved. Geometries that failed processing might be dropped.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the input data is not a GeoDataFrame or a file path, or if the input GeoDataFrame is empty.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">buildingregulariser</span><span class="w"> </span><span class="kn">import</span> <span class="n">regularize_geodataframe</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">install_package</span><span class="p">(</span><span class="s2">&quot;buildingregulariser&quot;</span><span class="p">)</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">buildingregulariser</span><span class="w"> </span><span class="kn">import</span> <span class="n">regularize_geodataframe</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input data must be a GeoDataFrame or a file path.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Check if the input data is empty</span>
+    <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input GeoDataFrame is empty.&quot;</span><span class="p">)</span>
+
+    <span class="n">gdf</span> <span class="o">=</span> <span class="n">regularize_geodataframe</span><span class="p">(</span>
+        <span class="n">data</span><span class="p">,</span>
+        <span class="n">parallel_threshold</span><span class="o">=</span><span class="n">parallel_threshold</span><span class="p">,</span>
+        <span class="n">target_crs</span><span class="o">=</span><span class="n">target_crs</span><span class="p">,</span>
+        <span class="n">simplify</span><span class="o">=</span><span class="n">simplify</span><span class="p">,</span>
+        <span class="n">simplify_tolerance</span><span class="o">=</span><span class="n">simplify_tolerance</span><span class="p">,</span>
+        <span class="n">allow_45_degree</span><span class="o">=</span><span class="n">allow_45_degree</span><span class="p">,</span>
+        <span class="n">diagonal_threshold_reduction</span><span class="o">=</span><span class="n">diagonal_threshold_reduction</span><span class="p">,</span>
+        <span class="n">allow_circles</span><span class="o">=</span><span class="n">allow_circles</span><span class="p">,</span>
+        <span class="n">circle_threshold</span><span class="o">=</span><span class="n">circle_threshold</span><span class="p">,</span>
+        <span class="n">num_cores</span><span class="o">=</span><span class="n">num_cores</span><span class="p">,</span>
+        <span class="n">include_metadata</span><span class="o">=</span><span class="n">include_metadata</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">output_path</span><span class="p">:</span>
+        <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">gdf</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
